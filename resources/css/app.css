@@ -74,3 +74,9 @@
     color: var(--color-galet);
   }
 }
+
+/* Classes composées à l'exécution par StatusPresenter : Tailwind ne peut pas les voir. */
+@source inline("{bg,border,text}-{ok,part,retard,impaye,neutre}-{bg,bord,texte,puce}");
+
+/* Le text-{{ $tone }} du stat-card est également composé à l'exécution. */
+@source inline("text-{lagune,terre,cuivre,acier}");
