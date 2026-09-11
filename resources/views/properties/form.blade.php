@@ -109,7 +109,10 @@
             <button type="submit" class="min-h-[44px] rounded-meexeo bg-cuivre px-5 text-sm font-semibold text-papier">
                 {{ $editing ? 'Enregistrer les modifications' : 'Enregistrer le bien' }}
             </button>
-            <a href="{{ $editing ? route('properties.show', $property) : route('properties.index') }}"
+            {{-- Chemin littéral et non route('properties.show', ...) : cette route n'existe
+                 qu'à partir de la Task 10. Son URI sera exactement /biens/{id}, donc ce lien
+                 restera correct sans modification une fois la route déclarée. --}}
+            <a href="{{ $editing ? "/biens/{$property->id}" : route('properties.index') }}"
                class="inline-flex min-h-[44px] items-center rounded-meexeo border border-galet bg-papier px-4 text-sm">Annuler</a>
         </div>
     </form>

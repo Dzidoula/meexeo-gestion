@@ -102,4 +102,17 @@ class PropertyWriteTest extends TestCase
 
         $this->assertSame('Nouveau titre', $property->fresh()->title);
     }
+
+    public function test_a_manager_can_open_the_edit_form_for_an_existing_property(): void
+    {
+        // Régression : le lien "Annuler" du formulaire appelait route('properties.show', ...),
+        // une route qui n'existe pas avant la Task 10. Comme Blade évalue route() à l'affichage,
+        // ça faisait planter GET /biens/{property}/modifier avec un 500 sur toute propriété
+        // existante ($editing est alors vrai). Ce test rend réellement la page pour l'attraper.
+        $property = Property::factory()->create();
+
+        $this->actingAs(User::factory()->manager()->create())
+            ->get("/biens/{$property->id}/modifier")
+            ->assertOk();
+    }
 }
