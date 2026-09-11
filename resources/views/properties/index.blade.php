@@ -2,9 +2,7 @@
 <x-layouts.app title="Biens — MEEXEO Immobilier">
     <x-page-header title="Biens" subtitle="{{ $properties->total() }} bien(s) au portefeuille">
         <x-slot:actions>
-            {{-- TASK7-NEUTRALIZED: route('properties.create') n'existe pas avant le Task 8.
-                 Rétablir le lien vers route('properties.create') au Task 8. --}}
-            <a href="#"
+            <a href="{{ route('properties.create') }}"
                class="inline-flex min-h-[44px] items-center rounded-meexeo bg-cuivre px-4 text-sm font-semibold text-papier">
                 Ajouter un bien
             </a>

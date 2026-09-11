@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Enums\PropertyStatus;
 use App\Enums\PropertyType;
+use App\Http\Requests\StorePropertyRequest;
+use App\Http\Requests\UpdatePropertyRequest;
 use App\Models\Property;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class PropertyController extends Controller
@@ -43,5 +46,43 @@ class PropertyController extends Controller
             'types' => PropertyType::options(),
             'statuses' => PropertyStatus::options(),
         ]);
+    }
+
+    public function create(): View
+    {
+        return view('properties.form', [
+            'property' => new Property(['status' => PropertyStatus::Vacant, 'city' => 'Abidjan']),
+            'types' => PropertyType::options(),
+            'statuses' => PropertyStatus::options(),
+        ]);
+    }
+
+    public function store(StorePropertyRequest $request): RedirectResponse
+    {
+        $property = Property::create($request->validated());
+
+        // Chemin littéral et non route('properties.show', ...) : cette route n'existe
+        // qu'à partir de la Task 10. Son URI sera exactement /biens/{id}, donc ce lien
+        // restera correct sans modification une fois la route déclarée.
+        return redirect("/biens/{$property->id}")
+            ->with('status', "Le bien {$property->reference} a été enregistré.");
+    }
+
+    public function edit(Property $property): View
+    {
+        return view('properties.form', [
+            'property' => $property,
+            'types' => PropertyType::options(),
+            'statuses' => PropertyStatus::options(),
+        ]);
+    }
+
+    public function update(UpdatePropertyRequest $request, Property $property): RedirectResponse
+    {
+        $property->update($request->validated());
+
+        // Même remarque que dans store() : chemin littéral en attendant la Task 10.
+        return redirect("/biens/{$property->id}")
+            ->with('status', 'Les informations du bien ont été mises à jour.');
     }
 }
