@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyDocumentController;
 use App\Http\Controllers\PropertyPhotoController;
+use App\Http\Controllers\TenantController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect()->route('login'));
@@ -14,6 +15,7 @@ Route::post('/deconnexion', [LoginController::class, 'destroy'])->middleware('au
 
 Route::middleware('auth')->group(function () {
     Route::get('/biens', [PropertyController::class, 'index'])->name('properties.index');
+    Route::get('/locataires', [TenantController::class, 'index'])->name('tenants.index');
 
     Route::middleware('role:manager')->group(function () {
         Route::get('/biens/nouveau', [PropertyController::class, 'create'])->name('properties.create');
