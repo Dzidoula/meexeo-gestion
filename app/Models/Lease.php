@@ -43,6 +43,7 @@ class Lease extends Model
     /** Durée d'occupation en mois, arrêtée à la date de fin réelle ou à aujourd'hui. */
     protected function durationInMonths(): Attribute
     {
-        return Attribute::get(fn () => $this->start_date->diffInMonths($this->actual_end_date ?? now()));
+        // Carbon 3's diffInMonths() returns a float; cast to keep whole months in the UI.
+        return Attribute::get(fn () => (int) $this->start_date->diffInMonths($this->actual_end_date ?? now()));
     }
 }

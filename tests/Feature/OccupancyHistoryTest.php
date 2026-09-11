@@ -96,6 +96,25 @@ class OccupancyHistoryTest extends TestCase
             ->assertSee("Ce bien n'a jamais été loué");
     }
 
+    public function test_the_duration_in_months_is_shown_as_a_whole_number(): void
+    {
+        // Carbon 3's diffInMonths() returns a float (17.466666666667 here) ; the
+        // timeline must show a whole number of months, not that raw float.
+        $property = Property::factory()->create();
+        $tenant = Tenant::factory()->create(['last_name' => 'Kouassi', 'first_names' => 'Marie']);
+        Lease::factory()->for($property)->for($tenant)->create([
+            'status' => LeaseStatus::Ended,
+            'start_date' => '2023-01-01',
+            'actual_end_date' => '2024-06-15',
+        ]);
+
+        $this->actingAs(User::factory()->viewer()->create())
+            ->get("/biens/{$property->id}")
+            ->assertOk()
+            ->assertSee('17 mois')
+            ->assertDontSee('17.466666666667 mois');
+    }
+
     public function test_the_tenant_record_names_the_property_they_occupy(): void
     {
         $tenant = Tenant::factory()->create();
