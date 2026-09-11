@@ -1,11 +1,14 @@
 {{-- resources/views/properties/index.blade.php --}}
+@php($canWrite = in_array(auth()->user()->role, [\App\Enums\Role::Admin, \App\Enums\Role::Manager], true))
 <x-layouts.app title="Biens — MEEXEO Immobilier">
     <x-page-header title="Biens" subtitle="{{ $properties->total() }} bien(s) au portefeuille">
         <x-slot:actions>
-            <a href="{{ route('properties.create') }}"
-               class="inline-flex min-h-[44px] items-center rounded-meexeo bg-cuivre px-4 text-sm font-semibold text-papier">
-                Ajouter un bien
-            </a>
+            @if ($canWrite)
+                <a href="{{ route('properties.create') }}"
+                   class="inline-flex min-h-[44px] items-center rounded-meexeo bg-cuivre px-4 text-sm font-semibold text-papier">
+                    Ajouter un bien
+                </a>
+            @endif
         </x-slot:actions>
     </x-page-header>
 

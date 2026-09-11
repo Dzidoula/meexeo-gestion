@@ -92,4 +92,20 @@ class PropertyIndexTest extends TestCase
             ->assertOk()
             ->assertSee('Aucun bien ne correspond');
     }
+
+    public function test_a_viewer_does_not_see_the_add_button(): void
+    {
+        $this->actingAs(User::factory()->viewer()->create())
+            ->get('/biens')
+            ->assertOk()
+            ->assertDontSee('Ajouter un bien');
+    }
+
+    public function test_a_manager_sees_the_add_button(): void
+    {
+        $this->actingAsManager()
+            ->get('/biens')
+            ->assertOk()
+            ->assertSee('Ajouter un bien');
+    }
 }

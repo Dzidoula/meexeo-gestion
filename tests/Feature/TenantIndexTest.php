@@ -74,4 +74,20 @@ class TenantIndexTest extends TestCase
             ->get('/locataires?q=introuvable')
             ->assertSee('Aucun locataire ne correspond');
     }
+
+    public function test_a_viewer_does_not_see_the_add_button(): void
+    {
+        $this->actingAs(User::factory()->viewer()->create())
+            ->get('/locataires')
+            ->assertOk()
+            ->assertDontSee('Ajouter un locataire');
+    }
+
+    public function test_a_manager_sees_the_add_button(): void
+    {
+        $this->actingAs(User::factory()->manager()->create())
+            ->get('/locataires')
+            ->assertOk()
+            ->assertSee('Ajouter un locataire');
+    }
 }
