@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\PropertyDocumentController;
+use App\Http\Controllers\PropertyPhotoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect()->route('login'));
@@ -18,5 +20,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/biens', [PropertyController::class, 'store'])->name('properties.store');
         Route::get('/biens/{property}/modifier', [PropertyController::class, 'edit'])->name('properties.edit');
         Route::put('/biens/{property}', [PropertyController::class, 'update'])->name('properties.update');
+
+        Route::post('/biens/{property}/photos', [PropertyPhotoController::class, 'store'])->name('properties.photos.store');
+        Route::patch('/biens/{property}/photos/{photo}/principale', [PropertyPhotoController::class, 'primary'])->name('properties.photos.primary');
+        Route::delete('/biens/{property}/photos/{photo}', [PropertyPhotoController::class, 'destroy'])->name('properties.photos.destroy');
+
+        Route::post('/biens/{property}/documents', [PropertyDocumentController::class, 'store'])->name('properties.documents.store');
+        Route::delete('/biens/{property}/documents/{document}', [PropertyDocumentController::class, 'destroy'])->name('properties.documents.destroy');
     });
 });

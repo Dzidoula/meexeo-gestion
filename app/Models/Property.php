@@ -7,6 +7,8 @@ use App\Enums\PropertyType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Property extends Model
 {
@@ -50,5 +52,20 @@ class Property extends Model
 
             return $plot === '' ? $place : "{$place} — {$plot}";
         });
+    }
+
+    public function photos(): HasMany
+    {
+        return $this->hasMany(PropertyPhoto::class)->orderBy('position')->orderBy('id');
+    }
+
+    public function primaryPhoto(): HasOne
+    {
+        return $this->hasOne(PropertyPhoto::class)->where('is_primary', true);
+    }
+
+    public function documents(): HasMany
+    {
+        return $this->hasMany(PropertyDocument::class)->orderBy('type');
     }
 }
