@@ -28,4 +28,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/biens/{property}/documents', [PropertyDocumentController::class, 'store'])->name('properties.documents.store');
         Route::delete('/biens/{property}/documents/{document}', [PropertyDocumentController::class, 'destroy'])->name('properties.documents.destroy');
     });
+
+    Route::get('/biens/{property}', [PropertyController::class, 'show'])->name('properties.show');
 });

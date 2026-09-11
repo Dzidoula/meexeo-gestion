@@ -80,3 +80,6 @@
 
 /* Le text-{{ $tone }} du stat-card est également composé à l'exécution. */
 @source inline("text-{lagune,terre,cuivre,acier}");
+
+/* Évite le clignotement des panneaux d'onglets avant le démarrage d'Alpine. */
+[x-cloak] { display: none !important; }

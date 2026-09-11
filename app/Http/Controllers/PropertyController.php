@@ -2,6 +2,7 @@
 // app/Http/Controllers/PropertyController.php
 namespace App\Http\Controllers;
 
+use App\Enums\DocumentType;
 use App\Enums\PropertyStatus;
 use App\Enums\PropertyType;
 use App\Http\Requests\StorePropertyRequest;
@@ -66,6 +67,16 @@ class PropertyController extends Controller
         // restera correct sans modification une fois la route déclarée.
         return redirect("/biens/{$property->id}")
             ->with('status', "Le bien {$property->reference} a été enregistré.");
+    }
+
+    public function show(Property $property): View
+    {
+        $property->load(['photos', 'documents']);
+
+        return view('properties.show', [
+            'property' => $property,
+            'documentTypes' => DocumentType::options(),
+        ]);
     }
 
     public function edit(Property $property): View

@@ -71,9 +71,7 @@
                         <tr class="border-b border-lin-pale last:border-0">
                             <td class="chiffre px-4 py-3 text-xs text-brume">{{ $property->reference }}</td>
                             <td class="px-4 py-3">
-                                {{-- TASK7-NEUTRALIZED: route('properties.show', $property) n'existe pas avant le Task 10.
-                                     Rétablir le lien vers route('properties.show', $property) au Task 10. --}}
-                                <a href="#" class="font-titre text-base text-lagune hover:text-cuivre">
+                                <a href="{{ route('properties.show', $property) }}" class="font-titre text-base text-lagune hover:text-cuivre">
                                     {{ $property->title }}
                                 </a>
                             </td>
@@ -90,9 +88,7 @@
         {{-- Cartes empilées sur téléphone : le loyer et l'état restent visibles sans défilement latéral --}}
         <div class="mt-6 space-y-3 lg:hidden">
             @foreach ($properties as $property)
-                {{-- TASK7-NEUTRALIZED: route('properties.show', $property) n'existe pas avant le Task 10.
-                     Rétablir le lien vers route('properties.show', $property) au Task 10. --}}
-                <a href="#" class="block rounded-meexeo border border-lin-clair bg-papier p-4">
+                <a href="{{ route('properties.show', $property) }}" class="block rounded-meexeo border border-lin-clair bg-papier p-4">
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <p class="chiffre text-[11px] text-brume">{{ $property->reference }}</p>
