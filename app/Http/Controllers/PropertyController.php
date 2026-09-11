@@ -71,7 +71,7 @@ class PropertyController extends Controller
 
     public function show(Property $property): View
     {
-        $property->load(['photos', 'documents']);
+        $property->load(['photos', 'documents', 'activeLease.tenant', 'leases.tenant']);
 
         return view('properties.show', [
             'property' => $property,

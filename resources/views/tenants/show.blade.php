@@ -33,7 +33,21 @@
         </div>
     </div>
 
-    {{-- Le bien occupé est ajouté ici au Task 14, une fois le modèle Lease disponible. --}}
+    @if ($lease = $tenant->activeLease)
+        <div class="mt-4 rounded-meexeo border border-lin-clair bg-papier p-4">
+            <p class="surtitre">Bien occupé</p>
+            <a href="{{ route('properties.show', $lease->property) }}" class="mt-1 block font-titre text-lg hover:text-cuivre">
+                {{ $lease->property->title }}
+            </a>
+            <p class="mt-0.5 text-xs text-ardoise">{{ $lease->property->full_address }}</p>
+            <p class="chiffre mt-1 text-xs text-brume">
+                Loyer {{ \App\Support\Money::fcfa($lease->monthly_rent) }}
+                · Échéance le {{ $lease->due_day }} du mois
+            </p>
+        </div>
+    @else
+        <p class="mt-4 text-sm text-brume">Ce locataire n'occupe aucun bien actuellement.</p>
+    @endif
 
     <x-tabs :tabs="['identite' => 'Identité', 'documents' => 'Documents']">
     <x-slot:panel_identite>

@@ -63,6 +63,40 @@
                 <div><dt class="surtitre">Lot</dt><dd class="chiffre mt-0.5">{{ $property->lot_number ?? '—' }}</dd></div>
                 <div><dt class="surtitre">Îlot</dt><dd class="chiffre mt-0.5">{{ $property->block_number ?? '—' }}</dd></div>
             </dl>
+
+            <div class="mt-5 border-t border-lin-pale pt-5">
+                <p class="surtitre">Locataire en place</p>
+                @if ($lease = $property->activeLease)
+                    <a href="{{ route('tenants.show', $lease->tenant) }}" class="mt-1 block font-titre text-lg hover:text-cuivre">
+                        {{ $lease->tenant->full_name }}
+                    </a>
+                    <p class="chiffre mt-0.5 text-xs text-brume">
+                        Depuis le {{ $lease->start_date->format('d/m/Y') }}
+                        · Loyer {{ \App\Support\Money::fcfa($lease->monthly_rent) }}
+                        · Échéance le {{ $lease->due_day }} du mois
+                    </p>
+                    @if ($canWrite)
+                        <form method="POST" action="{{ route('leases.end', $lease) }}" class="mt-3 flex flex-wrap items-end gap-2">
+                            @csrf @method('PATCH')
+                            <div>
+                                <label for="actual_end_date" class="text-xs font-semibold text-ardoise">Date de fin réelle</label>
+                                <input id="actual_end_date" name="actual_end_date" type="date" required
+                                       class="chiffre mt-1.5 min-h-[44px] rounded-meexeo border border-lin px-3 text-sm">
+                            </div>
+                            <button class="min-h-[44px] px-2 text-sm text-terre">Clôturer le bail</button>
+                            @error('actual_end_date') <p class="text-xs text-terre">{{ $message }}</p> @enderror
+                        </form>
+                    @endif
+                @else
+                    <p class="mt-1 text-sm text-brume">Aucun locataire en place.</p>
+                    @if ($canWrite)
+                        <a href="{{ route('leases.create', ['property' => $property->id]) }}"
+                           class="mt-3 inline-flex min-h-[44px] items-center rounded-meexeo bg-lagune px-4 text-sm font-semibold text-sable">
+                            Affecter à un locataire
+                        </a>
+                    @endif
+                @endif
+            </div>
         </div>
     </div>
 
@@ -177,10 +211,41 @@
         </x-slot:panel_documents>
 
         <x-slot:panel_historique>
-            {{-- Rempli au Task 14, une fois le modèle Lease disponible. --}}
-            <p class="rounded-meexeo border border-lin-clair bg-papier p-8 text-center text-sm text-brume">
-                L'historique d'occupation apparaîtra ici.
-            </p>
+            @if ($property->leases->isEmpty())
+                <p class="rounded-meexeo border border-lin-clair bg-papier p-8 text-center text-sm text-brume">
+                    Ce bien n&#039;a jamais été loué.
+                </p>
+            @else
+                {{-- Frise verticale, du bail le plus récent au plus ancien --}}
+                <ol class="rounded-meexeo border border-lin-clair bg-papier p-6">
+                    @foreach ($property->leases as $lease)
+                        <li class="relative border-l border-lin pl-6 pb-6 last:pb-0">
+                            <span class="absolute -left-[5px] top-1.5 h-2.5 w-2.5 rounded-full {{ $lease->status === \App\Enums\LeaseStatus::Active ? 'bg-cuivre' : 'bg-galet' }}"></span>
+                            <div class="flex flex-wrap items-start justify-between gap-3">
+                                <div>
+                                    <a href="{{ route('tenants.show', $lease->tenant) }}" class="font-titre text-base hover:text-cuivre">
+                                        {{ $lease->tenant->full_name }}
+                                    </a>
+                                    <p class="chiffre mt-0.5 text-xs text-brume">
+                                        {{ $lease->start_date->format('d/m/Y') }}
+                                        —
+                                        {{ $lease->actual_end_date?->format('d/m/Y') ?? 'en cours' }}
+                                        · {{ $lease->duration_in_months }} mois
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    {{-- Le loyer de l'époque, pas celui du bien aujourd'hui --}}
+                                    <p class="chiffre font-semibold">{{ \App\Support\Money::fcfa($lease->monthly_rent) }}</p>
+                                    <p class="mt-1"><x-status-badge :status="$lease->status === \App\Enums\LeaseStatus::Active ? 'occupied' : 'ended'" /></p>
+                                </div>
+                            </div>
+                            @if ($lease->notes)
+                                <p class="mt-2 text-xs text-ardoise">{{ $lease->notes }}</p>
+                            @endif
+                        </li>
+                    @endforeach
+                </ol>
+            @endif
         </x-slot:panel_historique>
     </x-tabs>
 </x-layouts.app>
