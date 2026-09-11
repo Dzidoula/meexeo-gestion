@@ -100,7 +100,10 @@
         </div>
     </div>
 
-    <x-tabs :tabs="['details' => 'Détails', 'photos' => 'Photos', 'documents' => 'Documents', 'historique' => 'Historique']">
+    {{-- Une erreur de validation sur l'envoi d'un document doit ouvrir l'onglet
+         Documents au chargement : sinon elle reste invisible sous l'onglet Détails. --}}
+    @php($initialTab = $errors->hasAny(['file', 'type']) ? 'documents' : null)
+    <x-tabs :tabs="['details' => 'Détails', 'photos' => 'Photos', 'documents' => 'Documents', 'historique' => 'Historique']" :initial="$initialTab">
         <x-slot:panel_details>
             <div class="rounded-meexeo border border-lin-clair bg-papier p-6">
                 <h2 class="font-titre text-lg">Localisation et repérage</h2>

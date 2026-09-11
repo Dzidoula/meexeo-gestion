@@ -49,7 +49,10 @@
         <p class="mt-4 text-sm text-brume">Ce locataire n'occupe aucun bien actuellement.</p>
     @endif
 
-    <x-tabs :tabs="['identite' => 'Identité', 'documents' => 'Documents']">
+    {{-- Une erreur de validation sur l'envoi d'un document doit ouvrir l'onglet
+         Documents au chargement : sinon elle reste invisible sous l'onglet Identité. --}}
+    @php($initialTab = $errors->hasAny(['file', 'type']) ? 'documents' : null)
+    <x-tabs :tabs="['identite' => 'Identité', 'documents' => 'Documents']" :initial="$initialTab">
     <x-slot:panel_identite>
         <div class="rounded-meexeo border border-lin-clair bg-papier p-6">
             <dl class="grid gap-4 sm:grid-cols-2 text-sm">

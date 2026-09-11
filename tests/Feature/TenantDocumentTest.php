@@ -49,6 +49,45 @@ class TenantDocumentTest extends TestCase
         $this->assertSame(3, $tenant->fresh()->documents()->where('type', TenantDocumentType::Payslip)->count());
     }
 
+    public function test_a_failed_upload_reopens_the_record_on_the_documents_tab(): void
+    {
+        // Même régression que côté Biens : l'onglet Documents n'est pas le premier
+        // onglet, donc l'erreur d'envoi doit forcer son ouverture au rechargement.
+        // Le client de test HTTP ne renvoie pas automatiquement le cookie de session
+        // d'une requête à l'autre : on le retransmet nous-mêmes pour reproduire
+        // fidèlement le comportement d'un vrai navigateur suivant la redirection.
+        Storage::fake('public');
+        $tenant = Tenant::factory()->create();
+        $manager = User::factory()->manager()->create();
+
+        $this->actingAs($manager)
+            ->from("/locataires/{$tenant->id}")
+            ->post("/locataires/{$tenant->id}/documents", [
+                'type' => 'permis-de-conduire',
+                'file' => UploadedFile::fake()->create('doc.pdf', 10, 'application/pdf'),
+            ])
+            ->assertSessionHasErrors('type');
+
+        $sessionId = $this->app['session']->getId();
+
+        $response = $this->actingAs($manager)
+            ->withCookie(config('session.cookie'), $sessionId)
+            ->get("/locataires/{$tenant->id}");
+
+        $response->assertOk();
+        $response->assertSee("onglet: 'documents'", false);
+    }
+
+    public function test_a_record_with_no_error_still_opens_on_the_first_tab(): void
+    {
+        $tenant = Tenant::factory()->create();
+
+        $response = $this->actingAs(User::factory()->manager()->create())
+            ->get("/locataires/{$tenant->id}");
+
+        $response->assertOk()->assertSee("onglet: 'identite'", false);
+    }
+
     public function test_deleting_a_document_removes_the_file(): void
     {
         Storage::fake('public');
