@@ -103,6 +103,52 @@ class PropertyWriteTest extends TestCase
         $this->assertSame('Nouveau titre', $property->fresh()->title);
     }
 
+    public function test_a_comma_decimal_latitude_is_rejected_because_it_is_not_numeric(): void
+    {
+        // Un utilisateur francophone tape volontiers une virgule décimale ; la règle
+        // "numeric" la rejette, et l'erreur doit rester visible nulle part masquée.
+        $this->actingAs(User::factory()->manager()->create())
+            ->from('/biens/nouveau')
+            ->post('/biens', $this->validPayload(['latitude' => '5,3049']))
+            ->assertSessionHasErrors('latitude');
+    }
+
+    public function test_an_out_of_range_latitude_is_rejected(): void
+    {
+        $this->actingAs(User::factory()->manager()->create())
+            ->from('/biens/nouveau')
+            ->post('/biens', $this->validPayload(['latitude' => '200']))
+            ->assertSessionHasErrors('latitude');
+    }
+
+    public function test_the_latitude_error_is_rendered_on_the_form_after_a_failed_submission(): void
+    {
+        // Avant le correctif, properties/form.blade.php n'avait aucun bloc
+        // @error('latitude') et ce message ne s'affichait donc nulle part. Le
+        // client de test HTTP ne renvoie pas automatiquement le cookie de session
+        // d'une requête à l'autre : on le retransmet nous-mêmes pour reproduire
+        // fidèlement le formulaire rechargé après une redirection de validation.
+        $manager = User::factory()->manager()->create();
+
+        $this->actingAs($manager)
+            ->from('/biens/nouveau')
+            ->post('/biens', $this->validPayload(['latitude' => '5,3049']))
+            ->assertSessionHasErrors('latitude');
+
+        $sessionId = $this->app['session']->getId();
+
+        // Aucun fichier de langue n'est publié dans ce projet (locale "en" par
+        // défaut) : Laravel affiche donc la clé de traduction brute plutôt que
+        // le texte anglais habituel. Ce qui compte ici, c'est qu'un message
+        // apparaisse enfin à côté du champ latitude, plutôt que nulle part.
+        $this->actingAs($manager)
+            ->withCookie(config('session.cookie'), $sessionId)
+            ->get('/biens/nouveau')
+            ->assertOk()
+            ->assertSee('validation.numeric')
+            ->assertSee('5,3049', false);
+    }
+
     public function test_a_manager_can_open_the_edit_form_for_an_existing_property(): void
     {
         // Régression : le lien "Annuler" du formulaire appelait route('properties.show', ...),

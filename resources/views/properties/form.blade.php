@@ -34,6 +34,7 @@
                             <option value="{{ $value }}" @selected(old('status', $property->status?->value) === $value)>{{ $label }}</option>
                         @endforeach
                     </select>
+                    @error('status') <p class="mt-1 text-xs text-terre">{{ $message }}</p> @enderror
                 </div>
             </div>
         </section>
@@ -61,11 +62,13 @@
                     <label for="latitude" class="text-xs font-semibold text-ardoise">Latitude GPS</label>
                     <input id="latitude" name="latitude" value="{{ old('latitude', $property->latitude) }}"
                            class="chiffre mt-1.5 min-h-[44px] w-full rounded-meexeo border border-lin px-3 text-sm">
+                    @error('latitude') <p class="mt-1 text-xs text-terre">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label for="longitude" class="text-xs font-semibold text-ardoise">Longitude GPS</label>
                     <input id="longitude" name="longitude" value="{{ old('longitude', $property->longitude) }}"
                            class="chiffre mt-1.5 min-h-[44px] w-full rounded-meexeo border border-lin px-3 text-sm">
+                    @error('longitude') <p class="mt-1 text-xs text-terre">{{ $message }}</p> @enderror
                 </div>
             </div>
         </section>
@@ -77,11 +80,13 @@
                     <label for="rooms" class="text-xs font-semibold text-ardoise">Nombre de pièces</label>
                     <input id="rooms" name="rooms" type="number" min="0" value="{{ old('rooms', $property->rooms) }}"
                            class="chiffre mt-1.5 min-h-[44px] w-full rounded-meexeo border border-lin px-3 text-sm">
+                    @error('rooms') <p class="mt-1 text-xs text-terre">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label for="area_sqm" class="text-xs font-semibold text-ardoise">Superficie (m²)</label>
                     <input id="area_sqm" name="area_sqm" type="number" min="0" value="{{ old('area_sqm', $property->area_sqm) }}"
                            class="chiffre mt-1.5 min-h-[44px] w-full rounded-meexeo border border-lin px-3 text-sm">
+                    @error('area_sqm') <p class="mt-1 text-xs text-terre">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label for="monthly_rent" class="text-xs font-semibold text-ardoise">Loyer mensuel (FCFA)</label>
@@ -101,6 +106,7 @@
                     <label for="notes" class="text-xs font-semibold text-ardoise">Notes</label>
                     <textarea id="notes" name="notes" rows="3"
                               class="mt-1.5 w-full rounded-meexeo border border-lin px-3 py-2 text-sm">{{ old('notes', $property->notes) }}</textarea>
+                    @error('notes') <p class="mt-1 text-xs text-terre">{{ $message }}</p> @enderror
                 </div>
             </div>
         </section>
