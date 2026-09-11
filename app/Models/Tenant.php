@@ -7,6 +7,7 @@ use App\Enums\TenantStatus;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Tenant extends Model
@@ -45,5 +46,10 @@ class Tenant extends Model
         return Attribute::get(fn () => Str::upper(
             Str::substr($this->first_names, 0, 1).Str::substr($this->last_name, 0, 1)
         ));
+    }
+
+    public function documents(): HasMany
+    {
+        return $this->hasMany(TenantDocument::class)->orderBy('type')->orderBy('id');
     }
 }

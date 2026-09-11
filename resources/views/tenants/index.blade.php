@@ -2,8 +2,7 @@
 <x-layouts.app title="Locataires — MEEXEO Immobilier">
     <x-page-header title="Locataires" subtitle="{{ $tenants->total() }} locataire(s) enregistré(s)">
         <x-slot:actions>
-            {{-- TASK11-NEUTRALIZED: route('tenants.create') n'existe pas avant la Task 12. --}}
-            <a href="#"
+            <a href="{{ route('tenants.create') }}"
                class="inline-flex min-h-[44px] items-center rounded-meexeo bg-cuivre px-4 text-sm font-semibold text-papier">
                 Ajouter un locataire
             </a>
@@ -41,8 +40,7 @@
                             {{ $tenant->initials }}
                         </span>
                         <div>
-                            {{-- TASK11-NEUTRALIZED: route('tenants.show', $tenant) n'existe pas avant la Task 12. --}}
-                            <a href="#" class="font-titre text-base hover:text-cuivre">
+                            <a href="{{ route('tenants.show', $tenant) }}" class="font-titre text-base hover:text-cuivre">
                                 {{ $tenant->full_name }}
                             </a>
                             <p class="chiffre text-[11px] text-brume">{{ $tenant->reference }} · {{ $tenant->phone1 }}</p>
