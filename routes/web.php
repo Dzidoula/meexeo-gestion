@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyDocumentController;
 use App\Http\Controllers\PropertyPhotoController;
@@ -38,6 +39,10 @@ Route::middleware('auth')->group(function () {
 
         Route::post('/locataires/{tenant}/documents', [TenantDocumentController::class, 'store'])->name('tenants.documents.store');
         Route::delete('/locataires/{tenant}/documents/{document}', [TenantDocumentController::class, 'destroy'])->name('tenants.documents.destroy');
+
+        Route::get('/affectations/nouvelle', [LeaseController::class, 'create'])->name('leases.create');
+        Route::post('/affectations', [LeaseController::class, 'store'])->name('leases.store');
+        Route::patch('/affectations/{lease}/fin', [LeaseController::class, 'end'])->name('leases.end');
     });
 
     Route::get('/biens/{property}', [PropertyController::class, 'show'])->name('properties.show');

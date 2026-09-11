@@ -2,12 +2,14 @@
 // app/Models/Tenant.php
 namespace App\Models;
 
+use App\Enums\LeaseStatus;
 use App\Enums\MaritalStatus;
 use App\Enums\TenantStatus;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 class Tenant extends Model
@@ -51,5 +53,15 @@ class Tenant extends Model
     public function documents(): HasMany
     {
         return $this->hasMany(TenantDocument::class)->orderBy('type')->orderBy('id');
+    }
+
+    public function leases(): HasMany
+    {
+        return $this->hasMany(Lease::class)->orderByDesc('start_date');
+    }
+
+    public function activeLease(): HasOne
+    {
+        return $this->hasOne(Lease::class)->where('status', LeaseStatus::Active->value);
     }
 }

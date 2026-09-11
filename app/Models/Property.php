@@ -2,6 +2,7 @@
 // app/Models/Property.php
 namespace App\Models;
 
+use App\Enums\LeaseStatus;
 use App\Enums\PropertyStatus;
 use App\Enums\PropertyType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -67,5 +68,15 @@ class Property extends Model
     public function documents(): HasMany
     {
         return $this->hasMany(PropertyDocument::class)->orderBy('type');
+    }
+
+    public function leases(): HasMany
+    {
+        return $this->hasMany(Lease::class)->orderByDesc('start_date');
+    }
+
+    public function activeLease(): HasOne
+    {
+        return $this->hasOne(Lease::class)->where('status', LeaseStatus::Active->value);
     }
 }
