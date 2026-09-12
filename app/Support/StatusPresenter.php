@@ -22,6 +22,11 @@ class StatusPresenter
         'blacklisted' => ['Blacklisté', 'impaye'],
         // Baux
         'ended'       => ['Terminé', 'neutre'],
+        // Paiements
+        'paid'    => ['Payé', 'ok'],
+        'partial' => ['Partiel', 'part'],
+        'late'    => ['En retard', 'retard'],
+        'unpaid'  => ['Impayé', 'impaye'],
     ];
 
     /** @return array{label: string, wrapper: string, dot: string} */
