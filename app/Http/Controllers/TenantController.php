@@ -61,7 +61,7 @@ class TenantController extends Controller
 
     public function show(Tenant $tenant): View
     {
-        $tenant->load(['documents', 'activeLease.property']);
+        $tenant->load(['documents', 'activeLease.property', 'payments.lease']);
 
         return view('tenants.show', [
             'tenant' => $tenant,

@@ -52,7 +52,7 @@
     {{-- Une erreur de validation sur l'envoi d'un document doit ouvrir l'onglet
          Documents au chargement : sinon elle reste invisible sous l'onglet Identité. --}}
     @php($initialTab = $errors->hasAny(['file', 'type']) ? 'documents' : null)
-    <x-tabs :tabs="['identite' => 'Identité', 'documents' => 'Documents']" :initial="$initialTab">
+    <x-tabs :tabs="['identite' => 'Identité', 'documents' => 'Documents', 'paiements' => 'Paiements']" :initial="$initialTab">
     <x-slot:panel_identite>
         <div class="rounded-meexeo border border-lin-clair bg-papier p-6">
             <dl class="grid gap-4 sm:grid-cols-2 text-sm">
@@ -118,5 +118,40 @@
                 </ul>
             @endif
         </x-slot:panel_documents>
+
+        <x-slot:panel_paiements>
+            @if ($tenant->payments->isEmpty())
+                <p class="rounded-meexeo border border-lin-clair bg-papier p-8 text-center text-sm text-brume">
+                    Aucun paiement enregistré pour ce locataire.
+                </p>
+            @else
+                <div class="overflow-x-auto rounded-meexeo border border-lin-clair bg-papier">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-lin-clair text-left">
+                                <th class="surtitre px-4 py-3">Mois</th>
+                                <th class="surtitre px-4 py-3">Mode</th>
+                                <th class="surtitre px-4 py-3">Date</th>
+                                <th class="surtitre px-4 py-3 text-right">Montant</th>
+                                <th class="surtitre px-4 py-3">Preuve</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($tenant->payments as $payment)
+                                <tr class="border-b border-lin-pale last:border-0">
+                                    <td class="px-4 py-3">{{ ucfirst($payment->month->translatedFormat('F Y')) }}</td>
+                                    <td class="px-4 py-3">{{ $payment->method->label() }}</td>
+                                    <td class="chiffre px-4 py-3">{{ $payment->paid_on->format('d/m/Y') }}</td>
+                                    <td class="chiffre px-4 py-3 text-right font-semibold">{{ \App\Support\Money::fcfa($payment->amount) }}</td>
+                                    <td class="px-4 py-3">
+                                        <a href="{{ $payment->url }}" target="_blank" rel="noopener" class="text-acier hover:underline">Voir</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+        </x-slot:panel_paiements>
     </x-tabs>
 </x-layouts.app>
