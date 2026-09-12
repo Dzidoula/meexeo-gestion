@@ -70,6 +70,24 @@ class DashboardController extends Controller
             ->sortBy(fn (array $row) => $row['days_until_due'])
             ->values();
 
+        $revenueByMonth = collect(range(11, 0))->map(function (int $monthsAgo) {
+            $month = now()->copy()->subMonths($monthsAgo)->startOfMonth();
+
+            return [
+                'label' => ucfirst($month->translatedFormat('M Y')),
+                'total' => (int) \App\Models\Payment::whereBetween('paid_on', [$month->copy()->startOfMonth(), $month->copy()->endOfMonth()])->sum('amount'),
+            ];
+        });
+
+        $revenueByCommune = \App\Models\Payment::query()
+            ->join('leases', 'leases.id', '=', 'payments.lease_id')
+            ->join('properties', 'properties.id', '=', 'leases.property_id')
+            ->whereBetween('payments.paid_on', [$start, $end])
+            ->selectRaw('properties.commune as commune, sum(payments.amount) as total')
+            ->groupBy('properties.commune')
+            ->orderByDesc('total')
+            ->get();
+
         return view('dashboard.index', [
             'period' => $period,
             'propertiesTotal' => $propertiesTotal,
@@ -78,6 +96,8 @@ class DashboardController extends Controller
             'revenue' => $revenue,
             'unpaid' => $unpaid,
             'dueSoon' => $dueSoon,
+            'revenueByMonth' => $revenueByMonth,
+            'revenueByCommune' => $revenueByCommune,
         ]);
     }
 

@@ -22,11 +22,13 @@
     <div class="mt-6 grid gap-5 lg:grid-cols-[1.62fr_1fr]">
         <div class="rounded-meexeo border border-lin-clair bg-papier p-6">
             <h2 class="font-titre text-lg">Loyers encaissés — 12 derniers mois</h2>
-            <p class="mt-8 text-sm text-brume">Graphique ajouté à l'étape suivante.</p>
+            <canvas id="revenue-chart" height="220" data-revenue-months="{{ json_encode($revenueByMonth) }}"></canvas>
+            <a href="#" class="mt-3 inline-block text-xs text-acier">Voir en tableau</a>
         </div>
         <div class="rounded-meexeo border border-lin-clair bg-papier p-6">
             <h2 class="font-titre text-lg">Revenu par commune</h2>
-            <p class="mt-8 text-sm text-brume">Graphique ajouté à l'étape suivante.</p>
+            <canvas id="commune-chart" height="220" data-commune-totals="{{ json_encode($revenueByCommune) }}"></canvas>
+            <a href="#" class="mt-3 inline-block text-xs text-acier">Voir en tableau</a>
         </div>
     </div>
 
