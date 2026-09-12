@@ -80,6 +80,34 @@ class PropertyPhotoTest extends TestCase
         $this->assertDatabaseCount('property_photos', 0);
     }
 
+    public function test_a_failed_upload_reopens_the_record_on_the_photos_tab(): void
+    {
+        // Régression : le formulaire d'envoi de photo vit dans l'onglet Photos, qui
+        // n'est pas le premier onglet. Le correctif équivalent pour l'onglet
+        // Documents (champs 'file'/'type') oubliait le champ 'photo' : sans lui,
+        // la page se rechargeait sur l'onglet Détails et l'erreur restait
+        // invisible derrière un panneau caché.
+        Storage::fake('public');
+        $property = Property::factory()->create();
+        $manager = User::factory()->manager()->create();
+
+        $this->actingAs($manager)
+            ->from("/biens/{$property->id}")
+            ->post("/biens/{$property->id}/photos", [
+                'photo' => UploadedFile::fake()->create('virus.exe', 10),
+            ])
+            ->assertSessionHasErrors('photo');
+
+        $sessionId = $this->app['session']->getId();
+
+        $response = $this->actingAs($manager)
+            ->withCookie(config('session.cookie'), $sessionId)
+            ->get("/biens/{$property->id}");
+
+        $response->assertOk();
+        $response->assertSee("onglet: 'photos'", false);
+    }
+
     public function test_deleting_a_photo_removes_the_file_too(): void
     {
         Storage::fake('public');
