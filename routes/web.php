@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\LeaseController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyDocumentController;
 use App\Http\Controllers\PropertyPhotoController;
@@ -43,6 +44,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/affectations/nouvelle', [LeaseController::class, 'create'])->name('leases.create');
         Route::post('/affectations', [LeaseController::class, 'store'])->name('leases.store');
         Route::patch('/affectations/{lease}/fin', [LeaseController::class, 'end'])->name('leases.end');
+    });
+
+    Route::middleware('role:manager,accountant')->group(function () {
+        Route::get('/paiements/nouveau', [PaymentController::class, 'create'])->name('payments.create');
+        Route::post('/paiements', [PaymentController::class, 'store'])->name('payments.store');
     });
 
     Route::get('/biens/{property}', [PropertyController::class, 'show'])->name('properties.show');
