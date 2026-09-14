@@ -9,9 +9,11 @@ class StaticModuleController extends Controller
     {
         $data = config("masterclays_modules.modules.{$module}");
 
-        // Seuls les modules génériques (kpis non vides) sont servis ici ;
-        // 'locative' et les 6 pages d'administration ont leur propre route.
-        abort_if(! $data || empty($data['kpis']), 404);
+        // Seuls les modules génériques sont servis ici ; 'locative' et les
+        // 6 pages d'administration ont leur propre route, marquées
+        // explicitement 'generic' => false plutôt que déduites d'un
+        // tableau kpis vide (fragile si ce tableau venait à être rempli).
+        abort_if(! $data || ! ($data['generic'] ?? false), 404);
 
         $rows = collect($data['rows'])->map(fn (array $row) => [
             ...$row,

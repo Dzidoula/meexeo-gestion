@@ -70,12 +70,20 @@ class DashboardController extends Controller
             ->sortBy(fn (array $row) => $row['days_until_due'])
             ->values();
 
-        $revenueByMonth = collect(range(11, 0))->map(function (int $monthsAgo) {
+        $windowStart = now()->copy()->subMonths(11)->startOfMonth();
+        $windowEnd = now()->copy()->endOfMonth();
+
+        $paidByMonthKey = \App\Models\Payment::whereBetween('paid_on', [$windowStart, $windowEnd])
+            ->get(['paid_on', 'amount'])
+            ->groupBy(fn ($payment) => $payment->paid_on->format('Y-m'))
+            ->map(fn ($group) => (int) $group->sum('amount'));
+
+        $revenueByMonth = collect(range(11, 0))->map(function (int $monthsAgo) use ($paidByMonthKey) {
             $month = now()->copy()->subMonths($monthsAgo)->startOfMonth();
 
             return [
                 'label' => ucfirst($month->translatedFormat('M Y')),
-                'total' => (int) \App\Models\Payment::whereBetween('paid_on', [$month->copy()->startOfMonth(), $month->copy()->endOfMonth()])->sum('amount'),
+                'total' => (int) ($paidByMonthKey->get($month->format('Y-m')) ?? 0),
             ];
         });
 
@@ -86,7 +94,8 @@ class DashboardController extends Controller
             ->selectRaw('properties.commune as commune, sum(payments.amount) as total')
             ->groupBy('properties.commune')
             ->orderByDesc('total')
-            ->get();
+            ->get()
+            ->map(fn ($row) => ['commune' => $row->commune, 'total' => (int) $row->total]);
 
         return view('dashboard.index', [
             'period' => $period,

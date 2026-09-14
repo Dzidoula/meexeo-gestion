@@ -11,7 +11,7 @@ return [
     'modules' => [
         'residence' => [
             'label' => 'Résidence', 'sub' => 'Gestion des résidences', 'icon' => 'RE',
-            'color' => '#2563EB', 'route' => null, 'addLabel' => 'Réservation',
+            'color' => '#2563EB', 'route' => null, 'addLabel' => 'Réservation', 'generic' => true,
             'kpis' => [
                 ['label' => 'Résidences actives', 'value' => '12'],
                 ['label' => 'Chambres/apparts occupés', 'value' => '45 / 58'],
@@ -29,7 +29,7 @@ return [
         ],
         'hotel' => [
             'label' => 'Hôtel', 'sub' => 'Chambres & réservations', 'icon' => 'HT',
-            'color' => '#16A34A', 'route' => null, 'addLabel' => 'Réservation',
+            'color' => '#16A34A', 'route' => null, 'addLabel' => 'Réservation', 'generic' => true,
             'kpis' => [
                 ['label' => 'Chambres occupées', 'value' => '85 / 120'],
                 ['label' => "Taux d'occupation", 'value' => '70,8%'],
@@ -47,12 +47,12 @@ return [
         ],
         'locative' => [
             'label' => 'Gestion locative', 'sub' => 'Biens & contrats', 'icon' => 'GL',
-            'color' => '#EA580C', 'route' => 'properties.index', 'addLabel' => 'Contrat',
+            'color' => '#EA580C', 'route' => 'properties.index', 'addLabel' => 'Contrat', 'generic' => false,
             'kpis' => [], 'columns' => [], 'rows' => [],
         ],
         'evenementiel' => [
             'label' => 'Événementiel', 'sub' => 'Événements & prestations', 'icon' => 'EV',
-            'color' => '#7C3AED', 'route' => null, 'addLabel' => 'Événement',
+            'color' => '#7C3AED', 'route' => null, 'addLabel' => 'Événement', 'generic' => true,
             'kpis' => [
                 ['label' => 'Événements ce mois', 'value' => '7'],
                 ['label' => 'Équipements en stock', 'value' => '312'],
@@ -69,7 +69,7 @@ return [
         ],
         'vehicules' => [
             'label' => 'Véhicules', 'sub' => 'Parc & locations', 'icon' => 'VH',
-            'color' => '#0284C7', 'route' => null, 'addLabel' => 'Véhicule',
+            'color' => '#0284C7', 'route' => null, 'addLabel' => 'Véhicule', 'generic' => true,
             'kpis' => [
                 ['label' => 'Véhicules', 'value' => '45'],
                 ['label' => 'Disponibles', 'value' => '26'],
@@ -87,7 +87,7 @@ return [
         ],
         'stock' => [
             'label' => 'Gestion de stock', 'sub' => 'Produits & inventaire', 'icon' => 'ST',
-            'color' => '#0D9488', 'route' => null, 'addLabel' => 'Produit',
+            'color' => '#0D9488', 'route' => null, 'addLabel' => 'Produit', 'generic' => true,
             'kpis' => [
                 ['label' => 'Articles en stock', 'value' => '1 245'],
                 ['label' => 'Équipements événementiel', 'value' => '312'],
@@ -104,7 +104,7 @@ return [
         ],
         'rh' => [
             'label' => 'Ressources humaines', 'sub' => 'Employés & paie', 'icon' => 'RH',
-            'color' => '#DB2777', 'route' => null, 'addLabel' => 'Employé',
+            'color' => '#DB2777', 'route' => null, 'addLabel' => 'Employé', 'generic' => true,
             'kpis' => [
                 ['label' => 'Employés actifs', 'value' => '18'],
                 ['label' => 'Nouveaux ce mois', 'value' => '2'],
@@ -121,7 +121,7 @@ return [
         ],
         'clients' => [
             'label' => 'Clients', 'sub' => 'Clients & prospects', 'icon' => 'CL',
-            'color' => '#0891B2', 'route' => null, 'addLabel' => 'Client',
+            'color' => '#0891B2', 'route' => null, 'addLabel' => 'Client', 'generic' => true,
             'kpis' => [
                 ['label' => 'Clients actifs', 'value' => '256'],
                 ['label' => 'Nouveaux ce mois', 'value' => '14'],
@@ -138,7 +138,7 @@ return [
         ],
         'fournisseurs' => [
             'label' => 'Fournisseurs', 'sub' => 'Fournisseurs & commandes', 'icon' => 'FO',
-            'color' => '#B45309', 'route' => null, 'addLabel' => 'Fournisseur',
+            'color' => '#B45309', 'route' => null, 'addLabel' => 'Fournisseur', 'generic' => true,
             'kpis' => [
                 ['label' => 'Fournisseurs actifs', 'value' => '32'],
                 ['label' => 'Montant dû total', 'value' => '865 000 FCFA'],
@@ -154,7 +154,7 @@ return [
         ],
         'ecommerce' => [
             'label' => 'E-commerce', 'sub' => 'Boutique en ligne', 'icon' => 'EC',
-            'color' => '#E11D48', 'route' => null, 'addLabel' => 'Commande',
+            'color' => '#E11D48', 'route' => null, 'addLabel' => 'Commande', 'generic' => true,
             'kpis' => [
                 ['label' => 'Commandes ce mois', 'value' => '96'],
                 ['label' => 'Revenus e-commerce', 'value' => '1 850 000 FCFA'],
@@ -169,11 +169,11 @@ return [
                 ['cells' => ['#CMD-1038', 'Ouattara Salif', '4 articles', '210 000 FCFA'], 'status' => 'Annulée'],
             ],
         ],
-        'finance' => ['label' => 'Comptabilité', 'sub' => 'Finances & rapports', 'icon' => 'CO', 'color' => '#059669', 'route' => 'masterclays.finance'],
-        'reports' => ['label' => 'Rapports & Statistiques', 'sub' => 'Rapports & exports', 'icon' => 'RA', 'color' => '#4F46E5', 'route' => 'masterclays.reports'],
-        'permissions' => ['label' => 'Utilisateurs & Permissions', 'sub' => "Comptes & droits d'accès", 'icon' => 'UP', 'color' => '#9333EA', 'route' => 'masterclays.permissions'],
-        'notifications' => ['label' => 'Notifications', 'sub' => 'Alertes & rappels', 'icon' => 'NO', 'color' => '#DC2626', 'route' => 'masterclays.notifications'],
-        'security' => ['label' => 'Sécurité', 'sub' => 'Connexions & journaux', 'icon' => 'SE', 'color' => '#475569', 'route' => 'masterclays.security'],
-        'settings' => ['label' => 'Paramètres', 'sub' => 'Configuration du système', 'icon' => 'PA', 'color' => '#57534E', 'route' => 'masterclays.settings'],
+        'finance' => ['label' => 'Comptabilité', 'sub' => 'Finances & rapports', 'icon' => 'CO', 'color' => '#059669', 'route' => 'masterclays.finance', 'generic' => false],
+        'reports' => ['label' => 'Rapports & Statistiques', 'sub' => 'Rapports & exports', 'icon' => 'RA', 'color' => '#4F46E5', 'route' => 'masterclays.reports', 'generic' => false],
+        'permissions' => ['label' => 'Utilisateurs & Permissions', 'sub' => "Comptes & droits d'accès", 'icon' => 'UP', 'color' => '#9333EA', 'route' => 'masterclays.permissions', 'generic' => false],
+        'notifications' => ['label' => 'Notifications', 'sub' => 'Alertes & rappels', 'icon' => 'NO', 'color' => '#DC2626', 'route' => 'masterclays.notifications', 'generic' => false],
+        'security' => ['label' => 'Sécurité', 'sub' => 'Connexions & journaux', 'icon' => 'SE', 'color' => '#475569', 'route' => 'masterclays.security', 'generic' => false],
+        'settings' => ['label' => 'Paramètres', 'sub' => 'Configuration du système', 'icon' => 'PA', 'color' => '#57534E', 'route' => 'masterclays.settings', 'generic' => false],
     ],
 ];
