@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeaseController;
+use App\Http\Controllers\MasterclaysAdminController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyDocumentController;
@@ -25,6 +26,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/locataires', [TenantController::class, 'index'])->name('tenants.index');
 
     Route::get('/modules/{module}', [StaticModuleController::class, 'show'])->name('modules.show');
+
+    Route::get('/comptabilite', [MasterclaysAdminController::class, 'finance'])->name('masterclays.finance');
+    Route::get('/rapports', [MasterclaysAdminController::class, 'reports'])->name('masterclays.reports');
+    Route::get('/permissions', [MasterclaysAdminController::class, 'permissions'])->name('masterclays.permissions');
+    Route::get('/notifications', [MasterclaysAdminController::class, 'notifications'])->name('masterclays.notifications');
+    Route::get('/securite', [MasterclaysAdminController::class, 'security'])->name('masterclays.security');
+    Route::get('/parametres', [MasterclaysAdminController::class, 'settings'])->name('masterclays.settings');
 
     Route::middleware('role:manager')->group(function () {
         Route::get('/biens/nouveau', [PropertyController::class, 'create'])->name('properties.create');
