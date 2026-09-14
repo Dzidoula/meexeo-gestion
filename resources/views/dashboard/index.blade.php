@@ -4,7 +4,8 @@
             <form method="GET" class="flex gap-2">
                 @foreach (['mois' => 'Ce mois', 'trimestre' => 'Ce trimestre', 'annee' => 'Cette année'] as $value => $label)
                     <button name="periode" value="{{ $value }}"
-                            class="min-h-[44px] rounded-meexeo border px-3 text-sm {{ $period === $value ? 'border-cuivre bg-cuivre/10' : 'border-galet' }}">
+                            class="min-h-[44px] px-3 text-sm"
+                            style="border-radius:var(--radius-mc-sm);{{ $period === $value ? 'border:1px solid var(--color-mc-accent);background:rgba(67,56,202,.08)' : 'border:1px solid var(--color-mc-border)' }}">
                         {{ $label }}
                     </button>
                 @endforeach
@@ -20,28 +21,28 @@
     </div>
 
     <div class="mt-6 grid gap-5 lg:grid-cols-[1.62fr_1fr]">
-        <div class="rounded-meexeo border border-lin-clair bg-papier p-6">
+        <div class="p-6" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-border);background:var(--color-mc-surface)">
             <h2 class="font-titre text-lg">Loyers encaissés — 12 derniers mois</h2>
             <canvas id="revenue-chart" height="220" data-revenue-months="{{ json_encode($revenueByMonth) }}"></canvas>
-            <a href="#" class="mt-3 inline-block text-xs text-acier">Voir en tableau</a>
+            <a href="#" class="mt-3 inline-block text-xs" style="color:var(--color-mc-ink-faint)">Voir en tableau</a>
         </div>
-        <div class="rounded-meexeo border border-lin-clair bg-papier p-6">
+        <div class="p-6" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-border);background:var(--color-mc-surface)">
             <h2 class="font-titre text-lg">Revenu par commune</h2>
             <canvas id="commune-chart" height="220" data-commune-totals="{{ json_encode($revenueByCommune) }}"></canvas>
-            <a href="#" class="mt-3 inline-block text-xs text-acier">Voir en tableau</a>
+            <a href="#" class="mt-3 inline-block text-xs" style="color:var(--color-mc-ink-faint)">Voir en tableau</a>
         </div>
     </div>
 
     <div class="mt-6 grid gap-5 lg:grid-cols-[1.62fr_1fr]">
-        <div class="rounded-meexeo border border-lin-clair bg-papier p-6">
+        <div class="p-6" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-border);background:var(--color-mc-surface)">
             <h2 class="font-titre text-lg">Loyers impayés</h2>
             @if ($unpaid->isEmpty())
-                <p class="mt-4 text-sm text-brume">Aucun impayé pour le moment.</p>
+                <p class="mt-4 text-sm" style="color:var(--color-mc-ink-faint)">Aucun impayé pour le moment.</p>
             @else
-                <ul class="mt-4 divide-y divide-lin-pale">
+                <ul class="mt-4 divide-y divide-[var(--color-mc-border-soft)]">
                     @foreach ($unpaid as $row)
                         <li class="flex items-center justify-between gap-3 py-3 text-sm">
-                            <a href="{{ route('tenants.show', $row['lease']->tenant) }}" class="hover:text-cuivre">
+                            <a href="{{ route('tenants.show', $row['lease']->tenant) }}" class="hover:[color:var(--color-mc-accent)]">
                                 {{ $row['lease']->tenant->full_name }} — {{ $row['lease']->property->title }}
                             </a>
                             <x-status-badge :status="$row['status']" />
@@ -51,22 +52,23 @@
             @endif
         </div>
 
-        <div class="rounded-meexeo border border-lin-clair bg-papier p-6">
+        <div class="p-6" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-border);background:var(--color-mc-surface)">
             <div class="flex items-center justify-between">
                 <h2 class="font-titre text-lg">Échéances du jour</h2>
                 <button type="button" disabled title="Bientôt disponible"
-                        class="min-h-[44px] rounded-meexeo border border-galet bg-papier px-3 text-xs text-brume opacity-60">
+                        class="min-h-[44px] px-3 text-xs opacity-60"
+                        style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border);background:var(--color-mc-surface);color:var(--color-mc-ink-faint)">
                     Lancer les relances
                 </button>
             </div>
             @if ($dueSoon->isEmpty())
-                <p class="mt-4 text-sm text-brume">Aucune échéance dans les prochains jours.</p>
+                <p class="mt-4 text-sm" style="color:var(--color-mc-ink-faint)">Aucune échéance dans les prochains jours.</p>
             @else
-                <ul class="mt-4 divide-y divide-lin-pale">
+                <ul class="mt-4 divide-y divide-[var(--color-mc-border-soft)]">
                     @foreach ($dueSoon as $row)
                         <li class="py-3 text-sm">
                             <p>{{ $row['lease']->tenant->full_name }}</p>
-                            <p class="text-xs text-brume">{{ $row['label'] }}</p>
+                            <p class="text-xs" style="color:var(--color-mc-ink-faint)">{{ $row['label'] }}</p>
                         </li>
                     @endforeach
                 </ul>

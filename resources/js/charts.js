@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 labels: months.map((m) => m.label),
                 datasets: [{
                     data: months.map((m) => m.total),
-                    borderColor: '#A9663A',
-                    backgroundColor: 'rgba(169, 102, 58, 0.08)',
+                    borderColor: '#4338CA',
+                    backgroundColor: 'rgba(67, 56, 202, 0.08)',
                     fill: true,
                     tension: 0.3,
                     pointRadius: 3,
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             options: {
                 plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true }, x: { grid: { color: '#E9E3DA' } } },
+                scales: { y: { beginAtZero: true }, x: { grid: { color: '#E7E8F0' } } },
             },
         });
     }
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 labels: rows.map((r) => r.commune),
                 datasets: [{
                     data: rows.map((r) => r.total),
-                    backgroundColor: '#101E28',
+                    backgroundColor: '#6C7093',
                 }],
             },
             options: { plugins: { legend: { display: false } } },
