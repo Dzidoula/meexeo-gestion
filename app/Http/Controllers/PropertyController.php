@@ -38,6 +38,7 @@ class PropertyController extends Controller
                         ->orWhere('block_number', 'like', "%{$search}%");
                 });
             })
+            ->with('activeLease.tenant')
             ->orderBy('city')
             ->orderBy('commune')
             ->orderBy('title')

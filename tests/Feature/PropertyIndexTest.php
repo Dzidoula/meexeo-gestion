@@ -162,4 +162,26 @@ class PropertyIndexTest extends TestCase
             ->assertOk()
             ->assertSee('0 FCFA');
     }
+
+    public function test_it_shows_the_current_tenant_of_an_occupied_property(): void
+    {
+        $lease = \App\Models\Lease::factory()->create();
+        $lease->property->update(['status' => \App\Enums\PropertyStatus::Occupied]);
+
+        $this->actingAsManager()
+            ->get('/biens')
+            ->assertOk()
+            ->assertSee($lease->tenant->full_name);
+    }
+
+    public function test_it_shows_a_dash_for_a_vacant_property(): void
+    {
+        Property::factory()->vacant()->create(['title' => 'Studio libre']);
+
+        $this->actingAsManager()
+            ->get('/biens')
+            ->assertOk()
+            ->assertSeeText('Studio libre')
+            ->assertSeeText('—');
+    }
 }

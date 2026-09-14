@@ -5,7 +5,8 @@
         <x-slot:actions>
             @if ($canWrite)
                 <a href="{{ route('properties.create') }}"
-                   class="inline-flex min-h-[44px] items-center rounded-meexeo bg-cuivre px-4 text-sm font-semibold text-papier">
+                   class="inline-flex min-h-[44px] items-center"
+                   style="border-radius:var(--radius-mc-sm);background:var(--color-mc-accent);padding:0 16px;font-size:13px;font-weight:700;color:#fff">
                     Ajouter un bien
                 </a>
             @endif
@@ -33,13 +34,15 @@
 
     <form method="GET" class="mt-6 flex flex-wrap items-end gap-3">
         <div class="min-w-[220px] flex-1">
-            <label for="q" class="text-xs font-semibold text-ardoise">Recherche</label>
+            <label for="q" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft)">Recherche</label>
             <input id="q" name="q" value="{{ request('q') }}" placeholder="Titre, quartier, lot…"
-                   class="mt-1.5 min-h-[44px] w-full rounded-meexeo border border-lin bg-papier px-3 text-sm">
+                   class="mt-1.5 min-h-[44px] w-full"
+                   style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border);background:var(--color-mc-surface);padding:0 12px;font-size:13px;color:var(--color-mc-ink)">
         </div>
         <div>
-            <label for="commune" class="text-xs font-semibold text-ardoise">Commune</label>
-            <select id="commune" name="commune" class="mt-1.5 min-h-[44px] rounded-meexeo border border-lin bg-papier px-3 text-sm">
+            <label for="commune" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft)">Commune</label>
+            <select id="commune" name="commune" class="mt-1.5 min-h-[44px]"
+                    style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border);background:var(--color-mc-surface);padding:0 12px;font-size:13px;color:var(--color-mc-ink)">
                 <option value="">Toutes</option>
                 @foreach ($communes as $commune)
                     <option value="{{ $commune }}" @selected(request('commune') === $commune)>{{ $commune }}</option>
@@ -47,8 +50,9 @@
             </select>
         </div>
         <div>
-            <label for="type" class="text-xs font-semibold text-ardoise">Type</label>
-            <select id="type" name="type" class="mt-1.5 min-h-[44px] rounded-meexeo border border-lin bg-papier px-3 text-sm">
+            <label for="type" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft)">Type</label>
+            <select id="type" name="type" class="mt-1.5 min-h-[44px]"
+                    style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border);background:var(--color-mc-surface);padding:0 12px;font-size:13px;color:var(--color-mc-ink)">
                 <option value="">Tous</option>
                 @foreach ($types as $value => $label)
                     <option value="{{ $value }}" @selected(request('type') === $value)>{{ $label }}</option>
@@ -56,50 +60,53 @@
             </select>
         </div>
         <div>
-            <label for="status" class="text-xs font-semibold text-ardoise">État</label>
-            <select id="status" name="status" class="mt-1.5 min-h-[44px] rounded-meexeo border border-lin bg-papier px-3 text-sm">
+            <label for="status" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft)">État</label>
+            <select id="status" name="status" class="mt-1.5 min-h-[44px]"
+                    style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border);background:var(--color-mc-surface);padding:0 12px;font-size:13px;color:var(--color-mc-ink)">
                 <option value="">Tous</option>
                 @foreach ($statuses as $value => $label)
                     <option value="{{ $value }}" @selected(request('status') === $value)>{{ $label }}</option>
                 @endforeach
             </select>
         </div>
-        <button class="min-h-[44px] rounded-meexeo bg-lagune px-4 text-sm font-semibold text-sable">Filtrer</button>
+        <button class="min-h-[44px]" style="border-radius:var(--radius-mc-sm);border:none;background:var(--color-mc-accent);color:#fff;padding:0 18px;font-size:13px;font-weight:700">Filtrer</button>
         @if (request()->hasAny(['q', 'commune', 'type', 'status', 'city']))
-            <a href="{{ route('properties.index') }}" class="inline-flex min-h-[44px] items-center px-2 text-sm text-acier">Réinitialiser</a>
+            <a href="{{ route('properties.index') }}" class="inline-flex min-h-[44px] items-center px-2" style="font-size:13px;color:var(--color-mc-ink-faint)">Réinitialiser</a>
         @endif
     </form>
 
     @if ($properties->isEmpty())
-        <p class="mt-8 rounded-meexeo border border-lin-clair bg-papier p-8 text-center text-sm text-brume">
+        <p class="mt-8 text-center" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-border);background:var(--color-mc-surface);padding:32px;font-size:13px;color:var(--color-mc-ink-soft)">
             Aucun bien ne correspond à cette recherche.
         </p>
     @else
         {{-- Tableau au-delà de 1024 px --}}
-        <div class="mt-6 hidden overflow-x-auto rounded-meexeo border border-lin-clair bg-papier lg:block">
+        <div class="mt-6 hidden overflow-x-auto lg:block" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-border);background:var(--color-mc-surface)">
             <table class="w-full text-sm">
                 <thead>
-                    <tr class="border-b border-lin-clair text-left">
-                        <th class="surtitre px-4 py-3">Référence</th>
-                        <th class="surtitre px-4 py-3">Bien</th>
-                        <th class="surtitre px-4 py-3">Localisation</th>
-                        <th class="surtitre px-4 py-3">Type</th>
-                        <th class="surtitre px-4 py-3 text-right">Loyer</th>
-                        <th class="surtitre px-4 py-3">État</th>
+                    <tr style="border-bottom:1px solid var(--color-mc-border);background:var(--color-mc-table-head)">
+                        <th class="px-4 py-3 text-left" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">RÉFÉRENCE</th>
+                        <th class="px-4 py-3 text-left" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">BIEN</th>
+                        <th class="px-4 py-3 text-left" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">LOCALISATION</th>
+                        <th class="px-4 py-3 text-left" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">TYPE</th>
+                        <th class="px-4 py-3 text-right" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">LOYER</th>
+                        <th class="px-4 py-3 text-left" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">LOCATAIRE ACTUEL</th>
+                        <th class="px-4 py-3 text-left" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">ÉTAT</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($properties as $property)
-                        <tr class="border-b border-lin-pale last:border-0">
-                            <td class="chiffre px-4 py-3 text-xs text-brume">{{ $property->reference }}</td>
+                        <tr style="border-bottom:1px solid var(--color-mc-border-soft)">
+                            <td class="px-4 py-3" style="font-size:12px;color:var(--color-mc-ink-faint)">{{ $property->reference }}</td>
                             <td class="px-4 py-3">
-                                <a href="{{ route('properties.show', $property) }}" class="font-titre text-base text-lagune hover:text-cuivre">
+                                <a href="{{ route('properties.show', $property) }}" style="font-size:14px;font-weight:700;color:var(--color-mc-ink)">
                                     {{ $property->title }}
                                 </a>
                             </td>
-                            <td class="px-4 py-3 text-xs text-ardoise">{{ $property->full_address }}</td>
-                            <td class="px-4 py-3 text-xs text-ardoise">{{ $property->type->label() }}</td>
-                            <td class="chiffre px-4 py-3 text-right font-semibold">{{ \App\Support\Money::fcfa($property->monthly_rent) }}</td>
+                            <td class="px-4 py-3" style="font-size:12px;color:var(--color-mc-ink-soft)">{{ $property->full_address }}</td>
+                            <td class="px-4 py-3" style="font-size:12px;color:var(--color-mc-ink-soft)">{{ $property->type->label() }}</td>
+                            <td class="px-4 py-3 text-right" style="font-size:13px;font-weight:700;color:var(--color-mc-ink)">{{ \App\Support\Money::fcfa($property->monthly_rent) }}</td>
+                            <td class="px-4 py-3" style="font-size:13px;color:var(--color-mc-ink)">{{ $property->activeLease?->tenant?->full_name ?? '—' }}</td>
                             <td class="px-4 py-3"><x-status-badge :status="$property->status->value" /></td>
                         </tr>
                     @endforeach
@@ -110,16 +117,17 @@
         {{-- Cartes empilées sur téléphone : le loyer et l'état restent visibles sans défilement latéral --}}
         <div class="mt-6 space-y-3 lg:hidden">
             @foreach ($properties as $property)
-                <a href="{{ route('properties.show', $property) }}" class="block rounded-meexeo border border-lin-clair bg-papier p-4">
+                <a href="{{ route('properties.show', $property) }}" class="block" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-border);background:var(--color-mc-surface);padding:16px">
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <p class="chiffre text-[11px] text-brume">{{ $property->reference }}</p>
-                            <p class="font-titre text-lg">{{ $property->title }}</p>
-                            <p class="mt-0.5 text-xs text-ardoise">{{ $property->full_address }}</p>
+                            <p style="font-size:11px;color:var(--color-mc-ink-faint)">{{ $property->reference }}</p>
+                            <p style="font-size:16px;font-weight:700;color:var(--color-mc-ink)">{{ $property->title }}</p>
+                            <p class="mt-0.5" style="font-size:12px;color:var(--color-mc-ink-soft)">{{ $property->full_address }}</p>
                         </div>
                         <x-status-badge :status="$property->status->value" />
                     </div>
-                    <p class="chiffre mt-3 text-lg font-semibold">{{ \App\Support\Money::fcfa($property->monthly_rent) }}</p>
+                    <p class="mt-3" style="font-size:12px;color:var(--color-mc-ink-soft)">Locataire : {{ $property->activeLease?->tenant?->full_name ?? '—' }}</p>
+                    <p class="mt-1" style="font-size:16px;font-weight:700;color:var(--color-mc-ink)">{{ \App\Support\Money::fcfa($property->monthly_rent) }}</p>
                 </a>
             @endforeach
         </div>
