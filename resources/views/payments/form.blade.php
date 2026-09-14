@@ -100,7 +100,7 @@
 
                 <button type="submit" :disabled="! preuveJointe"
                         class="min-h-[44px] w-full px-5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50"
-                        style="border-radius:var(--radius-mc);background:var(--color-mc-accent);color:var(--color-mc-on-accent)">
+                        style="border-radius:var(--radius-mc-sm);background:var(--color-mc-accent);color:var(--color-mc-on-accent)">
                     <span x-show="preuveJointe">Enregistrer le paiement</span>
                     <span x-show="! preuveJointe" x-cloak>Joignez une preuve de paiement pour valider</span>
                 </button>

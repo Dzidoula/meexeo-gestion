@@ -94,7 +94,7 @@
                     @if ($canWrite)
                         <a href="{{ route('leases.create', ['property' => $property->id]) }}"
                            class="mt-3 inline-flex min-h-[44px] items-center px-4 text-sm font-semibold"
-                           style="border-radius:var(--radius-mc);background:var(--color-mc-accent);color:var(--color-mc-on-accent)">
+                           style="border-radius:var(--radius-mc-sm);background:var(--color-mc-accent);color:var(--color-mc-on-accent)">
                             Affecter à un locataire
                         </a>
                     @endif
@@ -137,7 +137,7 @@
                       style="border-radius:var(--radius-mc);border-color:var(--color-mc-border);background:var(--color-mc-surface)">
                     @csrf
                     <input type="file" name="photo" accept="image/*" required class="text-sm">
-                    <button class="min-h-[44px] px-4 text-sm font-semibold" style="border-radius:var(--radius-mc);background:var(--color-mc-accent);color:var(--color-mc-on-accent)">Ajouter la photo</button>
+                    <button class="min-h-[44px] px-4 text-sm font-semibold" style="border-radius:var(--radius-mc-sm);background:var(--color-mc-accent);color:var(--color-mc-on-accent)">Ajouter la photo</button>
                     @error('photo') <p class="text-xs" style="color:var(--color-mc-danger)">{{ $message }}</p> @enderror
                 </form>
             @endif
@@ -186,7 +186,7 @@
                         </select>
                     </div>
                     <input type="file" name="file" accept=".pdf,image/*" required class="text-sm">
-                    <button class="min-h-[44px] px-4 text-sm font-semibold" style="border-radius:var(--radius-mc);background:var(--color-mc-accent);color:var(--color-mc-on-accent)">Joindre</button>
+                    <button class="min-h-[44px] px-4 text-sm font-semibold" style="border-radius:var(--radius-mc-sm);background:var(--color-mc-accent);color:var(--color-mc-on-accent)">Joindre</button>
                     @error('file') <p class="text-xs" style="color:var(--color-mc-danger)">{{ $message }}</p> @enderror
                     @error('type') <p class="text-xs" style="color:var(--color-mc-danger)">{{ $message }}</p> @enderror
                 </form>

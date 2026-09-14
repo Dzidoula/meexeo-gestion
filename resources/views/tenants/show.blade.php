@@ -87,7 +87,7 @@
                         </select>
                     </div>
                     <input type="file" name="file" accept=".pdf,image/*" required class="text-sm">
-                    <button class="min-h-[44px] px-4 text-sm font-semibold" style="border-radius:var(--radius-mc);background:var(--color-mc-accent);color:var(--color-mc-on-accent)">Joindre</button>
+                    <button class="min-h-[44px] px-4 text-sm font-semibold" style="border-radius:var(--radius-mc-sm);background:var(--color-mc-accent);color:var(--color-mc-on-accent)">Joindre</button>
                     @error('file') <p class="text-xs" style="color:var(--color-mc-danger)">{{ $message }}</p> @enderror
                     @error('type') <p class="text-xs" style="color:var(--color-mc-danger)">{{ $message }}</p> @enderror
                 </form>
