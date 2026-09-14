@@ -13,9 +13,9 @@
 
             <section class="rounded-meexeo border border-lin-clair bg-papier p-6">
                 <h2 class="font-titre text-lg">1. Locataire et bien</h2>
-                <form method="GET" action="{{ route('payments.create') }}" class="mt-4">
+                <div class="mt-4">
                     <label for="lease_picker" class="text-xs font-semibold text-ardoise">Bail concerné</label>
-                    <select id="lease_picker" name="lease" onchange="this.form.submit()"
+                    <select id="lease_picker" name="lease" onchange="window.location.href = '{{ route('payments.create') }}' + (this.value ? '?lease=' + this.value : '')"
                             class="mt-1.5 min-h-[44px] w-full rounded-meexeo border border-lin px-3 text-sm">
                         <option value="">Choisir un bail…</option>
                         @foreach ($leases as $option)
@@ -24,7 +24,7 @@
                             </option>
                         @endforeach
                     </select>
-                </form>
+                </div>
                 @error('lease_id') <p class="mt-2 text-xs text-terre">{{ $message }}</p> @enderror
             </section>
 
