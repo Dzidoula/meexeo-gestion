@@ -37,7 +37,8 @@
                         @php($cursor = $lease->start_date->copy()->startOfMonth())
                         @php($today = now())
                         @while ($cursor->lte($today))
-                            @php($paidThisMonth = $lease->payments->where('month', $cursor->toDateString())->sum('amount'))
+                            {{-- `month` est casté en Carbon : comparer avec une chaîne ne matcherait jamais. --}}
+                            @php($paidThisMonth = $lease->payments->filter(fn ($p) => $p->month->isSameMonth($cursor))->sum('amount'))
                             @php($status = \App\Support\PaymentMonthStatus::for($lease->monthly_rent, $paidThisMonth, $cursor, $lease->due_day, $today))
                             <label class="flex min-h-[44px] cursor-pointer items-center justify-between gap-2 rounded-meexeo border border-lin px-3 py-2 text-sm has-[:checked]:border-cuivre">
                                 <span>
