@@ -57,6 +57,27 @@
   /* Formes */
   --radius-meexeo: 3px;
   --radius-meexeo-sm: 2px;
+
+  /* MASTERCLAYS — coexiste avec les jetons MEEXEO ci-dessus, ne les remplace pas */
+  --color-mc-canvas: #F2F3F7;
+  --color-mc-surface: #FFFFFF;
+  --color-mc-ink: #1A1D29;
+  --color-mc-ink-soft: #6C7093;
+  --color-mc-ink-faint: #8B90AC;
+  --color-mc-ink-quiet: #9A9EBB;
+  --color-mc-border: #E7E8F0;
+  --color-mc-border-soft: #F1F1F6;
+  --color-mc-sidebar: #181A2E;
+  --color-mc-sidebar-ink: #8B90AC;
+  --color-mc-accent: #4338CA;
+  --color-mc-success: #16A34A;
+  --color-mc-danger: #DC2626;
+  --color-mc-warning: #D97706;
+  --color-mc-hover: #F7F7FB;
+  --color-mc-table-head: #FAFAFC;
+
+  --radius-mc: 12px;
+  --radius-mc-sm: 8px;
 }
 
 @layer utilities {
