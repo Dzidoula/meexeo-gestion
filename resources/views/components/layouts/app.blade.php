@@ -103,10 +103,62 @@
         @endauth
     </aside>
 
-    <div class="min-w-0 flex-1">
-        <header class="flex h-[68px] items-center gap-3 border-b border-lin bg-papier px-5">
-            <button class="min-h-[44px] px-2 lg:hidden" @click="menu = ! menu" aria-label="Ouvrir le menu">☰</button>
-            <div class="ml-auto flex items-center gap-2">{{ $topbar ?? '' }}</div>
+    <div class="min-w-0 flex-1" x-data="{ openDropdown: null }" @click.outside="openDropdown = null">
+        <header class="flex items-center gap-4" style="height:64px;flex:none;background:#fff;border-bottom:1px solid var(--color-mc-border);padding:0 24px;position:relative;z-index:20">
+            <button type="button" aria-label="Réduire ou déplier le menu" @click="toggle()"
+                    class="min-h-[44px] hidden lg:flex items-center justify-center" style="width:36px;height:36px;border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border);background:#fff">
+                <span style="width:16px;height:2px;background:#4A4E6B;display:block;position:relative">
+                    <span style="position:absolute;top:-5px;left:0;width:16px;height:2px;background:#4A4E6B"></span>
+                    <span style="position:absolute;top:5px;left:0;width:16px;height:2px;background:#4A4E6B"></span>
+                </span>
+            </button>
+            <button type="button" aria-label="Ouvrir le menu" @click="menu = ! menu" class="min-h-[44px] px-2 lg:hidden">☰</button>
+
+            <div class="hidden md:flex items-center" style="flex:1;max-width:420px;gap:10px;background:var(--color-mc-canvas);border-radius:var(--radius-mc-sm);padding:9px 14px">
+                <span style="font-size:13.5px;color:var(--color-mc-ink-faint)">Rechercher...</span>
+            </div>
+
+            <div style="flex:1"></div>
+
+            <div class="relative">
+                <button type="button" aria-label="Notifications" @click="openDropdown = openDropdown === 'notif' ? null : 'notif'"
+                        class="min-h-[44px]" style="width:38px;height:38px;border-radius:var(--radius-mc-sm);border:none;background:var(--color-mc-canvas)">🔔</button>
+                <div x-show="openDropdown === 'notif'" x-cloak style="position:absolute;top:48px;right:0;width:300px;background:#fff;border:1px solid var(--color-mc-border);border-radius:var(--radius-mc);box-shadow:0 16px 40px rgba(20,20,40,.18);padding:14px">
+                    <div style="font-size:12.5px;font-weight:800;color:#5D6285;letter-spacing:.5px;margin-bottom:8px">NOTIFICATIONS</div>
+                    <div style="font-size:12.5px;color:var(--color-mc-ink-soft)">Aucune notification pour le moment.</div>
+                </div>
+            </div>
+
+            <div class="relative">
+                <button type="button" aria-label="Messages" @click="openDropdown = openDropdown === 'mail' ? null : 'mail'"
+                        class="min-h-[44px]" style="width:38px;height:38px;border-radius:var(--radius-mc-sm);border:none;background:var(--color-mc-canvas)">✉️</button>
+                <div x-show="openDropdown === 'mail'" x-cloak style="position:absolute;top:48px;right:0;width:300px;background:#fff;border:1px solid var(--color-mc-border);border-radius:var(--radius-mc);box-shadow:0 16px 40px rgba(20,20,40,.18);padding:14px">
+                    <div style="font-size:12.5px;font-weight:800;color:#5D6285;letter-spacing:.5px;margin-bottom:8px">MESSAGES</div>
+                    <div style="font-size:12.5px;color:var(--color-mc-ink-soft)">Aucun message pour le moment.</div>
+                </div>
+            </div>
+
+            <div style="width:1px;height:26px;background:var(--color-mc-border)"></div>
+
+            @auth
+                <div class="relative">
+                    <button type="button" @click="openDropdown = openDropdown === 'profile' ? null : 'profile'" class="flex items-center min-h-[44px]" style="gap:10px;padding:4px 6px;border-radius:var(--radius-mc-sm)">
+                        <span class="flex items-center justify-center text-white font-extrabold text-sm" style="width:38px;height:38px;border-radius:50%;background:var(--color-mc-accent)">
+                            {{ collect(explode(' ', auth()->user()->name))->map(fn ($n) => mb_substr($n, 0, 1))->take(2)->implode('') }}
+                        </span>
+                        <span class="hidden md:block text-left">
+                            <span style="display:block;font-size:13px;font-weight:700">{{ auth()->user()->name }}</span>
+                            <span style="display:block;font-size:11px;color:var(--color-mc-ink-faint)">{{ auth()->user()->role->label() }}</span>
+                        </span>
+                    </button>
+                    <div x-show="openDropdown === 'profile'" x-cloak style="position:absolute;top:52px;right:0;width:200px;background:#fff;border:1px solid var(--color-mc-border);border-radius:var(--radius-mc);box-shadow:0 16px 40px rgba(20,20,40,.18);padding:8px">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="min-h-[44px] w-full text-left" style="padding:9px 10px;border-radius:var(--radius-mc-sm);font-size:13px;font-weight:600;color:var(--color-mc-danger)">Déconnexion</button>
+                        </form>
+                    </div>
+                </div>
+            @endauth
         </header>
         <main class="p-6 lg:p-8">{{ $slot }}</main>
     </div>
