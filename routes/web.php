@@ -7,6 +7,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyDocumentController;
 use App\Http\Controllers\PropertyPhotoController;
+use App\Http\Controllers\StaticModuleController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TenantDocumentController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/biens', [PropertyController::class, 'index'])->name('properties.index');
     Route::get('/locataires', [TenantController::class, 'index'])->name('tenants.index');
+
+    Route::get('/modules/{module}', [StaticModuleController::class, 'show'])->name('modules.show');
 
     Route::middleware('role:manager')->group(function () {
         Route::get('/biens/nouveau', [PropertyController::class, 'create'])->name('properties.create');
