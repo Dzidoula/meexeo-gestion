@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Enums\DocumentType;
+use App\Enums\LeaseStatus;
 use App\Enums\PropertyStatus;
 use App\Enums\PropertyType;
 use App\Http\Requests\StorePropertyRequest;
 use App\Http\Requests\UpdatePropertyRequest;
+use App\Models\Lease;
 use App\Models\Property;
+use App\Support\PaymentMonthStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -41,11 +44,38 @@ class PropertyController extends Controller
             ->paginate(25)
             ->withQueryString();
 
+        $today = now();
+        $month = $today->copy()->startOfMonth();
+
+        $activeLeaseStats = Lease::query()
+            ->where('status', LeaseStatus::Active->value)
+            ->with('payments')
+            ->get()
+            ->map(function (Lease $lease) use ($month, $today) {
+                $paidThisMonth = $lease->payments->filter(fn ($p) => $p->month->isSameMonth($month))->sum('amount');
+                $status = PaymentMonthStatus::for($lease->monthly_rent, $paidThisMonth, $month, $lease->due_day, $today);
+                $shortfall = max(0, $lease->monthly_rent - $paidThisMonth);
+
+                return ['status' => $status, 'shortfall' => $shortfall];
+            });
+
+        $activeLeasesCount = $activeLeaseStats->count();
+
+        $unpaidStats = $activeLeaseStats->filter(fn (array $row) => in_array($row['status'], ['late', 'unpaid'], true));
+        $unpaidCount = $unpaidStats->count();
+        $unpaidAmount = (int) $unpaidStats->sum('shortfall');
+
+        $occupiedCount = Property::where('status', PropertyStatus::Occupied->value)->count();
+
         return view('properties.index', [
             'properties' => $properties,
             'communes' => Property::query()->whereNotNull('commune')->distinct()->orderBy('commune')->pluck('commune'),
             'types' => PropertyType::options(),
             'statuses' => PropertyStatus::options(),
+            'occupiedCount' => $occupiedCount,
+            'activeLeasesCount' => $activeLeasesCount,
+            'unpaidCount' => $unpaidCount,
+            'unpaidAmount' => $unpaidAmount,
         ]);
     }
 

@@ -12,6 +12,25 @@
         </x-slot:actions>
     </x-page-header>
 
+    <div class="mt-6 grid gap-3.5" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
+        <div style="background:var(--color-mc-surface);border:1px solid var(--color-mc-border);border-radius:var(--radius-mc);padding:16px">
+            <div style="font-size:12px;color:var(--color-mc-ink-faint);font-weight:600">Biens loués</div>
+            <div style="font-size:20px;font-weight:800;margin-top:4px">{{ $occupiedCount }}</div>
+        </div>
+        <div style="background:var(--color-mc-surface);border:1px solid var(--color-mc-border);border-radius:var(--radius-mc);padding:16px">
+            <div style="font-size:12px;color:var(--color-mc-ink-faint);font-weight:600">Contrats actifs</div>
+            <div style="font-size:20px;font-weight:800;margin-top:4px">{{ $activeLeasesCount }}</div>
+        </div>
+        <div style="background:var(--color-mc-surface);border:1px solid var(--color-mc-border);border-radius:var(--radius-mc);padding:16px">
+            <div style="font-size:12px;color:var(--color-mc-ink-faint);font-weight:600">Loyers impayés</div>
+            <div style="font-size:20px;font-weight:800;margin-top:4px">{{ $unpaidCount }}</div>
+        </div>
+        <div style="background:var(--color-mc-surface);border:1px solid var(--color-mc-border);border-radius:var(--radius-mc);padding:16px">
+            <div style="font-size:12px;color:var(--color-mc-ink-faint);font-weight:600">Montant dû</div>
+            <div style="font-size:20px;font-weight:800;margin-top:4px">{{ \App\Support\Money::fcfa($unpaidAmount) }}</div>
+        </div>
+    </div>
+
     <form method="GET" class="mt-6 flex flex-wrap items-end gap-3">
         <div class="min-w-[220px] flex-1">
             <label for="q" class="text-xs font-semibold text-ardoise">Recherche</label>

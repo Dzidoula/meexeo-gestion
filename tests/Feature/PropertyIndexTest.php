@@ -108,4 +108,58 @@ class PropertyIndexTest extends TestCase
             ->assertOk()
             ->assertSee('Ajouter un bien');
     }
+
+    public function test_it_shows_the_occupied_and_active_lease_counts(): void
+    {
+        Property::factory()->occupied()->count(2)->create();
+        Property::factory()->vacant()->create();
+
+        \App\Models\Lease::factory()->count(3)->create();
+
+        $html = $this->actingAsManager()->get('/biens')->assertOk()->getContent();
+
+        // Ancrée sur la carte KPI précise (libellé puis valeur), pas une simple
+        // recherche de chiffre isolé qui collerait presque toujours par hasard
+        // (padding, tailles de police, etc. contiennent aussi des chiffres).
+        $this->assertMatchesRegularExpression('/Biens lou.s<\/div>\s*<div[^>]*>\s*2\s*<\/div>/u', $html);
+        $this->assertMatchesRegularExpression('/Contrats actifs<\/div>\s*<div[^>]*>\s*3\s*<\/div>/u', $html);
+    }
+
+    public function test_it_counts_unpaid_active_leases_and_sums_the_shortfall(): void
+    {
+        // Date figée : le calcul du statut mensuel dépend du jour réel.
+        \Illuminate\Support\Carbon::setTestNow('2026-06-20');
+
+        try {
+            \App\Models\Lease::factory()->create([
+                'monthly_rent' => 217000,
+                'due_day' => 1, // échu depuis 19 jours : impayé, pas seulement en retard
+            ]);
+            // Aucun paiement ce mois-ci pour ce bail : il compte pour tout le loyer.
+
+            $paidLease = \App\Models\Lease::factory()->create([
+                'monthly_rent' => 150000,
+                'due_day' => 1,
+            ]);
+            \App\Models\Payment::factory()->for($paidLease)->create([
+                'amount' => 150000,
+                'month' => now()->startOfMonth()->toDateString(),
+            ]);
+
+            $html = $this->actingAsManager()->get('/biens')->assertOk()->getContent();
+
+            $this->assertMatchesRegularExpression('/Loyers impay.s<\/div>\s*<div[^>]*>\s*1\s*<\/div>/u', $html);
+            $this->assertMatchesRegularExpression('/Montant d.<\/div>\s*<div[^>]*>\s*217 000 FCFA\s*<\/div>/u', $html);
+        } finally {
+            \Illuminate\Support\Carbon::setTestNow();
+        }
+    }
+
+    public function test_the_kpis_are_zero_on_an_empty_portfolio(): void
+    {
+        $this->actingAsManager()
+            ->get('/biens')
+            ->assertOk()
+            ->assertSee('0 FCFA');
+    }
 }
