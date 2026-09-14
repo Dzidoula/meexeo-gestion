@@ -33,7 +33,7 @@
                 <div style="width:14px;height:14px;background:#fff;border-radius:3px;transform:rotate(45deg)"></div>
             </div>
             <div x-show="! collapsed" x-cloak>
-                <div style="font-size:15px;font-weight:800;color:#fff;letter-spacing:.5px;line-height:1.1">MASTERCLAYS</div>
+                <div style="font-size:15px;font-weight:800;color:var(--color-mc-on-accent);letter-spacing:.5px;line-height:1.1">MASTERCLAYS</div>
                 <div style="font-size:9.5px;font-weight:600;color:var(--color-mc-sidebar-ink);letter-spacing:1px">DASHBOARD CENTRALISÉ</div>
             </div>
         </div>
@@ -46,7 +46,7 @@
                style="padding:10px;{{ request()->routeIs('dashboard') ? 'background:rgba(67,56,202,.165);border-left:3px solid var(--color-mc-accent)' : 'border-left:3px solid transparent' }}">
                 <div class="flex items-center justify-center text-white font-extrabold text-xs" style="width:34px;height:34px;flex:none;border-radius:8px;background:var(--color-mc-accent)">TB</div>
                 <div x-show="! collapsed" x-cloak style="min-width:0">
-                    <div style="font-size:13.5px;font-weight:700;color:#fff">Tableau de bord</div>
+                    <div style="font-size:13.5px;font-weight:700;color:var(--color-mc-on-accent)">Tableau de bord</div>
                     <div style="font-size:11px;color:var(--color-mc-sidebar-ink)">Vue d'ensemble</div>
                 </div>
             </a>
@@ -64,7 +64,7 @@
                            style="padding:10px;{{ $isActive ? 'background:'.$module['color'].'2A;border-left:3px solid '.$module['color'] : 'border-left:3px solid transparent' }}">
                             <div class="flex items-center justify-center text-white font-extrabold text-xs" style="width:34px;height:34px;flex:none;border-radius:8px;background:{{ $module['color'] }}">{{ $module['icon'] }}</div>
                             <div x-show="! collapsed" x-cloak style="min-width:0">
-                                <div style="font-size:13.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $module['label'] }}</div>
+                                <div style="font-size:13.5px;font-weight:700;color:var(--color-mc-on-accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $module['label'] }}</div>
                                 <div style="font-size:11px;color:var(--color-mc-sidebar-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $module['sub'] }}</div>
                             </div>
                         </a>
@@ -89,7 +89,7 @@
                     <a href="{{ route($route) }}" class="flex min-h-[44px] items-center gap-3 rounded-lg mb-0.5"
                        style="padding:10px;{{ request()->routeIs($route) ? 'background:rgba(67,56,202,.16);border-left:3px solid var(--color-mc-accent)' : 'border-left:3px solid transparent' }}">
                         <span class="text-white">{!! $icon !!}</span>
-                        <span x-show="! collapsed" x-cloak style="font-size:13.5px;font-weight:700;color:#fff">{{ $label }}</span>
+                        <span x-show="! collapsed" x-cloak style="font-size:13.5px;font-weight:700;color:var(--color-mc-on-accent)">{{ $label }}</span>
                     </a>
                 @endforeach
             </div>

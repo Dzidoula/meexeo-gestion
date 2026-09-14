@@ -72,9 +72,8 @@
   --color-mc-accent: #4338CA;
   --color-mc-success: #16A34A;
   --color-mc-danger: #DC2626;
-  --color-mc-warning: #D97706;
-  --color-mc-hover: #F7F7FB;
   --color-mc-table-head: #FAFAFC;
+  --color-mc-on-accent: #FFFFFF;
 
   --radius-mc: 12px;
   --radius-mc-sm: 8px;
@@ -104,3 +103,14 @@
 
 /* Évite le clignotement des panneaux d'onglets avant le démarrage d'Alpine. */
 [x-cloak] { display: none !important; }
+
+/* Scrollbar fine assortie au fond sombre de la sidebar MASTERCLAYS. */
+.mc-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-mc-sidebar-ink) transparent;
+}
+.mc-scroll::-webkit-scrollbar { width: 6px; }
+.mc-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-mc-sidebar-ink);
+  border-radius: 3px;
+}

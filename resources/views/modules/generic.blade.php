@@ -10,8 +10,8 @@
                 </div>
             </div>
             <button type="button" disabled title="Bientôt disponible"
-                    class="text-white font-bold text-sm"
-                    style="padding:11px 18px;border-radius:var(--radius-mc-sm);border:none;background:{{ $module['color'] }};opacity:.6">
+                    class="inline-flex min-h-[44px] items-center justify-center text-white font-bold text-sm"
+                    style="padding:0 18px;border-radius:var(--radius-mc-sm);border:none;background:{{ $module['color'] }};opacity:.6">
                 + {{ $module['addLabel'] }}
             </button>
         </div>

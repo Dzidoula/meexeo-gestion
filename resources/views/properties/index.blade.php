@@ -6,7 +6,7 @@
             @if ($canWrite)
                 <a href="{{ route('properties.create') }}"
                    class="inline-flex min-h-[44px] items-center"
-                   style="border-radius:var(--radius-mc-sm);background:var(--color-mc-accent);padding:0 16px;font-size:13px;font-weight:700;color:#fff">
+                   style="border-radius:var(--radius-mc-sm);background:var(--color-mc-accent);padding:0 16px;font-size:13px;font-weight:700;color:var(--color-mc-on-accent)">
                     Ajouter un bien
                 </a>
             @endif
@@ -69,7 +69,7 @@
                 @endforeach
             </select>
         </div>
-        <button class="min-h-[44px]" style="border-radius:var(--radius-mc-sm);border:none;background:var(--color-mc-accent);color:#fff;padding:0 18px;font-size:13px;font-weight:700">Filtrer</button>
+        <button class="min-h-[44px]" style="border-radius:var(--radius-mc-sm);border:none;background:var(--color-mc-accent);color:var(--color-mc-on-accent);padding:0 18px;font-size:13px;font-weight:700">Filtrer</button>
         @if (request()->hasAny(['q', 'commune', 'type', 'status', 'city']))
             <a href="{{ route('properties.index') }}" class="inline-flex min-h-[44px] items-center px-2" style="font-size:13px;color:var(--color-mc-ink-faint)">Réinitialiser</a>
         @endif
