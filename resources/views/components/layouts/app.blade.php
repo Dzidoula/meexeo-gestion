@@ -26,7 +26,7 @@
     <aside
         :class="[menu ? 'translate-x-0' : '-translate-x-full lg:translate-x-0', collapsed ? 'lg:w-[80px]' : 'lg:w-[250px]']"
         class="fixed inset-y-0 left-0 z-40 w-[250px] shrink-0 transition-[transform,width] lg:static"
-        style="background:var(--color-mc-sidebar)"
+        style="background:var(--color-mc-sidebar);display:flex;flex-direction:column"
     >
         <div class="flex items-center gap-2.5" style="padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.08)">
             <div class="flex items-center justify-center" style="width:38px;height:38px;flex:none;border-radius:10px;background:linear-gradient(135deg,var(--color-mc-accent),#7C3AED);transform:rotate(45deg)">
@@ -43,7 +43,7 @@
                  plutôt que d'en ajouter une seconde qui pointerait vers la même route. --}}
             <a href="{{ route('dashboard') }}"
                class="flex min-h-[44px] items-center gap-3 rounded-lg mb-0.5"
-               style="padding:10px;{{ request()->routeIs('dashboard') ? 'background:'.'var(--color-mc-accent)'.'2A;border-left:3px solid var(--color-mc-accent)' : 'border-left:3px solid transparent' }}">
+               style="padding:10px;{{ request()->routeIs('dashboard') ? 'background:rgba(67,56,202,.165);border-left:3px solid var(--color-mc-accent)' : 'border-left:3px solid transparent' }}">
                 <div class="flex items-center justify-center text-white font-extrabold text-xs" style="width:34px;height:34px;flex:none;border-radius:8px;background:var(--color-mc-accent)">TB</div>
                 <div x-show="! collapsed" x-cloak style="min-width:0">
                     <div style="font-size:13.5px;font-weight:700;color:#fff">Tableau de bord</div>
@@ -103,8 +103,8 @@
         @endauth
     </aside>
 
-    <div class="min-w-0 flex-1" x-data="{ openDropdown: null }" @click.outside="openDropdown = null">
-        <header class="flex items-center gap-4" style="height:64px;flex:none;background:#fff;border-bottom:1px solid var(--color-mc-border);padding:0 24px;position:relative;z-index:20">
+    <div class="min-w-0 flex-1">
+        <header class="flex items-center gap-4" x-data="{ openDropdown: null }" @click.outside="openDropdown = null" style="height:64px;flex:none;background:#fff;border-bottom:1px solid var(--color-mc-border);padding:0 24px;position:relative;z-index:20">
             <button type="button" aria-label="Réduire ou déplier le menu" @click="toggle()"
                     class="min-h-[44px] hidden lg:flex items-center justify-center" style="width:36px;height:36px;border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border);background:#fff">
                 <span style="width:16px;height:2px;background:#4A4E6B;display:block;position:relative">

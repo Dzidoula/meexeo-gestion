@@ -20,11 +20,13 @@
                 @foreach ([['emailNotif', 'Notifications par e-mail'], ['smsNotif', 'Notifications par SMS']] as [$key, $label])
                     <div class="flex items-center justify-between" style="padding:10px 0;border-bottom:1px solid var(--color-mc-border-soft)">
                         <div style="font-size:13px;font-weight:600">{{ $label }}</div>
-                        <button type="button" role="switch" :aria-checked="toggles.{{ $key }}" @click="toggles.{{ $key }} = ! toggles.{{ $key }}"
-                                class="min-h-[24px]" style="width:40px;height:22px;border-radius:11px;padding:2px;cursor:pointer;display:flex"
-                                :style="`background:${toggles.{{ $key }} ? 'var(--color-mc-accent)' : '#D9DBE6'};justify-content:${toggles.{{ $key }} ? 'flex-end' : 'flex-start'}`">
-                            <span style="width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25)"></span>
-                        </button>
+                        <div style="min-height:44px;display:flex;align-items:center">
+                            <button type="button" role="switch" :aria-checked="toggles.{{ $key }}" @click="toggles.{{ $key }} = ! toggles.{{ $key }}"
+                                    class="min-h-[24px]" style="width:40px;height:22px;border-radius:11px;padding:2px;cursor:pointer;display:flex"
+                                    :style="`background:${toggles.{{ $key }} ? 'var(--color-mc-accent)' : '#D9DBE6'};justify-content:${toggles.{{ $key }} ? 'flex-end' : 'flex-start'}`">
+                                <span style="width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25)"></span>
+                            </button>
+                        </div>
                     </div>
                 @endforeach
             </div>
