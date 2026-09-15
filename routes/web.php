@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\MasterclaysAdminController;
@@ -24,6 +25,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/biens', [PropertyController::class, 'index'])->name('properties.index');
     Route::get('/locataires', [TenantController::class, 'index'])->name('tenants.index');
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 
     Route::get('/modules/{module}', [StaticModuleController::class, 'show'])->name('modules.show');
 
@@ -58,6 +60,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/affectations/nouvelle', [LeaseController::class, 'create'])->name('leases.create');
         Route::post('/affectations', [LeaseController::class, 'store'])->name('leases.store');
         Route::patch('/affectations/{lease}/fin', [LeaseController::class, 'end'])->name('leases.end');
+
+        Route::get('/categories/nouvelle', [CategoryController::class, 'create'])->name('categories.create');
+        Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+        Route::get('/categories/{category}/modifier', [CategoryController::class, 'edit'])->name('categories.edit');
+        Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+        Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
     });
 
     Route::middleware('role:manager,accountant')->group(function () {
