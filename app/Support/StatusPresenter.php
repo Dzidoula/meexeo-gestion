@@ -22,6 +22,9 @@ class StatusPresenter
         'blacklisted' => ['Blacklisté', 'impaye'],
         // Baux
         'ended'       => ['Terminé', 'neutre'],
+        // Produits
+        'en_stock' => ['En stock', 'ok'],
+        'rupture'  => ['Rupture', 'impaye'],
         // Paiements
         'paid'    => ['Payé', 'ok'],
         'partial' => ['Partiel', 'part'],

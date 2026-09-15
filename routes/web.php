@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\MasterclaysAdminController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyDocumentController;
 use App\Http\Controllers\PropertyPhotoController;
@@ -66,6 +67,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/categories/{category}/modifier', [CategoryController::class, 'edit'])->name('categories.edit');
         Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+
+        Route::get('/produits/nouveau', [ProductController::class, 'create'])->name('products.create');
+        Route::post('/produits', [ProductController::class, 'store'])->name('products.store');
+        Route::get('/produits/{product}/modifier', [ProductController::class, 'edit'])->name('products.edit');
+        Route::put('/produits/{product}', [ProductController::class, 'update'])->name('products.update');
     });
 
     Route::middleware('role:manager,accountant')->group(function () {
@@ -75,4 +81,5 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/biens/{property}', [PropertyController::class, 'show'])->name('properties.show');
     Route::get('/locataires/{tenant}', [TenantController::class, 'show'])->name('tenants.show');
+    Route::get('/produits/{product}', [ProductController::class, 'show'])->name('products.show');
 });
