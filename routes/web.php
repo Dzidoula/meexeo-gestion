@@ -7,6 +7,7 @@ use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\MasterclaysAdminController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductPhotoController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyDocumentController;
 use App\Http\Controllers\PropertyPhotoController;
@@ -73,6 +74,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/produits', [ProductController::class, 'store'])->name('products.store');
         Route::get('/produits/{product}/modifier', [ProductController::class, 'edit'])->name('products.edit');
         Route::put('/produits/{product}', [ProductController::class, 'update'])->name('products.update');
+
+        Route::post('/produits/{product}/photos', [ProductPhotoController::class, 'store'])->name('products.photos.store');
+        Route::patch('/produits/{product}/photos/{photo}/principale', [ProductPhotoController::class, 'primary'])->name('products.photos.primary');
+        Route::delete('/produits/{product}/photos/{photo}', [ProductPhotoController::class, 'destroy'])->name('products.photos.destroy');
     });
 
     Route::middleware('role:manager,accountant')->group(function () {
