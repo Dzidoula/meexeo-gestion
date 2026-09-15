@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/biens', [PropertyController::class, 'index'])->name('properties.index');
     Route::get('/locataires', [TenantController::class, 'index'])->name('tenants.index');
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/produits', [ProductController::class, 'index'])->name('products.index');
 
     Route::get('/modules/{module}', [StaticModuleController::class, 'show'])->name('modules.show');
 

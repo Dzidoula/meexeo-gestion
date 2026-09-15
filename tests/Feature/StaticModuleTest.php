@@ -35,7 +35,6 @@ class StaticModuleTest extends TestCase
             ['rh', 'Ressources humaines'],
             ['clients', 'Clients'],
             ['fournisseurs', 'Fournisseurs'],
-            ['ecommerce', 'E-commerce'],
         ];
     }
 
@@ -61,5 +60,12 @@ class StaticModuleTest extends TestCase
             ->get('/modules/residence')
             ->assertSee('disabled', false)
             ->assertSee('Réservation');
+    }
+
+    public function test_ecommerce_is_no_longer_a_generic_static_page(): void
+    {
+        $this->actingAs(User::factory()->viewer()->create())
+            ->get('/modules/ecommerce')
+            ->assertNotFound();
     }
 }

@@ -154,20 +154,8 @@ return [
         ],
         'ecommerce' => [
             'label' => 'E-commerce', 'sub' => 'Boutique en ligne', 'icon' => 'EC',
-            'color' => '#E11D48', 'route' => null, 'addLabel' => 'Commande', 'generic' => true,
-            'kpis' => [
-                ['label' => 'Commandes ce mois', 'value' => '96'],
-                ['label' => 'Revenus e-commerce', 'value' => '1 850 000 FCFA'],
-                ['label' => 'Produits en ligne', 'value' => '214'],
-            ],
-            'columns' => ['Commande', 'Client', 'Produits', 'Montant'],
-            'rows' => [
-                ['cells' => ['#CMD-1042', 'Kouassi Jean', '2 articles', '85 000 FCFA'], 'status' => 'Livrée'],
-                ['cells' => ['#CMD-1041', 'Diarra Fatou', '1 article', '32 000 FCFA'], 'status' => 'Expédiée'],
-                ['cells' => ['#CMD-1040', "N'Guessan A.", '3 articles', '145 000 FCFA'], 'status' => 'En préparation'],
-                ['cells' => ['#CMD-1039', 'Yao Michel', '1 article', '19 000 FCFA'], 'status' => 'Nouvelle'],
-                ['cells' => ['#CMD-1038', 'Ouattara Salif', '4 articles', '210 000 FCFA'], 'status' => 'Annulée'],
-            ],
+            'color' => '#E11D48', 'route' => 'products.index', 'addLabel' => 'Produit', 'generic' => false,
+            'kpis' => [], 'columns' => [], 'rows' => [],
         ],
         'finance' => ['label' => 'Comptabilité', 'sub' => 'Finances & rapports', 'icon' => 'CO', 'color' => '#059669', 'route' => 'masterclays.finance', 'generic' => false],
         'reports' => ['label' => 'Rapports & Statistiques', 'sub' => 'Rapports & exports', 'icon' => 'RA', 'color' => '#4F46E5', 'route' => 'masterclays.reports', 'generic' => false],
