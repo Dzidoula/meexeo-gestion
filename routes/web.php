@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/produits', [ProductController::class, 'index'])->name('products.index');
     Route::get('/types-vehicules', [VehicleTypeController::class, 'index'])->name('vehicle-types.index');
+    Route::get('/vehicules', [VehicleController::class, 'index'])->name('vehicles.index');
 
     Route::get('/modules/{module}', [StaticModuleController::class, 'show'])->name('modules.show');
 

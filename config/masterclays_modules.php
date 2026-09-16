@@ -69,21 +69,8 @@ return [
         ],
         'vehicules' => [
             'label' => 'Véhicules', 'sub' => 'Parc & locations', 'icon' => 'VH',
-            'color' => '#0284C7', 'route' => null, 'addLabel' => 'Véhicule', 'generic' => true,
-            'kpis' => [
-                ['label' => 'Véhicules', 'value' => '45'],
-                ['label' => 'Disponibles', 'value' => '26'],
-                ['label' => 'Loués', 'value' => '15'],
-                ['label' => 'En maintenance', 'value' => '4'],
-            ],
-            'columns' => ['Véhicule', 'Immatriculation', 'Chauffeur', 'Dernière révision'],
-            'rows' => [
-                ['cells' => ['Toyota Hilux', 'CI-2201-AB', 'Bakayoko S.', '12/04/2025'], 'status' => 'Disponible'],
-                ['cells' => ['Toyota Corolla', 'CI-1187-CD', 'Ouattara Salif', '28/03/2025'], 'status' => 'Loué'],
-                ['cells' => ['Hyundai Tucson', 'CI-0765-EF', '—', '15/02/2025'], 'status' => 'En maintenance'],
-                ['cells' => ['Mercedes Sprinter', 'CI-3320-GH', 'Diarra Fatou', '30/04/2025'], 'status' => 'Disponible'],
-                ['cells' => ['Kia Picanto', 'CI-4402-IJ', 'Kouassi Jean', '10/04/2025'], 'status' => 'Loué'],
-            ],
+            'color' => '#0284C7', 'route' => 'vehicles.index', 'addLabel' => 'Véhicule', 'generic' => false,
+            'kpis' => [], 'columns' => [], 'rows' => [],
         ],
         'stock' => [
             'label' => 'Gestion de stock', 'sub' => 'Produits & inventaire', 'icon' => 'ST',

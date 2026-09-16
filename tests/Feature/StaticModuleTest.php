@@ -30,7 +30,6 @@ class StaticModuleTest extends TestCase
             ['residence', 'Résidence'],
             ['hotel', 'Hôtel'],
             ['evenementiel', 'Événementiel'],
-            ['vehicules', 'Véhicules'],
             ['stock', 'Gestion de stock'],
             ['rh', 'Ressources humaines'],
             ['clients', 'Clients'],
@@ -66,6 +65,13 @@ class StaticModuleTest extends TestCase
     {
         $this->actingAs(User::factory()->viewer()->create())
             ->get('/modules/ecommerce')
+            ->assertNotFound();
+    }
+
+    public function test_vehicules_is_no_longer_a_generic_static_page(): void
+    {
+        $this->actingAs(User::factory()->viewer()->create())
+            ->get('/modules/vehicules')
             ->assertNotFound();
     }
 }
