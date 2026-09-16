@@ -14,6 +14,7 @@ use App\Http\Controllers\PropertyPhotoController;
 use App\Http\Controllers\StaticModuleController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TenantDocumentController;
+use App\Http\Controllers\VehicleTypeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect()->route('login'));
@@ -29,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/locataires', [TenantController::class, 'index'])->name('tenants.index');
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/produits', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/types-vehicules', [VehicleTypeController::class, 'index'])->name('vehicle-types.index');
 
     Route::get('/modules/{module}', [StaticModuleController::class, 'show'])->name('modules.show');
 
@@ -69,6 +71,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/categories/{category}/modifier', [CategoryController::class, 'edit'])->name('categories.edit');
         Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+
+        Route::get('/types-vehicules/nouveau', [VehicleTypeController::class, 'create'])->name('vehicle-types.create');
+        Route::post('/types-vehicules', [VehicleTypeController::class, 'store'])->name('vehicle-types.store');
+        Route::get('/types-vehicules/{vehicleType}/modifier', [VehicleTypeController::class, 'edit'])->name('vehicle-types.edit');
+        Route::put('/types-vehicules/{vehicleType}', [VehicleTypeController::class, 'update'])->name('vehicle-types.update');
+        Route::delete('/types-vehicules/{vehicleType}', [VehicleTypeController::class, 'destroy'])->name('vehicle-types.destroy');
 
         Route::get('/produits/nouveau', [ProductController::class, 'create'])->name('products.create');
         Route::post('/produits', [ProductController::class, 'store'])->name('products.store');
