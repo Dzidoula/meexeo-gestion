@@ -15,6 +15,7 @@ use App\Http\Controllers\StaticModuleController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TenantDocumentController;
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\VehiclePhotoController;
 use App\Http\Controllers\VehicleTypeController;
 use Illuminate\Support\Facades\Route;
 
@@ -84,6 +85,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/vehicules', [VehicleController::class, 'store'])->name('vehicles.store');
         Route::get('/vehicules/{vehicle}/modifier', [VehicleController::class, 'edit'])->name('vehicles.edit');
         Route::put('/vehicules/{vehicle}', [VehicleController::class, 'update'])->name('vehicles.update');
+
+        Route::post('/vehicules/{vehicle}/photos', [VehiclePhotoController::class, 'store'])->name('vehicles.photos.store');
+        Route::patch('/vehicules/{vehicle}/photos/{photo}/principale', [VehiclePhotoController::class, 'primary'])->name('vehicles.photos.primary');
+        Route::delete('/vehicules/{vehicle}/photos/{photo}', [VehiclePhotoController::class, 'destroy'])->name('vehicles.photos.destroy');
 
         Route::get('/produits/nouveau', [ProductController::class, 'create'])->name('products.create');
         Route::post('/produits', [ProductController::class, 'store'])->name('products.store');

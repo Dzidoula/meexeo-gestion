@@ -8,10 +8,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Vehicle extends Model
 {
     use HasFactory;
+
+    protected static function booted(): void
+    {
+        static::deleting(function (Vehicle $vehicle) {
+            foreach ($vehicle->photos as $photo) {
+                Storage::disk('public')->delete($photo->path);
+            }
+        });
+    }
 
     protected $fillable = ['vehicle_type_id', 'brand', 'model', 'fuel_type', 'transmission', 'seats', 'price', 'stock_quantity', 'description'];
 
