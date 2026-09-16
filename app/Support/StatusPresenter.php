@@ -25,6 +25,9 @@ class StatusPresenter
         // Produits
         'en_stock' => ['En stock', 'ok'],
         'rupture'  => ['Rupture', 'impaye'],
+        // Véhicules
+        'disponible' => ['Disponible', 'ok'],
+        'epuise'     => ['Épuisé', 'impaye'],
         // Paiements
         'paid'    => ['Payé', 'ok'],
         'partial' => ['Partiel', 'part'],

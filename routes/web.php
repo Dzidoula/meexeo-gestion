@@ -14,6 +14,7 @@ use App\Http\Controllers\PropertyPhotoController;
 use App\Http\Controllers\StaticModuleController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TenantDocumentController;
+use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\VehicleTypeController;
 use Illuminate\Support\Facades\Route;
 
@@ -78,6 +79,11 @@ Route::middleware('auth')->group(function () {
         Route::put('/types-vehicules/{vehicleType}', [VehicleTypeController::class, 'update'])->name('vehicle-types.update');
         Route::delete('/types-vehicules/{vehicleType}', [VehicleTypeController::class, 'destroy'])->name('vehicle-types.destroy');
 
+        Route::get('/vehicules/nouveau', [VehicleController::class, 'create'])->name('vehicles.create');
+        Route::post('/vehicules', [VehicleController::class, 'store'])->name('vehicles.store');
+        Route::get('/vehicules/{vehicle}/modifier', [VehicleController::class, 'edit'])->name('vehicles.edit');
+        Route::put('/vehicules/{vehicle}', [VehicleController::class, 'update'])->name('vehicles.update');
+
         Route::get('/produits/nouveau', [ProductController::class, 'create'])->name('products.create');
         Route::post('/produits', [ProductController::class, 'store'])->name('products.store');
         Route::get('/produits/{product}/modifier', [ProductController::class, 'edit'])->name('products.edit');
@@ -96,4 +102,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/biens/{property}', [PropertyController::class, 'show'])->name('properties.show');
     Route::get('/locataires/{tenant}', [TenantController::class, 'show'])->name('tenants.show');
     Route::get('/produits/{product}', [ProductController::class, 'show'])->name('products.show');
+    Route::get('/vehicules/{vehicle}', [VehicleController::class, 'show'])->name('vehicles.show');
 });
