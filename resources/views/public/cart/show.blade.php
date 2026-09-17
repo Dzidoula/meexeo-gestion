@@ -24,7 +24,10 @@
                                 <div class="flex h-16 w-24 items-center justify-center text-xs" style="border-radius:var(--radius-sonor-sm);background:var(--color-sonor-navy-soft);color:#fff">Aucune photo</div>
                             @endif
                             <div>
-                                <p style="font-size:15px;font-weight:700">{{ $vehicle->brand }} {{ $vehicle->model }}</p>
+                                <div class="flex items-center gap-2">
+                                    <p style="font-size:15px;font-weight:700">{{ $vehicle->brand }} {{ $vehicle->model }}</p>
+                                    <x-status-badge :status="\App\Support\VehicleStockStatus::for($vehicle->stock_quantity)" />
+                                </div>
                                 <p class="chiffre mt-1" style="font-size:14px;color:var(--color-sonor-ink-soft)">{{ \App\Support\Money::fcfa($vehicle->price) }}</p>
                             </div>
                         </div>

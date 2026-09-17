@@ -77,6 +77,19 @@ class CartTest extends TestCase
         $response->assertSee('disabled', false);
     }
 
+    public function test_a_vehicle_that_becomes_out_of_stock_still_shows_its_badge_in_the_cart(): void
+    {
+        $vehicle = Vehicle::factory()->create(['model' => 'ModeleDevenuEpuise', 'stock_quantity' => 3]);
+        $this->post(route('cart.add', $vehicle));
+
+        $vehicle->update(['stock_quantity' => 0]);
+
+        $this->get(route('cart.show'))
+            ->assertOk()
+            ->assertSee('ModeleDevenuEpuise')
+            ->assertSee('Épuisé');
+    }
+
     public function test_the_nav_shows_the_real_cart_count(): void
     {
         $vehicle = Vehicle::factory()->create(['stock_quantity' => 3]);

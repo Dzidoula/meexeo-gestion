@@ -24,7 +24,10 @@
                 <div class="mt-4 space-y-3">
                     @foreach ($vehicles as $vehicle)
                         <div class="flex items-center justify-between gap-3 p-3 text-sm" style="border-radius:var(--radius-sonor-sm);border:1px solid var(--color-sonor-border)">
-                            <span style="font-weight:700">{{ $vehicle->brand }} {{ $vehicle->model }}</span>
+                            <span class="flex items-center gap-2">
+                                <span style="font-weight:700">{{ $vehicle->brand }} {{ $vehicle->model }}</span>
+                                <x-status-badge :status="\App\Support\VehicleStockStatus::for($vehicle->stock_quantity)" />
+                            </span>
                             <span class="chiffre" style="color:var(--color-sonor-ink-soft)">{{ \App\Support\Money::fcfa($vehicle->price) }}</span>
                         </div>
                     @endforeach
