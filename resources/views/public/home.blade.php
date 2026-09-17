@@ -1,14 +1,14 @@
 {{-- resources/views/public/home.blade.php --}}
-<x-layouts.public title="MASTERCLAYS — Vos déplacements et vos événements, notre priorité">
+<x-layouts.public title="MASTERCLAYS — Trouvez votre prochain véhicule, en toute confiance">
     {{-- Bandeau principal --}}
     <div class="relative" style="color:#fff;padding:96px 24px;background:linear-gradient(155deg, rgba(16,24,40,.93), rgba(16,24,40,.72)), url('{{ asset('images/mc-store/hero-highway.jpg') }}') center/cover no-repeat">
         <div class="relative mx-auto max-w-6xl">
             <p style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-mc-store-yellow)">MASTERCLAYS</p>
             <h1 class="mt-3 max-w-xl" style="font-size:40px;font-weight:800;line-height:1.15">
-                Vos déplacements et vos événements, notre priorité !
+                Trouvez votre prochain véhicule, en toute confiance
             </h1>
             <p class="mt-4 max-w-lg" style="color:#E4E7EC;font-size:15.5px">
-                Vente de véhicules, taxis, location de sonorisation et gestion de podiums. Un seul partenaire pour tous vos besoins de mobilité et d'événements.
+                Véhicules neufs et d'occasion sélectionnés, ajoutez au panier en quelques clics. Taxis, sonorisation et podiums arrivent bientôt sur ce site.
             </p>
             <a href="{{ route('public.vehicles.index') }}" class="mc-store-card mt-8 inline-flex min-h-[44px] items-center px-6" style="border-radius:var(--radius-mc-store-sm);background:var(--color-mc-store-yellow);color:var(--color-mc-store-navy);font-weight:700;font-size:14px">
                 Découvrir nos véhicules

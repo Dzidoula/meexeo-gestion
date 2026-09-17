@@ -29,8 +29,31 @@
 
     <main>{{ $slot }}</main>
 
-    <footer style="background:var(--color-mc-store-navy);color:#fff;padding:32px 24px;margin-top:48px">
-        <div class="mx-auto max-w-6xl text-center" style="font-size:12.5px;color:var(--color-mc-store-ink-soft)">
+    <footer style="background:var(--color-mc-store-navy);color:#fff;padding:40px 24px 24px">
+        <div class="mx-auto grid max-w-6xl gap-8 sm:grid-cols-3" style="font-size:13px">
+            <div>
+                <p style="font-weight:800;font-size:16px">MASTERCLAYS</p>
+                <p class="mt-2" style="color:#C3C9D3">Vente de véhicules, taxis, sonorisation et podiums — un seul partenaire pour vos besoins de mobilité et d'événements en Côte d'Ivoire.</p>
+            </div>
+            <div>
+                <p style="font-weight:700;color:#fff">Nos activités</p>
+                <ul class="mt-2 space-y-1.5" style="color:#C3C9D3">
+                    <li><a href="{{ route('public.vehicles.index') }}" style="color:#C3C9D3">Véhicules</a></li>
+                    <li><a href="{{ route('public.taxis') }}" style="color:#C3C9D3">Taxis</a></li>
+                    <li><a href="{{ route('public.sonorisation') }}" style="color:#C3C9D3">Sonorisation</a></li>
+                    <li><a href="{{ route('public.podiums') }}" style="color:#C3C9D3">Podiums</a></li>
+                </ul>
+            </div>
+            <div>
+                <p style="font-weight:700;color:#fff">Informations</p>
+                <ul class="mt-2 space-y-1.5" style="color:#C3C9D3">
+                    <li>Contact — bientôt disponible</li>
+                    <li>Conditions générales de vente — bientôt disponible</li>
+                    <li>Politique de confidentialité — bientôt disponible</li>
+                </ul>
+            </div>
+        </div>
+        <div class="mx-auto mt-8 max-w-6xl border-t pt-5 text-center" style="border-color:rgba(255,255,255,.1);font-size:12.5px;color:var(--color-mc-store-ink-soft)">
             © {{ now()->year }} MASTERCLAYS. Tous droits réservés.
         </div>
     </footer>
