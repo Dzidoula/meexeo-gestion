@@ -1,6 +1,8 @@
 <?php
 namespace Tests\Feature;
 
+use App\Enums\FuelType;
+use App\Enums\Transmission;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -46,6 +48,36 @@ class PublicVehicleIndexTest extends TestCase
         $this->get("/nos-vehicules?type={$suv->id}")
             ->assertSee('ModeleSuv')
             ->assertDontSee('ModeleBerline');
+    }
+
+    public function test_it_filters_by_fuel_type(): void
+    {
+        Vehicle::factory()->create(['model' => 'ModeleEssence', 'fuel_type' => FuelType::Essence]);
+        Vehicle::factory()->create(['model' => 'ModeleDiesel', 'fuel_type' => FuelType::Diesel]);
+
+        $this->get('/nos-vehicules?fuel_type=essence')
+            ->assertSee('ModeleEssence')
+            ->assertDontSee('ModeleDiesel');
+    }
+
+    public function test_it_filters_by_transmission(): void
+    {
+        Vehicle::factory()->create(['model' => 'ModeleAuto', 'transmission' => Transmission::Automatique]);
+        Vehicle::factory()->create(['model' => 'ModeleManuelle', 'transmission' => Transmission::Manuelle]);
+
+        $this->get('/nos-vehicules?transmission=automatique')
+            ->assertSee('ModeleAuto')
+            ->assertDontSee('ModeleManuelle');
+    }
+
+    public function test_it_filters_by_price_range(): void
+    {
+        Vehicle::factory()->create(['model' => 'ModeleAbordable', 'price' => 5000000]);
+        Vehicle::factory()->create(['model' => 'ModeleCher', 'price' => 50000000]);
+
+        $this->get('/nos-vehicules?price_min=1000000&price_max=10000000')
+            ->assertSee('ModeleAbordable')
+            ->assertDontSee('ModeleCher');
     }
 
     public function test_it_tells_the_visitor_when_nothing_matches(): void

@@ -18,8 +18,36 @@
                     @endforeach
                 </select>
             </div>
+            <div>
+                <label for="fuel_type" style="font-size:12px;font-weight:700;color:var(--color-sonor-ink-soft)">Carburant</label>
+                <select id="fuel_type" name="fuel_type" class="mt-1.5 min-h-[44px]" style="border-radius:var(--radius-sonor-sm);border:1px solid var(--color-sonor-border);padding:0 12px;font-size:13px">
+                    <option value="">Tous</option>
+                    @foreach ($fuelTypes as $value => $label)
+                        <option value="{{ $value }}" @selected(request('fuel_type') === $value)>{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label for="transmission" style="font-size:12px;font-weight:700;color:var(--color-sonor-ink-soft)">Transmission</label>
+                <select id="transmission" name="transmission" class="mt-1.5 min-h-[44px]" style="border-radius:var(--radius-sonor-sm);border:1px solid var(--color-sonor-border);padding:0 12px;font-size:13px">
+                    <option value="">Toutes</option>
+                    @foreach ($transmissions as $value => $label)
+                        <option value="{{ $value }}" @selected(request('transmission') === $value)>{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label for="price_min" style="font-size:12px;font-weight:700;color:var(--color-sonor-ink-soft)">Prix min.</label>
+                <input id="price_min" name="price_min" type="number" min="0" value="{{ request('price_min') }}" placeholder="0"
+                       class="mt-1.5 min-h-[44px] w-28" style="border-radius:var(--radius-sonor-sm);border:1px solid var(--color-sonor-border);padding:0 12px;font-size:13px">
+            </div>
+            <div>
+                <label for="price_max" style="font-size:12px;font-weight:700;color:var(--color-sonor-ink-soft)">Prix max.</label>
+                <input id="price_max" name="price_max" type="number" min="0" value="{{ request('price_max') }}" placeholder="Aucun"
+                       class="mt-1.5 min-h-[44px] w-28" style="border-radius:var(--radius-sonor-sm);border:1px solid var(--color-sonor-border);padding:0 12px;font-size:13px">
+            </div>
             <button class="min-h-[44px]" style="border-radius:var(--radius-sonor-sm);border:none;background:var(--color-sonor-yellow);color:var(--color-sonor-navy);padding:0 18px;font-size:13px;font-weight:700">Filtrer</button>
-            @if (request()->hasAny(['q', 'type']))
+            @if (request()->hasAny(['q', 'type', 'fuel_type', 'transmission', 'price_min', 'price_max']))
                 <a href="{{ route('public.vehicles.index') }}" class="inline-flex min-h-[44px] items-center px-2 text-sm" style="color:var(--color-sonor-ink-soft)">Réinitialiser</a>
             @endif
         </form>
