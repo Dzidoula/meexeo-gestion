@@ -129,6 +129,18 @@
   box-shadow: var(--shadow-mc-store-card-hover);
 }
 
+/* MASTERCLAYS — parallax discret du bandeau d'accueil, desktop uniquement :
+   background-attachment: fixed est peu fiable/saccadé sur mobile tactile,
+   donc réservé aux pointeurs fins (souris/trackpad). */
+.mc-store-hero-parallax {
+  background-attachment: scroll;
+}
+@media (hover: hover) and (pointer: fine) {
+  .mc-store-hero-parallax {
+    background-attachment: fixed;
+  }
+}
+
 /* Scrollbar fine assortie au fond sombre de la sidebar MASTERCLAYS. */
 .mc-scroll {
   scrollbar-width: thin;

@@ -1,7 +1,7 @@
 {{-- resources/views/public/home.blade.php --}}
 <x-layouts.public title="MASTERCLAYS — Trouvez votre prochain véhicule, en toute confiance">
     {{-- Bandeau principal --}}
-    <div class="relative" style="color:#fff;padding:96px 24px;background:linear-gradient(155deg, rgba(16,24,40,.93), rgba(16,24,40,.72)), url('{{ asset('images/mc-store/hero-highway.jpg') }}') center/cover no-repeat">
+    <div class="relative mc-store-hero-parallax" style="color:#fff;padding:96px 24px;background:linear-gradient(155deg, rgba(16,24,40,.93), rgba(16,24,40,.72)), url('{{ asset('images/mc-store/hero-highway.jpg') }}') center/cover no-repeat">
         <div class="relative mx-auto max-w-6xl">
             <p style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-mc-store-yellow)">MASTERCLAYS</p>
             <h1 class="mt-3 max-w-xl" style="font-size:40px;font-weight:800;line-height:1.15">
