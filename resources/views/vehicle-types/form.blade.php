@@ -1,4 +1,4 @@
-<x-layouts.app :title="($vehicleType->exists ? 'Modifier' : 'Ajouter').' un type de véhicule — SONOR LOCATION'">
+<x-layouts.app :title="($vehicleType->exists ? 'Modifier' : 'Ajouter').' un type de véhicule — MASTERCLAYS'">
     <x-page-header :title="$vehicleType->exists ? 'Modifier le type de véhicule' : 'Ajouter un type de véhicule'" />
 
     <form method="POST" action="{{ $vehicleType->exists ? route('vehicle-types.update', $vehicleType) : route('vehicle-types.store') }}" class="mt-6 max-w-md">

@@ -30,7 +30,7 @@ Route::get('/connexion', [LoginController::class, 'show'])->name('login');
 Route::post('/connexion', [LoginController::class, 'store'])->name('login.store');
 Route::post('/deconnexion', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');
 
-// SONOR LOCATION — vitrine publique (sans authentification), distincte de l'espace MEEXEO/MASTERCLAYS ci-dessous.
+// MASTERCLAYS — vitrine publique (sans authentification), distincte de l'espace admin ci-dessous.
 Route::get('/', [HomeController::class, 'index'])->name('public.home');
 Route::get('/nos-vehicules', [PublicVehicleController::class, 'index'])->name('public.vehicles.index');
 Route::get('/nos-vehicules/{vehicle}', [PublicVehicleController::class, 'show'])->name('public.vehicles.show');
@@ -38,7 +38,7 @@ Route::get('/taxis', [ComingSoonController::class, 'show'])->name('public.taxis'
 Route::get('/sonorisation', [ComingSoonController::class, 'show'])->name('public.sonorisation')->defaults('activity', 'sonorisation');
 Route::get('/podiums', [ComingSoonController::class, 'show'])->name('public.podiums')->defaults('activity', 'podiums');
 
-// SONOR LOCATION — compte client, guard « customer » distinct de l'admin.
+// MASTERCLAYS — compte client, guard « customer » distinct de l'admin.
 Route::get('/inscription', [CustomerRegisterController::class, 'show'])->name('customer.register');
 Route::post('/inscription', [CustomerRegisterController::class, 'store'])->name('customer.register.store');
 Route::get('/connexion-client', [CustomerLoginController::class, 'show'])->name('customer.login');

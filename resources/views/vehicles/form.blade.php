@@ -1,4 +1,4 @@
-<x-layouts.app :title="($vehicle->exists ? 'Modifier' : 'Ajouter').' un véhicule — SONOR LOCATION'">
+<x-layouts.app :title="($vehicle->exists ? 'Modifier' : 'Ajouter').' un véhicule — MASTERCLAYS'">
     <x-page-header :title="$vehicle->exists ? 'Modifier le véhicule' : 'Ajouter un véhicule'" />
 
     @if ($vehicleTypes->isEmpty())

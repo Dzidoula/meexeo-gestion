@@ -1,5 +1,5 @@
 @php($canWrite = in_array(auth()->user()->role, [\App\Enums\Role::Admin, \App\Enums\Role::Manager], true))
-<x-layouts.app title="Catalogue véhicules — SONOR LOCATION">
+<x-layouts.app title="Catalogue véhicules — MASTERCLAYS">
     <x-page-header title="Catalogue véhicules" subtitle="{{ $vehiclesTotal }} véhicule(s)">
         <x-slot:actions>
             @if ($canWrite)
