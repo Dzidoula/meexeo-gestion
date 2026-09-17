@@ -16,7 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\EnsureUserHasRole::class,
         ]);
 
-        $middleware->redirectGuestsTo('/connexion');
+        $middleware->redirectGuestsTo(function (Request $request) {
+            return $request->routeIs('customer.*') ? '/connexion-client' : '/connexion';
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

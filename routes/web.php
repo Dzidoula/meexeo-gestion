@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Customer\AccountController as CustomerAccountController;
+use App\Http\Controllers\Customer\Auth\LoginController as CustomerLoginController;
+use App\Http\Controllers\Customer\Auth\RegisterController as CustomerRegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\MasterclaysAdminController;
@@ -33,6 +36,17 @@ Route::get('/nos-vehicules/{vehicle}', [PublicVehicleController::class, 'show'])
 Route::get('/taxis', [ComingSoonController::class, 'show'])->name('public.taxis')->defaults('activity', 'taxis');
 Route::get('/sonorisation', [ComingSoonController::class, 'show'])->name('public.sonorisation')->defaults('activity', 'sonorisation');
 Route::get('/podiums', [ComingSoonController::class, 'show'])->name('public.podiums')->defaults('activity', 'podiums');
+
+// SONOR LOCATION — compte client, guard « customer » distinct de l'admin.
+Route::get('/inscription', [CustomerRegisterController::class, 'show'])->name('customer.register');
+Route::post('/inscription', [CustomerRegisterController::class, 'store'])->name('customer.register.store');
+Route::get('/connexion-client', [CustomerLoginController::class, 'show'])->name('customer.login');
+Route::post('/connexion-client', [CustomerLoginController::class, 'store'])->name('customer.login.store');
+Route::post('/deconnexion-client', [CustomerLoginController::class, 'destroy'])->middleware('auth:customer')->name('customer.logout');
+
+Route::middleware('auth:customer')->group(function () {
+    Route::get('/mon-compte', [CustomerAccountController::class, 'show'])->name('customer.account');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/tableau-de-bord', [DashboardController::class, 'index'])->name('dashboard');
