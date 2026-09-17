@@ -11,14 +11,17 @@ class ComingSoonController extends Controller
         'taxis' => [
             'title' => 'Taxis',
             'description' => "Réservez un taxi en toute simplicité, bientôt directement depuis ce site. En attendant, contactez-nous pour organiser votre trajet.",
+            'icon' => 'taxi',
         ],
         'sonorisation' => [
             'title' => 'Sonorisation',
             'description' => "La location de matériel de sonorisation pour vos événements arrive bientôt sur ce site. Contactez-nous pour vos besoins actuels.",
+            'icon' => 'speaker',
         ],
         'podiums' => [
             'title' => 'Podiums',
             'description' => "La gestion de podiums pour vos événements arrive bientôt sur ce site. Contactez-nous pour vos besoins actuels.",
+            'icon' => 'stage',
         ],
     ];
 

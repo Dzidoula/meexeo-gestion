@@ -5,9 +5,10 @@
         <div class="mt-4 grid gap-8 lg:grid-cols-[1.3fr_1fr]">
             <div>
                 @if ($primary = $vehicle->photos->firstWhere('is_primary', true))
-                    <img src="{{ $primary->url }}" alt="{{ $vehicle->brand }} {{ $vehicle->model }}" class="h-[360px] w-full object-cover" style="border-radius:var(--radius-sonor)">
+                    <img src="{{ $primary->url }}" alt="{{ $vehicle->brand }} {{ $vehicle->model }}" class="h-[360px] w-full object-cover" style="border-radius:var(--radius-sonor);box-shadow:var(--shadow-sonor-card)">
                 @else
-                    <div class="flex h-[360px] items-center justify-center text-sm" style="border-radius:var(--radius-sonor);background:var(--color-sonor-navy-soft);color:#fff">
+                    <div class="flex h-[360px] flex-col items-center justify-center gap-2 text-sm" style="border-radius:var(--radius-sonor);background:linear-gradient(155deg, var(--color-sonor-navy), var(--color-sonor-navy-soft));color:#fff;box-shadow:var(--shadow-sonor-card)">
+                        <x-sonor-icon name="vehicle" class="h-12 w-12 opacity-70" />
                         Aucune photo pour ce véhicule
                     </div>
                 @endif
@@ -15,13 +16,13 @@
                 @if ($vehicle->photos->count() > 1)
                     <div class="mt-3 grid grid-cols-4 gap-2">
                         @foreach ($vehicle->photos as $photo)
-                            <img src="{{ $photo->url }}" alt="" class="h-20 w-full object-cover" style="border-radius:var(--radius-sonor-sm)">
+                            <img src="{{ $photo->url }}" alt="" class="h-20 w-full object-cover" style="border-radius:var(--radius-sonor-sm);box-shadow:var(--shadow-sonor-card)">
                         @endforeach
                     </div>
                 @endif
             </div>
 
-            <div>
+            <div class="p-6" style="border-radius:var(--radius-sonor);background:var(--color-sonor-surface);box-shadow:var(--shadow-sonor-card)">
                 <div class="flex items-start justify-between gap-3">
                     <h1 style="font-size:24px;font-weight:800">{{ $vehicle->brand }} {{ $vehicle->model }}</h1>
                     <x-status-badge :status="\App\Support\VehicleStockStatus::for($vehicle->stock_quantity)" />

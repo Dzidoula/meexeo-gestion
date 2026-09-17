@@ -89,6 +89,9 @@
 
   --radius-sonor: 12px;
   --radius-sonor-sm: 8px;
+
+  --shadow-sonor-card: 0 1px 2px rgba(16, 24, 40, 0.06), 0 4px 12px rgba(16, 24, 40, 0.08);
+  --shadow-sonor-card-hover: 0 4px 10px rgba(16, 24, 40, 0.10), 0 16px 28px rgba(16, 24, 40, 0.14);
 }
 
 @layer utilities {
@@ -115,6 +118,16 @@
 
 /* Évite le clignotement des panneaux d'onglets avant le démarrage d'Alpine. */
 [x-cloak] { display: none !important; }
+
+/* SONOR LOCATION — relief au survol des cartes (site public). */
+.sonor-card {
+  box-shadow: var(--shadow-sonor-card);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.sonor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sonor-card-hover);
+}
 
 /* Scrollbar fine assortie au fond sombre de la sidebar MASTERCLAYS. */
 .mc-scroll {

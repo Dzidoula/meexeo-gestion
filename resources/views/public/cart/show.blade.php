@@ -16,13 +16,9 @@
         @else
             <div class="mt-6 space-y-4">
                 @foreach ($vehicles as $vehicle)
-                    <div class="flex items-center justify-between gap-4 p-4" style="border-radius:var(--radius-sonor);border:1px solid var(--color-sonor-border)">
+                    <div class="flex items-center justify-between gap-4 p-4" style="border-radius:var(--radius-sonor);background:var(--color-sonor-surface);box-shadow:var(--shadow-sonor-card)">
                         <div class="flex items-center gap-4">
-                            @if ($primary = $vehicle->photos->firstWhere('is_primary', true))
-                                <img src="{{ $primary->url }}" alt="{{ $vehicle->brand }} {{ $vehicle->model }}" class="h-16 w-24 object-cover" style="border-radius:var(--radius-sonor-sm)">
-                            @else
-                                <div class="flex h-16 w-24 items-center justify-center text-xs" style="border-radius:var(--radius-sonor-sm);background:var(--color-sonor-navy-soft);color:#fff">Aucune photo</div>
-                            @endif
+                            <x-vehicle-photo :vehicle="$vehicle" class="h-16 w-24" icon-class="h-6 w-6" radius="var(--radius-sonor-sm)" />
                             <div>
                                 <div class="flex items-center gap-2">
                                     <p style="font-size:15px;font-weight:700">{{ $vehicle->brand }} {{ $vehicle->model }}</p>

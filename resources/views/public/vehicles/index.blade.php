@@ -3,7 +3,7 @@
         <h1 style="font-size:26px;font-weight:800">Nos véhicules</h1>
         <p class="mt-1" style="color:var(--color-sonor-ink-soft)">Découvrez notre sélection de véhicules disponibles à la vente.</p>
 
-        <form method="GET" class="mt-6 flex flex-wrap items-end gap-3">
+        <form method="GET" class="mt-6 flex flex-wrap items-end gap-3 p-5" style="border-radius:var(--radius-sonor);background:var(--color-sonor-surface);box-shadow:var(--shadow-sonor-card)">
             <div class="min-w-[220px] flex-1">
                 <label for="q" style="font-size:12px;font-weight:700;color:var(--color-sonor-ink-soft)">Recherche</label>
                 <input id="q" name="q" value="{{ request('q') }}" placeholder="Marque, modèle…"
@@ -59,12 +59,8 @@
         @else
             <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($vehicles as $vehicle)
-                    <a href="{{ route('public.vehicles.show', $vehicle) }}" class="block" style="border-radius:var(--radius-sonor);border:1px solid var(--color-sonor-border);background:var(--color-sonor-surface);overflow:hidden">
-                        @if ($primary = $vehicle->photos->firstWhere('is_primary', true))
-                            <img src="{{ $primary->url }}" alt="{{ $vehicle->brand }} {{ $vehicle->model }}" class="h-40 w-full object-cover">
-                        @else
-                            <div class="flex h-40 items-center justify-center text-sm" style="background:var(--color-sonor-navy-soft);color:#fff">Aucune photo</div>
-                        @endif
+                    <a href="{{ route('public.vehicles.show', $vehicle) }}" class="sonor-card block" style="border-radius:var(--radius-sonor);background:var(--color-sonor-surface);overflow:hidden">
+                        <x-vehicle-photo :vehicle="$vehicle" class="h-40 w-full" />
                         <div class="p-4">
                             <div class="flex items-start justify-between gap-2">
                                 <p style="font-size:15px;font-weight:700;color:var(--color-sonor-ink)">{{ $vehicle->brand }} {{ $vehicle->model }}</p>
