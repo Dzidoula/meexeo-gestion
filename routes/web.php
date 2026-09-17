@@ -8,6 +8,9 @@ use App\Http\Controllers\MasterclaysAdminController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductPhotoController;
+use App\Http\Controllers\Public\ComingSoonController;
+use App\Http\Controllers\Public\HomeController;
+use App\Http\Controllers\Public\VehicleController as PublicVehicleController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyDocumentController;
 use App\Http\Controllers\PropertyPhotoController;
@@ -19,11 +22,16 @@ use App\Http\Controllers\VehiclePhotoController;
 use App\Http\Controllers\VehicleTypeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => redirect()->route('login'));
-
 Route::get('/connexion', [LoginController::class, 'show'])->name('login');
 Route::post('/connexion', [LoginController::class, 'store'])->name('login.store');
 Route::post('/deconnexion', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');
+
+// SONOR LOCATION — vitrine publique (sans authentification), distincte de l'espace MEEXEO/MASTERCLAYS ci-dessous.
+Route::get('/', [HomeController::class, 'index'])->name('public.home');
+Route::get('/nos-vehicules', [PublicVehicleController::class, 'index'])->name('public.vehicles.index');
+Route::get('/taxis', [ComingSoonController::class, 'show'])->name('public.taxis')->defaults('activity', 'taxis');
+Route::get('/sonorisation', [ComingSoonController::class, 'show'])->name('public.sonorisation')->defaults('activity', 'sonorisation');
+Route::get('/podiums', [ComingSoonController::class, 'show'])->name('public.podiums')->defaults('activity', 'podiums');
 
 Route::middleware('auth')->group(function () {
     Route::get('/tableau-de-bord', [DashboardController::class, 'index'])->name('dashboard');

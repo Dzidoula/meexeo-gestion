@@ -77,6 +77,18 @@
 
   --radius-mc: 12px;
   --radius-mc-sm: 8px;
+
+  /* SONOR LOCATION — vitrine publique, coexiste avec les jetons MEEXEO/MASTERCLAYS ci-dessus */
+  --color-sonor-navy: #101828;
+  --color-sonor-navy-soft: #1D2939;
+  --color-sonor-yellow: #F5B324;
+  --color-sonor-ink: #101828;
+  --color-sonor-ink-soft: #667085;
+  --color-sonor-surface: #FFFFFF;
+  --color-sonor-border: #E4E7EC;
+
+  --radius-sonor: 12px;
+  --radius-sonor-sm: 8px;
 }
 
 @layer utilities {
