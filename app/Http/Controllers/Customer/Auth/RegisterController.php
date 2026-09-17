@@ -25,6 +25,8 @@ class RegisterController extends Controller
         Auth::guard('customer')->login($customer);
         $request->session()->regenerate();
 
+        \App\Support\Cart::mergeIntoCustomer($customer);
+
         return redirect()->route('customer.account');
     }
 }

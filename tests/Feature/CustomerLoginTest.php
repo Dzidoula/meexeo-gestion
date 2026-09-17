@@ -63,6 +63,17 @@ class CustomerLoginTest extends TestCase
         $this->get('/mon-compte')->assertOk()->assertSee('Awa Koné');
     }
 
+    public function test_the_account_page_shows_the_customers_cart(): void
+    {
+        $customer = Customer::factory()->create();
+        $vehicle = \App\Models\Vehicle::factory()->create(['model' => 'ModeleAuCompte', 'stock_quantity' => 3]);
+        \App\Models\CartItem::create(['customer_id' => $customer->id, 'vehicle_id' => $vehicle->id]);
+
+        $this->actingAs($customer, 'customer');
+
+        $this->get('/mon-compte')->assertOk()->assertSee('ModeleAuCompte');
+    }
+
     public function test_admin_guests_are_still_redirected_to_the_admin_login(): void
     {
         // Régression : le changement de redirectGuestsTo (Task 1) ne doit pas

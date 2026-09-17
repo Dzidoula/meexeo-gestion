@@ -14,5 +14,23 @@
                 Se déconnecter
             </button>
         </form>
+
+        <div class="mt-10 border-t pt-6" style="border-color:var(--color-sonor-border)">
+            <h2 style="font-size:18px;font-weight:800">Mon panier</h2>
+
+            @if ($vehicles->isEmpty())
+                <p class="mt-3 text-sm" style="color:var(--color-sonor-ink-soft)">Votre panier est vide.</p>
+            @else
+                <div class="mt-4 space-y-3">
+                    @foreach ($vehicles as $vehicle)
+                        <div class="flex items-center justify-between gap-3 p-3 text-sm" style="border-radius:var(--radius-sonor-sm);border:1px solid var(--color-sonor-border)">
+                            <span style="font-weight:700">{{ $vehicle->brand }} {{ $vehicle->model }}</span>
+                            <span class="chiffre" style="color:var(--color-sonor-ink-soft)">{{ \App\Support\Money::fcfa($vehicle->price) }}</span>
+                        </div>
+                    @endforeach
+                </div>
+                <a href="{{ route('cart.show') }}" class="mt-4 inline-block text-sm font-semibold" style="color:var(--color-sonor-ink)">Voir mon panier →</a>
+            @endif
+        </div>
     </div>
 </x-layouts.public>

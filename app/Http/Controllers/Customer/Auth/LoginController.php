@@ -41,6 +41,8 @@ class LoginController extends Controller
         RateLimiter::clear($key);
         $request->session()->regenerate();
 
+        \App\Support\Cart::mergeIntoCustomer(Auth::guard('customer')->user());
+
         return redirect()->intended(route('customer.account'));
     }
 
