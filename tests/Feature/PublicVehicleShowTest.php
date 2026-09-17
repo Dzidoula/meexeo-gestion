@@ -31,15 +31,15 @@ class PublicVehicleShowTest extends TestCase
             ->assertSee($vehicle->transmission->label());
     }
 
-    public function test_an_available_vehicle_shows_a_disabled_reservation_button_marked_coming_soon(): void
+    public function test_an_available_vehicle_shows_an_active_add_to_cart_button(): void
     {
         $vehicle = Vehicle::factory()->create(['stock_quantity' => 3]);
 
         $this->get("/nos-vehicules/{$vehicle->id}")
             ->assertOk()
             ->assertSee('Disponible')
-            ->assertSee('Bientôt disponible')
-            ->assertSee('disabled', false);
+            ->assertSee('Ajouter au panier')
+            ->assertDontSee('disabled', false);
     }
 
     public function test_an_out_of_stock_vehicle_shows_a_disabled_epuise_button(): void
@@ -59,6 +59,6 @@ class PublicVehicleShowTest extends TestCase
         $this->get("/nos-vehicules/{$vehicle->id}")
             ->assertOk()
             ->assertDontSee('Modifier le véhicule')
-            ->assertDontSee('Ajouter');
+            ->assertDontSee('Ajouter un véhicule');
     }
 }

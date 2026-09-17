@@ -39,15 +39,22 @@
                     <p class="mt-5 border-t pt-5 text-sm" style="border-color:var(--color-sonor-border);color:var(--color-sonor-ink-soft)">{{ $vehicle->description }}</p>
                 @endif
 
-                <button type="button" disabled
-                        class="mt-6 min-h-[44px] w-full text-sm font-semibold"
-                        style="border-radius:var(--radius-sonor-sm);border:none;background:var(--color-sonor-navy-soft);color:#fff;opacity:.7">
-                    @if ($vehicle->stock_quantity > 0)
-                        Réserver — Bientôt disponible
-                    @else
+                @if ($vehicle->stock_quantity > 0)
+                    <form method="POST" action="{{ route('cart.add', $vehicle) }}" class="mt-6">
+                        @csrf
+                        <button type="submit"
+                                class="min-h-[44px] w-full text-sm font-semibold"
+                                style="border-radius:var(--radius-sonor-sm);border:none;background:var(--color-sonor-yellow);color:var(--color-sonor-navy)">
+                            Ajouter au panier
+                        </button>
+                    </form>
+                @else
+                    <button type="button" disabled
+                            class="mt-6 min-h-[44px] w-full text-sm font-semibold"
+                            style="border-radius:var(--radius-sonor-sm);border:none;background:var(--color-sonor-navy-soft);color:#fff;opacity:.7">
                         Épuisé
-                    @endif
-                </button>
+                    </button>
+                @endif
             </div>
         </div>
     </div>

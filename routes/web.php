@@ -11,6 +11,7 @@ use App\Http\Controllers\MasterclaysAdminController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductPhotoController;
+use App\Http\Controllers\Public\CartController;
 use App\Http\Controllers\Public\ComingSoonController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\VehicleController as PublicVehicleController;
@@ -47,6 +48,10 @@ Route::post('/deconnexion-client', [CustomerLoginController::class, 'destroy'])-
 Route::middleware('auth:customer')->group(function () {
     Route::get('/mon-compte', [CustomerAccountController::class, 'show'])->name('customer.account');
 });
+
+Route::post('/panier/ajouter/{vehicle}', [CartController::class, 'add'])->name('cart.add');
+Route::delete('/panier/{vehicle}', [CartController::class, 'remove'])->name('cart.remove');
+Route::get('/panier', [CartController::class, 'show'])->name('cart.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/tableau-de-bord', [DashboardController::class, 'index'])->name('dashboard');

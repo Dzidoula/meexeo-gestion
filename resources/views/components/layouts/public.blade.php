@@ -17,6 +17,12 @@
                 <a href="{{ route('public.taxis') }}" style="color:#fff">Taxis</a>
                 <a href="{{ route('public.sonorisation') }}" style="color:#fff">Sonorisation</a>
                 <a href="{{ route('public.podiums') }}" style="color:#fff">Podiums</a>
+                <a href="{{ route('cart.show') }}" style="color:#fff">Panier ({{ \App\Support\Cart::count() }})</a>
+                @auth('customer')
+                    <a href="{{ route('customer.account') }}" style="color:#fff">Mon compte</a>
+                @else
+                    <a href="{{ route('customer.login') }}" style="color:#fff">Connexion</a>
+                @endauth
             </nav>
         </div>
     </header>
