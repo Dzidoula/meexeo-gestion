@@ -29,6 +29,7 @@ Route::post('/deconnexion', [LoginController::class, 'destroy'])->middleware('au
 // SONOR LOCATION — vitrine publique (sans authentification), distincte de l'espace MEEXEO/MASTERCLAYS ci-dessous.
 Route::get('/', [HomeController::class, 'index'])->name('public.home');
 Route::get('/nos-vehicules', [PublicVehicleController::class, 'index'])->name('public.vehicles.index');
+Route::get('/nos-vehicules/{vehicle}', [PublicVehicleController::class, 'show'])->name('public.vehicles.show');
 Route::get('/taxis', [ComingSoonController::class, 'show'])->name('public.taxis')->defaults('activity', 'taxis');
 Route::get('/sonorisation', [ComingSoonController::class, 'show'])->name('public.sonorisation')->defaults('activity', 'sonorisation');
 Route::get('/podiums', [ComingSoonController::class, 'show'])->name('public.podiums')->defaults('activity', 'podiums');
