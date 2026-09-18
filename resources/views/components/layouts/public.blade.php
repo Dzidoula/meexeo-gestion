@@ -10,7 +10,9 @@
 <body style="background:var(--color-mc-store-surface);color:var(--color-mc-store-ink);font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif">
     <header style="background:var(--color-mc-store-navy);padding:16px 24px">
         <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4">
-            <a href="{{ route('public.home') }}" style="color:#fff;font-weight:800;font-size:18px;letter-spacing:.5px">MASTERCLAYS</a>
+            <a href="{{ route('public.home') }}" class="inline-flex items-center" style="border-radius:var(--radius-mc-store-sm);background:#fff;padding:4px 10px">
+                <img src="{{ asset('images/mc-store/logo_masterclays001.png') }}" alt="MASTERCLAYS" style="height:28px;width:auto">
+            </a>
             <nav class="flex flex-wrap items-center gap-5" style="font-size:13.5px">
                 <a href="{{ route('public.home') }}" style="color:#fff">Accueil</a>
                 <a href="{{ route('public.vehicles.index') }}" style="color:#fff">Véhicules</a>
@@ -32,8 +34,10 @@
     <footer style="background:var(--color-mc-store-navy);color:#fff;padding:40px 24px 24px">
         <div class="mx-auto grid max-w-6xl gap-8 sm:grid-cols-3" style="font-size:13px">
             <div>
-                <p style="font-weight:800;font-size:16px">MASTERCLAYS</p>
-                <p class="mt-2" style="color:#C3C9D3">Vente de véhicules, taxis, sonorisation et podiums — un seul partenaire pour vos besoins de mobilité et d'événements en Côte d'Ivoire.</p>
+                <div class="inline-flex items-center" style="border-radius:var(--radius-mc-store-sm);background:#fff;padding:5px 12px">
+                    <img src="{{ asset('images/mc-store/logo_masterclays001.png') }}" alt="MASTERCLAYS" style="height:26px;width:auto">
+                </div>
+                <p class="mt-3" style="color:#C3C9D3">Vente de véhicules, taxis, sonorisation et podiums — un seul partenaire pour vos besoins de mobilité et d'événements en Côte d'Ivoire.</p>
             </div>
             <div>
                 <p style="font-weight:700;color:#fff">Nos activités</p>
