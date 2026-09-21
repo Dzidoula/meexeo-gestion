@@ -77,4 +77,24 @@
             </div>
         </div>
     </x-dashboard-section>
+
+    <x-dashboard-section title="Véhicules" icon="car" icon-color="var(--color-acier)" :href="route('vehicles.index')" link-label="Voir le catalogue">
+        <div class="grid gap-4 sm:grid-cols-3">
+            <x-stat-card label="Total véhicules" :value="$vehiclesTotal" icon="car" icon-color="var(--color-acier)" />
+            <x-stat-card label="Valeur du stock" :value="\App\Support\Money::fcfa($vehiclesStockValue)" />
+            <x-stat-card label="Véhicules épuisés" :value="$vehiclesOutOfStock" :tone="$vehiclesOutOfStock > 0 ? 'terre' : 'lagune'" />
+        </div>
+
+        @if ($vehiclesOutOfStock > 0)
+            <p class="mt-3 text-sm" style="color:var(--color-mc-danger)">
+                {{ $vehiclesOutOfStock }} véhicule(s) épuisé(s) —
+                <a href="{{ route('vehicles.index', ['status' => 'epuise']) }}" style="text-decoration:underline">voir la liste</a>
+            </p>
+        @endif
+
+        <div class="mt-6 p-6" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-border);background:var(--color-mc-surface)">
+            <h3 class="font-titre text-lg">Répartition par type</h3>
+            <canvas id="vehicle-type-chart" height="180" data-vehicle-types="{{ json_encode($vehiclesByType) }}"></canvas>
+        </div>
+    </x-dashboard-section>
 </x-layouts.app>

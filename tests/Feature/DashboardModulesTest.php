@@ -2,6 +2,8 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\Vehicle;
+use App\Models\VehicleType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -22,5 +24,26 @@ class DashboardModulesTest extends TestCase
         $this->actingAs(User::factory()->manager()->create())
             ->get('/tableau-de-bord')
             ->assertSee('Locatif');
+    }
+
+    public function test_it_shows_the_vehicles_section_with_real_totals(): void
+    {
+        $suv = VehicleType::factory()->create(['name' => 'SUV']);
+        Vehicle::factory()->for($suv, 'vehicleType')->create(['price' => 10000000, 'stock_quantity' => 2]);
+        Vehicle::factory()->for($suv, 'vehicleType')->create(['price' => 5000000, 'stock_quantity' => 0]);
+
+        $response = $this->actingAs(User::factory()->manager()->create())->get('/tableau-de-bord');
+
+        $response->assertSee('Véhicules');
+        $response->assertSee('2'); // total véhicules
+        $response->assertSee('20 000 000 FCFA'); // valeur du stock : 10M*2 + 5M*0
+        $response->assertSee('1'); // 1 véhicule épuisé
+    }
+
+    public function test_the_vehicles_section_links_to_the_vehicle_catalog(): void
+    {
+        $this->actingAs(User::factory()->manager()->create())
+            ->get('/tableau-de-bord')
+            ->assertSee(route('vehicles.index'), false);
     }
 }

@@ -40,4 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
             options: { plugins: { legend: { display: false } } },
         });
     }
+
+    const vehicleTypeCanvas = document.getElementById('vehicle-type-chart');
+    if (vehicleTypeCanvas) {
+        const rows = JSON.parse(vehicleTypeCanvas.dataset.vehicleTypes);
+        new Chart(vehicleTypeCanvas, {
+            type: 'bar',
+            data: {
+                labels: rows.map((r) => r.label),
+                datasets: [{
+                    data: rows.map((r) => r.total),
+                    backgroundColor: '#2E6A82',
+                }],
+            },
+            options: { plugins: { legend: { display: false } } },
+        });
+    }
 });

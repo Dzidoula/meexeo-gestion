@@ -5,6 +5,8 @@ use App\Enums\LeaseStatus;
 use App\Enums\PropertyStatus;
 use App\Models\Lease;
 use App\Models\Property;
+use App\Models\Vehicle;
+use App\Models\VehicleType;
 use App\Support\PaymentMonthStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -97,6 +99,13 @@ class DashboardController extends Controller
             ->get()
             ->map(fn ($row) => ['commune' => $row->commune, 'total' => (int) $row->total]);
 
+        $vehiclesTotal = Vehicle::count();
+        $vehiclesStockValue = (int) Vehicle::query()
+            ->selectRaw('COALESCE(SUM(price * stock_quantity), 0) as total')->value('total');
+        $vehiclesOutOfStock = Vehicle::where('stock_quantity', 0)->count();
+        $vehiclesByType = VehicleType::withCount('vehicles')->orderByDesc('vehicles_count')->get()
+            ->map(fn (VehicleType $t) => ['label' => $t->name, 'total' => $t->vehicles_count]);
+
         return view('dashboard.index', [
             'period' => $period,
             'propertiesTotal' => $propertiesTotal,
@@ -107,6 +116,10 @@ class DashboardController extends Controller
             'dueSoon' => $dueSoon,
             'revenueByMonth' => $revenueByMonth,
             'revenueByCommune' => $revenueByCommune,
+            'vehiclesTotal' => $vehiclesTotal,
+            'vehiclesStockValue' => $vehiclesStockValue,
+            'vehiclesOutOfStock' => $vehiclesOutOfStock,
+            'vehiclesByType' => $vehiclesByType,
         ]);
     }
 
