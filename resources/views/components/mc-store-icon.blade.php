@@ -1,39 +1,48 @@
+{{-- Icônes Lucide (lucide.dev, licence ISC) — tracés officiels, pas de dessin fait main. --}}
 @props(['name', 'class' => 'h-8 w-8'])
 
 @switch($name)
     @case('vehicle')
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="{{ $class }}">
-            <path d="M6 28 L9 18 Q10 15 13 15 H35 Q38 15 39 18 L42 28" />
-            <rect x="4" y="28" width="40" height="8" rx="2" />
-            <circle cx="14" cy="38" r="4" fill="currentColor" stroke="none" />
-            <circle cx="34" cy="38" r="4" fill="currentColor" stroke="none" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="{{ $class }}">
+            <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
+            <circle cx="7" cy="17" r="2" />
+            <path d="M9 17h6" />
+            <circle cx="17" cy="17" r="2" />
         </svg>
         @break
 
     @case('taxi')
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="{{ $class }}">
-            <rect x="19" y="9" width="10" height="5" rx="1" fill="currentColor" stroke="none" />
-            <path d="M6 28 L9 18 Q10 15 13 15 H35 Q38 15 39 18 L42 28" />
-            <rect x="4" y="28" width="40" height="8" rx="2" />
-            <circle cx="14" cy="38" r="4" fill="currentColor" stroke="none" />
-            <circle cx="34" cy="38" r="4" fill="currentColor" stroke="none" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="{{ $class }}">
+            <path d="M10 2h4" />
+            <path d="m21 8-2 2-1.5-3.7A2 2 0 0 0 15.646 5H8.4a2 2 0 0 0-1.903 1.257L5 10 3 8" />
+            <path d="M7 14h.01" />
+            <path d="M17 14h.01" />
+            <rect width="18" height="8" x="3" y="10" rx="2" />
+            <path d="M5 18v2" />
+            <path d="M19 18v2" />
         </svg>
         @break
 
     @case('speaker')
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="{{ $class }}">
-            <rect x="8" y="18" width="10" height="12" rx="1" />
-            <path d="M18 18 L30 10 V38 L18 30 Z" />
-            <path d="M35 16 Q40 24 35 32" />
-            <path d="M39 12 Q46 24 39 36" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="{{ $class }}">
+            <rect width="16" height="20" x="4" y="2" rx="2" />
+            <path d="M12 6h.01" />
+            <circle cx="12" cy="14" r="4" />
+            <path d="M12 14h.01" />
         </svg>
         @break
 
     @case('stage')
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="{{ $class }}">
-            <path d="M6 34 L14 20 H34 L42 34 Z" />
-            <line x1="4" y1="38" x2="44" y2="38" />
-            <path d="M24 6 L27 13 L34 14 L29 19 L30 26 L24 22 L18 26 L19 19 L14 14 L21 13 Z" fill="currentColor" stroke="none" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="{{ $class }}">
+            <path d="M2 10s3-3 3-8" />
+            <path d="M22 10s-3-3-3-8" />
+            <path d="M10 2c0 4.4-3.6 8-8 8" />
+            <path d="M14 2c0 4.4 3.6 8 8 8" />
+            <path d="M2 10s2 2 2 5" />
+            <path d="M22 10s-2 2-2 5" />
+            <path d="M8 15h8" />
+            <path d="M2 22v-1a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1" />
+            <path d="M14 22v-1a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1" />
         </svg>
         @break
 @endswitch
