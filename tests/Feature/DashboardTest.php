@@ -105,8 +105,10 @@ class DashboardTest extends TestCase
         $html = $response->getContent();
         $dueSoonStart = strpos($html, 'Échéances du jour');
         $dueSoonEnd = strpos($html, 'Activité récente');
+        $this->assertNotFalse($dueSoonStart, 'Marker "Échéances du jour" not found on the page.');
+        $this->assertNotFalse($dueSoonEnd, 'Marker "Activité récente" not found on the page.');
         $dueSoonSection = substr($html, $dueSoonStart, $dueSoonEnd - $dueSoonStart);
 
-        $this->assertStringNotContainsString($lease->tenant->full_name, $dueSoonSection);
+        $this->assertStringNotContainsString(e($lease->tenant->full_name), $dueSoonSection);
     }
 }

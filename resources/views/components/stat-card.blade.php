@@ -7,7 +7,7 @@
 })
 <div style="background:var(--color-mc-surface);border:1px solid var(--color-mc-border);border-radius:var(--radius-mc);padding:16px">
     @if ($icon)
-        <div class="mb-2 flex h-8 w-8 items-center justify-center" style="border-radius:8px;background:{{ $iconColor }}1A;color:{{ $iconColor }}">
+        <div class="mb-2 flex h-8 w-8 items-center justify-center" style="border-radius:8px;background:color-mix(in srgb, {{ $iconColor }} 12%, transparent);color:{{ $iconColor }}">
             <x-mc-icon :name="$icon" class="h-4 w-4" />
         </div>
     @endif

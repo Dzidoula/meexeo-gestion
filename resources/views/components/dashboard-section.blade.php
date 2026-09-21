@@ -2,7 +2,7 @@
 <section class="mt-8">
     <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
-            <div class="flex items-center justify-center" style="width:40px;height:40px;border-radius:10px;background:{{ $iconColor }}1A;color:{{ $iconColor }}">
+            <div class="flex items-center justify-center" style="width:40px;height:40px;border-radius:10px;background:color-mix(in srgb, {{ $iconColor }} 12%, transparent);color:{{ $iconColor }}">
                 <x-mc-icon :name="$icon" class="h-5 w-5" />
             </div>
             <h2 class="font-titre text-lg">{{ $title }}</h2>
