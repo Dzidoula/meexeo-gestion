@@ -5,6 +5,7 @@ use App\Enums\LeaseStatus;
 use App\Enums\PropertyStatus;
 use App\Models\Category;
 use App\Models\Lease;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Property;
 use App\Models\Vehicle;
@@ -115,6 +116,31 @@ class DashboardController extends Controller
         $productsByCategory = Category::withCount('products')->orderByDesc('products_count')->get()
             ->map(fn (Category $c) => ['label' => $c->name, 'total' => $c->products_count]);
 
+        $recentActivity = collect()
+            ->concat(Lease::with(['tenant'])->latest()->take(8)->get()->map(fn (Lease $l) => [
+                'at' => $l->created_at,
+                'label' => "Nouveau bail — {$l->tenant->full_name}",
+                'url' => route('tenants.show', $l->tenant),
+            ]))
+            ->concat(Vehicle::latest()->take(8)->get()->map(fn (Vehicle $v) => [
+                'at' => $v->created_at,
+                'label' => "Véhicule ajouté — {$v->brand} {$v->model}",
+                'url' => route('vehicles.show', $v),
+            ]))
+            ->concat(Product::latest()->take(8)->get()->map(fn (Product $p) => [
+                'at' => $p->created_at,
+                'label' => "Produit ajouté — {$p->name}",
+                'url' => route('products.show', $p),
+            ]))
+            ->concat(Payment::with('lease.tenant')->latest()->take(8)->get()->map(fn (Payment $p) => [
+                'at' => $p->created_at,
+                'label' => "Paiement enregistré — {$p->lease->tenant->full_name}",
+                'url' => route('tenants.show', $p->lease->tenant),
+            ]))
+            ->sortByDesc('at')
+            ->take(8)
+            ->values();
+
         return view('dashboard.index', [
             'period' => $period,
             'propertiesTotal' => $propertiesTotal,
@@ -133,6 +159,7 @@ class DashboardController extends Controller
             'productsStockValue' => $productsStockValue,
             'productsOutOfStock' => $productsOutOfStock,
             'productsByCategory' => $productsByCategory,
+            'recentActivity' => $recentActivity,
         ]);
     }
 

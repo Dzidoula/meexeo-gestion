@@ -2,11 +2,14 @@
 namespace Tests\Feature;
 
 use App\Models\Category;
+use App\Models\Lease;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class DashboardModulesTest extends TestCase
@@ -66,5 +69,46 @@ class DashboardModulesTest extends TestCase
         $this->actingAs(User::factory()->manager()->create())
             ->get('/tableau-de-bord')
             ->assertSee(route('products.index'), false);
+    }
+
+    public function test_it_shows_recent_activity_across_modules_newest_first(): void
+    {
+        Carbon::setTestNow('2026-06-20 12:00:00');
+        try {
+            $oldVehicle = Vehicle::factory()->create(['brand' => 'Toyota', 'model' => 'AncienModele']);
+            Carbon::setTestNow('2026-06-21 12:00:00');
+            $newVehicle = Vehicle::factory()->create(['brand' => 'Kia', 'model' => 'NouveauModele']);
+
+            $response = $this->actingAs(User::factory()->manager()->create())->get('/tableau-de-bord');
+
+            $response->assertOk();
+            $html = $response->getContent();
+            $this->assertLessThan(
+                strpos($html, 'AncienModele'),
+                strpos($html, 'NouveauModele'),
+                'Le véhicule le plus récent doit apparaître avant le plus ancien.'
+            );
+        } finally {
+            Carbon::setTestNow();
+        }
+    }
+
+    public function test_recent_activity_is_capped_at_eight_entries(): void
+    {
+        Vehicle::factory()->count(10)->create();
+
+        $response = $this->actingAs(User::factory()->manager()->create())->get('/tableau-de-bord');
+
+        $response->assertOk();
+        $this->assertSame(8, substr_count($response->getContent(), 'Véhicule ajouté —'));
+    }
+
+    public function test_recent_activity_links_to_the_source_record(): void
+    {
+        $vehicle = Vehicle::factory()->create();
+
+        $this->actingAs(User::factory()->manager()->create())
+            ->get('/tableau-de-bord')
+            ->assertSee(route('vehicles.show', $vehicle), false);
     }
 }

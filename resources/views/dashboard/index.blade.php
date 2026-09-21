@@ -117,4 +117,21 @@
             <canvas id="product-category-chart" height="180" data-product-categories="{{ json_encode($productsByCategory) }}"></canvas>
         </div>
     </x-dashboard-section>
+
+    <x-dashboard-section title="Activité récente" icon="activity" icon-color="var(--color-mc-ink-faint)">
+        @if ($recentActivity->isEmpty())
+            <p class="text-sm" style="color:var(--color-mc-ink-faint)">Aucune activité récente.</p>
+        @else
+            <div class="p-6" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-border);background:var(--color-mc-surface)">
+                <ul class="divide-y divide-[var(--color-mc-border-soft)]">
+                    @foreach ($recentActivity as $row)
+                        <li class="flex items-center justify-between gap-3 py-3 text-sm">
+                            <a href="{{ $row['url'] }}" class="hover:[color:var(--color-mc-accent)]">{{ $row['label'] }}</a>
+                            <span class="text-xs" style="color:var(--color-mc-ink-faint)">{{ $row['at']->diffForHumans() }}</span>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    </x-dashboard-section>
 </x-layouts.app>
