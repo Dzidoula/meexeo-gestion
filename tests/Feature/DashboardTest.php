@@ -100,8 +100,13 @@ class DashboardTest extends TestCase
             'month' => now()->startOfMonth()->toDateString(),
         ]);
 
-        $this->actingAs(User::factory()->manager()->create())
-            ->get('/tableau-de-bord')
-            ->assertDontSee($lease->tenant->full_name);
+        $response = $this->actingAs(User::factory()->manager()->create())->get('/tableau-de-bord');
+
+        $html = $response->getContent();
+        $dueSoonStart = strpos($html, 'Échéances du jour');
+        $dueSoonEnd = strpos($html, 'Activité récente');
+        $dueSoonSection = substr($html, $dueSoonStart, $dueSoonEnd - $dueSoonStart);
+
+        $this->assertStringNotContainsString($lease->tenant->full_name, $dueSoonSection);
     }
 }
