@@ -2,31 +2,13 @@
 
 return [
     'nav_groups' => [
-        'OPÉRATIONS' => ['residence', 'hotel', 'locative', 'evenementiel', 'vehicules'],
+        'OPÉRATIONS' => ['hotel', 'locative', 'evenementiel', 'vehicules'],
         'SUPPORT' => ['stock', 'rh', 'clients', 'fournisseurs'],
         'COMMERCE & FINANCE' => ['ecommerce', 'finance', 'reports'],
         'ADMINISTRATION' => ['permissions', 'notifications', 'security', 'settings'],
     ],
 
     'modules' => [
-        'residence' => [
-            'label' => 'Résidence', 'sub' => 'Gestion des résidences', 'icon' => 'RE',
-            'color' => '#2563EB', 'route' => null, 'addLabel' => 'Réservation', 'generic' => true,
-            'kpis' => [
-                ['label' => 'Résidences actives', 'value' => '12'],
-                ['label' => 'Chambres/apparts occupés', 'value' => '45 / 58'],
-                ['label' => 'Réservations ce mois', 'value' => '128'],
-                ['label' => "Taux d'occupation", 'value' => '78%'],
-            ],
-            'columns' => ['Client', 'Logement', 'Arrivée', 'Départ', 'Montant'],
-            'rows' => [
-                ['cells' => ['Kouassi Jean', 'Villa Deluxe - Cocody', '21/05/2025', '25/05/2025', '450 000 FCFA'], 'status' => 'Confirmée'],
-                ['cells' => ['Yao Michel', 'Appartement F2 - Les Palmiers', '20/05/2025', '22/05/2025', '180 000 FCFA'], 'status' => 'En attente'],
-                ['cells' => ["N'Guessan A.", 'Studio Riviera', '19/05/2025', '30/05/2025', '620 000 FCFA'], 'status' => 'Confirmée'],
-                ['cells' => ['Diarra Fatou', 'Duplex Marcory', '18/05/2025', '19/05/2025', '340 000 FCFA'], 'status' => 'Terminée'],
-                ['cells' => ['Ouattara Salif', 'Villa Prestige - Bingerville', '24/05/2025', '29/05/2025', '780 000 FCFA'], 'status' => 'Confirmée'],
-            ],
-        ],
         'hotel' => [
             'label' => 'Hôtel', 'sub' => 'Chambres & réservations', 'icon' => 'HT',
             'color' => '#16A34A', 'route' => null, 'addLabel' => 'Réservation', 'generic' => true,

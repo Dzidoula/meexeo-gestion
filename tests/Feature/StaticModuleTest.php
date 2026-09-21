@@ -12,7 +12,7 @@ class StaticModuleTest extends TestCase
 
     public function test_a_guest_cannot_see_a_module_page(): void
     {
-        $this->get('/modules/residence')->assertRedirect('/connexion');
+        $this->get('/modules/hotel')->assertRedirect('/connexion');
     }
 
     #[DataProvider('genericModules')]
@@ -27,7 +27,6 @@ class StaticModuleTest extends TestCase
     public static function genericModules(): array
     {
         return [
-            ['residence', 'Résidence'],
             ['hotel', 'Hôtel'],
             ['evenementiel', 'Événementiel'],
             ['stock', 'Gestion de stock'],
@@ -44,19 +43,18 @@ class StaticModuleTest extends TestCase
             ->assertNotFound();
     }
 
-    public function test_the_residence_table_shows_a_row_and_its_status_pill(): void
+    public function test_the_hotel_table_shows_a_row_and_its_status_pill(): void
     {
         $this->actingAs(User::factory()->viewer()->create())
-            ->get('/modules/residence')
-            ->assertSee('Kouassi Jean')
-            ->assertSee('Villa Deluxe - Cocody')
+            ->get('/modules/hotel')
+            ->assertSee("N'Guessan A.")
             ->assertSee('Confirmée');
     }
 
     public function test_the_add_button_is_present_but_disabled(): void
     {
         $this->actingAs(User::factory()->viewer()->create())
-            ->get('/modules/residence')
+            ->get('/modules/hotel')
             ->assertSee('disabled', false)
             ->assertSee('Réservation');
     }
@@ -73,5 +71,19 @@ class StaticModuleTest extends TestCase
         $this->actingAs(User::factory()->viewer()->create())
             ->get('/modules/vehicules')
             ->assertNotFound();
+    }
+
+    public function test_residence_is_no_longer_a_generic_static_page(): void
+    {
+        $this->actingAs(User::factory()->viewer()->create())
+            ->get('/modules/residence')
+            ->assertNotFound();
+    }
+
+    public function test_the_sidebar_no_longer_lists_residence(): void
+    {
+        $this->actingAs(User::factory()->viewer()->create())
+            ->get('/tableau-de-bord')
+            ->assertDontSee('Résidence');
     }
 }
