@@ -1,6 +1,8 @@
 <?php
 namespace Tests\Feature;
 
+use App\Models\Category;
+use App\Models\Product;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
@@ -45,5 +47,24 @@ class DashboardModulesTest extends TestCase
         $this->actingAs(User::factory()->manager()->create())
             ->get('/tableau-de-bord')
             ->assertSee(route('vehicles.index'), false);
+    }
+
+    public function test_it_shows_the_products_section_with_real_totals(): void
+    {
+        $category = Category::factory()->create(['name' => 'Boissons']);
+        Product::factory()->for($category)->create(['price' => 5000, 'stock_quantity' => 10]);
+        Product::factory()->for($category)->create(['price' => 3000, 'stock_quantity' => 0]);
+
+        $response = $this->actingAs(User::factory()->manager()->create())->get('/tableau-de-bord');
+
+        $response->assertSee('Produits');
+        $response->assertSee('50 000 FCFA'); // valeur du stock : 5000*10 + 3000*0
+    }
+
+    public function test_the_products_section_links_to_the_product_catalog(): void
+    {
+        $this->actingAs(User::factory()->manager()->create())
+            ->get('/tableau-de-bord')
+            ->assertSee(route('products.index'), false);
     }
 }

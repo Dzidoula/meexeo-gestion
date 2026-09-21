@@ -56,4 +56,20 @@ document.addEventListener('DOMContentLoaded', () => {
             options: { plugins: { legend: { display: false } } },
         });
     }
+
+    const productCategoryCanvas = document.getElementById('product-category-chart');
+    if (productCategoryCanvas) {
+        const rows = JSON.parse(productCategoryCanvas.dataset.productCategories);
+        new Chart(productCategoryCanvas, {
+            type: 'bar',
+            data: {
+                labels: rows.map((r) => r.label),
+                datasets: [{
+                    data: rows.map((r) => r.total),
+                    backgroundColor: '#A9663A',
+                }],
+            },
+            options: { plugins: { legend: { display: false } } },
+        });
+    }
 });

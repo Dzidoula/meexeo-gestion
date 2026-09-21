@@ -97,4 +97,24 @@
             <canvas id="vehicle-type-chart" height="180" data-vehicle-types="{{ json_encode($vehiclesByType) }}"></canvas>
         </div>
     </x-dashboard-section>
+
+    <x-dashboard-section title="Produits" icon="package" icon-color="var(--color-cuivre)" :href="route('products.index')" link-label="Voir le catalogue">
+        <div class="grid gap-4 sm:grid-cols-3">
+            <x-stat-card label="Total produits" :value="$productsTotal" icon="package" icon-color="var(--color-cuivre)" />
+            <x-stat-card label="Valeur du stock" :value="\App\Support\Money::fcfa($productsStockValue)" />
+            <x-stat-card label="Produits en rupture" :value="$productsOutOfStock" :tone="$productsOutOfStock > 0 ? 'terre' : 'lagune'" />
+        </div>
+
+        @if ($productsOutOfStock > 0)
+            <p class="mt-3 text-sm" style="color:var(--color-mc-danger)">
+                {{ $productsOutOfStock }} produit(s) en rupture —
+                <a href="{{ route('products.index', ['status' => 'rupture']) }}" style="text-decoration:underline">voir la liste</a>
+            </p>
+        @endif
+
+        <div class="mt-6 p-6" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-border);background:var(--color-mc-surface)">
+            <h3 class="font-titre text-lg">Répartition par catégorie</h3>
+            <canvas id="product-category-chart" height="180" data-product-categories="{{ json_encode($productsByCategory) }}"></canvas>
+        </div>
+    </x-dashboard-section>
 </x-layouts.app>

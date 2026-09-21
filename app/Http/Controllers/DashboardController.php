@@ -3,7 +3,9 @@ namespace App\Http\Controllers;
 
 use App\Enums\LeaseStatus;
 use App\Enums\PropertyStatus;
+use App\Models\Category;
 use App\Models\Lease;
+use App\Models\Product;
 use App\Models\Property;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
@@ -106,6 +108,13 @@ class DashboardController extends Controller
         $vehiclesByType = VehicleType::withCount('vehicles')->orderByDesc('vehicles_count')->get()
             ->map(fn (VehicleType $t) => ['label' => $t->name, 'total' => $t->vehicles_count]);
 
+        $productsTotal = Product::count();
+        $productsStockValue = (int) Product::query()
+            ->selectRaw('COALESCE(SUM(price * stock_quantity), 0) as total')->value('total');
+        $productsOutOfStock = Product::where('stock_quantity', 0)->count();
+        $productsByCategory = Category::withCount('products')->orderByDesc('products_count')->get()
+            ->map(fn (Category $c) => ['label' => $c->name, 'total' => $c->products_count]);
+
         return view('dashboard.index', [
             'period' => $period,
             'propertiesTotal' => $propertiesTotal,
@@ -120,6 +129,10 @@ class DashboardController extends Controller
             'vehiclesStockValue' => $vehiclesStockValue,
             'vehiclesOutOfStock' => $vehiclesOutOfStock,
             'vehiclesByType' => $vehiclesByType,
+            'productsTotal' => $productsTotal,
+            'productsStockValue' => $productsStockValue,
+            'productsOutOfStock' => $productsOutOfStock,
+            'productsByCategory' => $productsByCategory,
         ]);
     }
 
