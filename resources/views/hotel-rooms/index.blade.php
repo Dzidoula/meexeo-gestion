@@ -9,6 +9,10 @@
                     Ajouter une chambre
                 </a>
             @endif
+            <a href="{{ route('hotel-stays.index') }}"
+               class="inline-flex min-h-[44px] items-center px-2 text-sm" style="color:var(--color-mc-ink-faint)">Séjours</a>
+            <a href="{{ route('hotel-room-types.index') }}"
+               class="inline-flex min-h-[44px] items-center px-2 text-sm" style="color:var(--color-mc-ink-faint)">Types de chambre</a>
         </x-slot:actions>
     </x-page-header>
 

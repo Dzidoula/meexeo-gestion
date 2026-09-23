@@ -35,6 +35,15 @@ class HotelRoomTest extends TestCase
             ->assertSee('Disponible');
     }
 
+    public function test_it_links_to_the_stays_and_room_types_pages(): void
+    {
+        $this->actingAsManager()
+            ->get('/chambres')
+            ->assertOk()
+            ->assertSee(route('hotel-stays.index'), false)
+            ->assertSee(route('hotel-room-types.index'), false);
+    }
+
     public function test_it_filters_by_status(): void
     {
         HotelRoom::factory()->create(['number' => 'ModeleDispo', 'status' => HotelRoomStatus::Available]);

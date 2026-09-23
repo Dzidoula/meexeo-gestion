@@ -6,6 +6,10 @@
                style="border-radius:var(--radius-mc-sm);background:var(--color-mc-accent);color:var(--color-mc-on-accent)">
                 Nouveau séjour
             </a>
+            <a href="{{ route('hotel-rooms.index') }}"
+               class="inline-flex min-h-[44px] items-center px-2 text-sm" style="color:var(--color-mc-ink-faint)">Chambres</a>
+            <a href="{{ route('hotel-room-types.index') }}"
+               class="inline-flex min-h-[44px] items-center px-2 text-sm" style="color:var(--color-mc-ink-faint)">Types de chambre</a>
         </x-slot:actions>
     </x-page-header>
 

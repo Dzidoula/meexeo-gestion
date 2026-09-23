@@ -19,6 +19,10 @@ class StoreHotelStayRequest extends FormRequest
                 'required',
                 'exists:hotel_rooms,id',
                 function (string $attribute, mixed $value, \Closure $fail): void {
+                    if (! $this->filled(['arrival_date', 'departure_date'])) {
+                        return;
+                    }
+
                     $overlaps = HotelStay::query()
                         ->where('hotel_room_id', $value)
                         ->whereIn('status', [HotelStayStatus::Reserved->value, HotelStayStatus::InProgress->value])

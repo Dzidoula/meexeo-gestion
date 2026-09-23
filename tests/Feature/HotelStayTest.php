@@ -44,6 +44,23 @@ class HotelStayTest extends TestCase
         $this->assertSame(HotelStayStatus::Reserved, $stay->status);
     }
 
+    public function test_creating_a_stay_without_dates_does_not_crash(): void
+    {
+        $room = HotelRoom::factory()->create();
+
+        $this->actingAsManager()
+            ->post('/sejours', [
+                'hotel_room_id' => $room->id,
+                'guest_name' => 'Awa Koné',
+                'guest_phone' => '0102030405',
+                'total_amount' => 90000,
+                'deposit_amount' => 30000,
+            ])
+            ->assertSessionHasErrors(['arrival_date', 'departure_date']);
+
+        $this->assertSame(0, HotelStay::count());
+    }
+
     public function test_a_viewer_cannot_create_a_stay(): void
     {
         $room = HotelRoom::factory()->create();
@@ -221,6 +238,23 @@ class HotelStayTest extends TestCase
             ->assertRedirect();
 
         $this->assertSame(HotelStayStatus::Completed, $stay->fresh()->status);
+    }
+
+    public function test_the_deposit_is_shown_and_deducted_from_the_balance(): void
+    {
+        $stay = HotelStay::factory()->create([
+            'total_amount' => 90000,
+            'deposit_amount' => 30000,
+        ]);
+
+        $expectedBalance = \App\Support\Money::fcfa(90000 - 30000);
+        $expectedDeposit = \App\Support\Money::fcfa(30000);
+
+        $this->actingAsManager()
+            ->get("/sejours/{$stay->id}")
+            ->assertOk()
+            ->assertSee($expectedDeposit)
+            ->assertSee($expectedBalance);
     }
 
     public function test_cancelling_an_in_progress_stay_frees_the_room(): void

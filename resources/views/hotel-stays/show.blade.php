@@ -1,5 +1,5 @@
 @php($canWrite = in_array(auth()->user()->role, [\App\Enums\Role::Admin, \App\Enums\Role::Manager], true))
-@php($balance = $stay->total_amount - $stay->payments->sum('amount'))
+@php($balance = $stay->total_amount - $stay->deposit_amount - $stay->payments->sum('amount'))
 <x-layouts.app :title="'Séjour de '.$stay->guest_name.' — MASTERCLAYS'">
     <x-page-header :title="'Séjour de '.$stay->guest_name" :subtitle="'Chambre '.$stay->room->number">
         <x-slot:actions>
@@ -41,6 +41,7 @@
                 <div><dt style="color:var(--color-mc-ink-faint)">Arrivée prévue</dt><dd class="mt-1">{{ $stay->arrival_date->format('d/m/Y') }}</dd></div>
                 <div><dt style="color:var(--color-mc-ink-faint)">Départ prévu</dt><dd class="mt-1">{{ $stay->departure_date->format('d/m/Y') }}</dd></div>
                 <div><dt style="color:var(--color-mc-ink-faint)">Montant total</dt><dd class="chiffre mt-1 font-semibold">{{ \App\Support\Money::fcfa($stay->total_amount) }}</dd></div>
+                <div><dt style="color:var(--color-mc-ink-faint)">Acompte versé</dt><dd class="chiffre mt-1 font-semibold">{{ \App\Support\Money::fcfa($stay->deposit_amount) }}</dd></div>
                 <div><dt style="color:var(--color-mc-ink-faint)">Solde restant</dt><dd class="chiffre mt-1 font-semibold">{{ \App\Support\Money::fcfa($balance) }}</dd></div>
             </dl>
             @if ($stay->notes)

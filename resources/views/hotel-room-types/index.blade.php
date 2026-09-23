@@ -9,6 +9,10 @@
                     Ajouter un type
                 </a>
             @endif
+            <a href="{{ route('hotel-rooms.index') }}"
+               class="inline-flex min-h-[44px] items-center px-2 text-sm" style="color:var(--color-mc-ink-faint)">Chambres</a>
+            <a href="{{ route('hotel-stays.index') }}"
+               class="inline-flex min-h-[44px] items-center px-2 text-sm" style="color:var(--color-mc-ink-faint)">Séjours</a>
         </x-slot:actions>
     </x-page-header>
 
