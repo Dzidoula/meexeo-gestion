@@ -28,6 +28,11 @@ class StatusPresenter
         // Véhicules
         'disponible' => ['Disponible', 'ok'],
         'epuise'     => ['Épuisé', 'impaye'],
+        // Chambres hôtel
+        'disponible_chambre' => ['Disponible', 'ok'],
+        'occupee'            => ['Occupée', 'neutre'],
+        'nettoyage'          => ['Nettoyage', 'part'],
+        'maintenance_chambre'=> ['Maintenance', 'impaye'],
         // Paiements
         'paid'    => ['Payé', 'ok'],
         'partial' => ['Partiel', 'part'],
