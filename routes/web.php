@@ -6,6 +6,7 @@ use App\Http\Controllers\Customer\AccountController as CustomerAccountController
 use App\Http\Controllers\Customer\Auth\LoginController as CustomerLoginController;
 use App\Http\Controllers\Customer\Auth\RegisterController as CustomerRegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HotelPaymentController;
 use App\Http\Controllers\HotelRoomController;
 use App\Http\Controllers\HotelRoomTypeController;
 use App\Http\Controllers\HotelStayController;
@@ -131,6 +132,7 @@ Route::middleware('auth')->group(function () {
         Route::patch('/sejours/{stay}/arrivee', [HotelStayController::class, 'checkIn'])->name('hotel-stays.check-in');
         Route::patch('/sejours/{stay}/depart', [HotelStayController::class, 'checkOut'])->name('hotel-stays.check-out');
         Route::patch('/sejours/{stay}/annuler', [HotelStayController::class, 'cancel'])->name('hotel-stays.cancel');
+        Route::post('/sejours/{stay}/paiements', [HotelPaymentController::class, 'store'])->name('hotel-payments.store');
 
         Route::get('/vehicules/nouveau', [VehicleController::class, 'create'])->name('vehicles.create');
         Route::post('/vehicules', [VehicleController::class, 'store'])->name('vehicles.store');
