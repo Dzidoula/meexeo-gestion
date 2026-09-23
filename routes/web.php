@@ -6,6 +6,7 @@ use App\Http\Controllers\Customer\AccountController as CustomerAccountController
 use App\Http\Controllers\Customer\Auth\LoginController as CustomerLoginController;
 use App\Http\Controllers\Customer\Auth\RegisterController as CustomerRegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HotelRoomTypeController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\MasterclaysAdminController;
 use App\Http\Controllers\PaymentController;
@@ -61,6 +62,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/produits', [ProductController::class, 'index'])->name('products.index');
     Route::get('/types-vehicules', [VehicleTypeController::class, 'index'])->name('vehicle-types.index');
+    Route::get('/types-chambres', [HotelRoomTypeController::class, 'index'])->name('hotel-room-types.index');
     Route::get('/vehicules', [VehicleController::class, 'index'])->name('vehicles.index');
 
     Route::get('/modules/{module}', [StaticModuleController::class, 'show'])->name('modules.show');
@@ -108,6 +110,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/types-vehicules/{vehicleType}/modifier', [VehicleTypeController::class, 'edit'])->name('vehicle-types.edit');
         Route::put('/types-vehicules/{vehicleType}', [VehicleTypeController::class, 'update'])->name('vehicle-types.update');
         Route::delete('/types-vehicules/{vehicleType}', [VehicleTypeController::class, 'destroy'])->name('vehicle-types.destroy');
+
+        Route::get('/types-chambres/nouveau', [HotelRoomTypeController::class, 'create'])->name('hotel-room-types.create');
+        Route::post('/types-chambres', [HotelRoomTypeController::class, 'store'])->name('hotel-room-types.store');
+        Route::get('/types-chambres/{hotelRoomType}/modifier', [HotelRoomTypeController::class, 'edit'])->name('hotel-room-types.edit');
+        Route::put('/types-chambres/{hotelRoomType}', [HotelRoomTypeController::class, 'update'])->name('hotel-room-types.update');
+        Route::delete('/types-chambres/{hotelRoomType}', [HotelRoomTypeController::class, 'destroy'])->name('hotel-room-types.destroy');
 
         Route::get('/vehicules/nouveau', [VehicleController::class, 'create'])->name('vehicles.create');
         Route::post('/vehicules', [VehicleController::class, 'store'])->name('vehicles.store');
