@@ -8,6 +8,7 @@ use App\Http\Controllers\Customer\Auth\RegisterController as CustomerRegisterCon
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HotelRoomController;
 use App\Http\Controllers\HotelRoomTypeController;
+use App\Http\Controllers\HotelStayController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\MasterclaysAdminController;
 use App\Http\Controllers\PaymentController;
@@ -66,6 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/types-chambres', [HotelRoomTypeController::class, 'index'])->name('hotel-room-types.index');
     Route::get('/vehicules', [VehicleController::class, 'index'])->name('vehicles.index');
     Route::get('/chambres', [HotelRoomController::class, 'index'])->name('hotel-rooms.index');
+    Route::get('/sejours', [HotelStayController::class, 'index'])->name('hotel-stays.index');
 
     Route::get('/modules/{module}', [StaticModuleController::class, 'show'])->name('modules.show');
 
@@ -124,6 +126,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/chambres/{room}/modifier', [HotelRoomController::class, 'edit'])->name('hotel-rooms.edit');
         Route::put('/chambres/{room}', [HotelRoomController::class, 'update'])->name('hotel-rooms.update');
 
+        Route::get('/sejours/nouveau', [HotelStayController::class, 'create'])->name('hotel-stays.create');
+        Route::post('/sejours', [HotelStayController::class, 'store'])->name('hotel-stays.store');
+        Route::patch('/sejours/{stay}/arrivee', [HotelStayController::class, 'checkIn'])->name('hotel-stays.check-in');
+        Route::patch('/sejours/{stay}/depart', [HotelStayController::class, 'checkOut'])->name('hotel-stays.check-out');
+        Route::patch('/sejours/{stay}/annuler', [HotelStayController::class, 'cancel'])->name('hotel-stays.cancel');
+
         Route::get('/vehicules/nouveau', [VehicleController::class, 'create'])->name('vehicles.create');
         Route::post('/vehicules', [VehicleController::class, 'store'])->name('vehicles.store');
         Route::get('/vehicules/{vehicle}/modifier', [VehicleController::class, 'edit'])->name('vehicles.edit');
@@ -153,4 +161,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/produits/{product}', [ProductController::class, 'show'])->name('products.show');
     Route::get('/vehicules/{vehicle}', [VehicleController::class, 'show'])->name('vehicles.show');
     Route::get('/chambres/{room}', [HotelRoomController::class, 'show'])->name('hotel-rooms.show');
+    Route::get('/sejours/{stay}', [HotelStayController::class, 'show'])->name('hotel-stays.show');
 });

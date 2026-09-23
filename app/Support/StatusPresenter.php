@@ -33,6 +33,11 @@ class StatusPresenter
         'occupee'            => ['Occupée', 'neutre'],
         'nettoyage'          => ['Nettoyage', 'part'],
         'maintenance_chambre'=> ['Maintenance', 'impaye'],
+        // Séjours hôtel
+        'reserve'  => ['Réservé', 'neutre'],
+        'en_cours' => ['En cours', 'ok'],
+        'termine'  => ['Terminé', 'neutre'],
+        'annule'   => ['Annulé', 'impaye'],
         // Paiements
         'paid'    => ['Payé', 'ok'],
         'partial' => ['Partiel', 'part'],
