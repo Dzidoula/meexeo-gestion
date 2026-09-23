@@ -10,22 +10,9 @@ return [
 
     'modules' => [
         'hotel' => [
-            'label' => 'Hôtel', 'sub' => 'Chambres & réservations', 'icon' => 'HT',
-            'color' => '#16A34A', 'route' => null, 'addLabel' => 'Réservation', 'generic' => true,
-            'kpis' => [
-                ['label' => 'Chambres occupées', 'value' => '85 / 120'],
-                ['label' => "Taux d'occupation", 'value' => '70,8%'],
-                ['label' => 'Réservations ce mois', 'value' => '243'],
-                ['label' => 'Séjours en cours', 'value' => '32'],
-            ],
-            'columns' => ['Client', 'Chambre', 'Type', 'Arrivée', 'Départ', 'Montant'],
-            'rows' => [
-                ['cells' => ["N'Guessan A.", '204', 'Standard', '21/05/2025', '23/05/2025', '90 000 FCFA'], 'status' => 'Confirmée'],
-                ['cells' => ['Diarra Fatou', 'Suite 12', 'Junior Suite', '20/05/2025', '22/05/2025', '150 000 FCFA'], 'status' => 'Confirmée'],
-                ['cells' => ['Kouassi Jean', '305', 'Deluxe', '19/05/2025', '21/05/2025', '120 000 FCFA'], 'status' => 'En attente'],
-                ['cells' => ['Traoré Awa', 'Suite 03', 'Suite Prestige', '18/05/2025', '20/05/2025', '220 000 FCFA'], 'status' => 'Confirmée'],
-                ['cells' => ['Bakayoko S.', '118', 'Standard', '17/05/2025', '18/05/2025', '60 000 FCFA'], 'status' => 'Terminée'],
-            ],
+            'label' => 'Hôtel', 'sub' => 'Chambres & séjours', 'icon' => 'HT',
+            'color' => '#16A34A', 'route' => 'hotel-rooms.index', 'addLabel' => 'Séjour', 'generic' => false,
+            'kpis' => [], 'columns' => [], 'rows' => [],
         ],
         'locative' => [
             'label' => 'Gestion locative', 'sub' => 'Biens & contrats', 'icon' => 'GL',
