@@ -9,6 +9,8 @@
                     Ajouter un équipement
                 </a>
             @endif
+            <a href="{{ route('events.index') }}"
+               class="inline-flex min-h-[44px] items-center px-2 text-sm" style="color:var(--color-mc-ink-faint)">Événements</a>
         </x-slot:actions>
     </x-page-header>
 

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\Customer\AccountController as CustomerAccountController;
 use App\Http\Controllers\Customer\Auth\LoginController as CustomerLoginController;
 use App\Http\Controllers\Customer\Auth\RegisterController as CustomerRegisterController;
@@ -70,6 +71,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/vehicules', [VehicleController::class, 'index'])->name('vehicles.index');
     Route::get('/chambres', [HotelRoomController::class, 'index'])->name('hotel-rooms.index');
     Route::get('/equipements', [EquipmentController::class, 'index'])->name('equipment.index');
+    Route::get('/evenements', [EventController::class, 'index'])->name('events.index');
     Route::get('/sejours', [HotelStayController::class, 'index'])->name('hotel-stays.index');
 
     Route::get('/modules/{module}', [StaticModuleController::class, 'show'])->name('modules.show');
@@ -142,6 +144,14 @@ Route::middleware('auth')->group(function () {
         Route::put('/equipements/{equipment}', [EquipmentController::class, 'update'])->name('equipment.update');
         Route::delete('/equipements/{equipment}', [EquipmentController::class, 'destroy'])->name('equipment.destroy');
 
+        Route::get('/evenements/nouveau', [EventController::class, 'create'])->name('events.create');
+        Route::post('/evenements', [EventController::class, 'store'])->name('events.store');
+        Route::get('/evenements/{event}/modifier', [EventController::class, 'edit'])->name('events.edit');
+        Route::put('/evenements/{event}', [EventController::class, 'update'])->name('events.update');
+        Route::patch('/evenements/{event}/confirmer', [EventController::class, 'confirm'])->name('events.confirm');
+        Route::patch('/evenements/{event}/terminer', [EventController::class, 'complete'])->name('events.complete');
+        Route::patch('/evenements/{event}/annuler', [EventController::class, 'cancel'])->name('events.cancel');
+
         Route::get('/vehicules/nouveau', [VehicleController::class, 'create'])->name('vehicles.create');
         Route::post('/vehicules', [VehicleController::class, 'store'])->name('vehicles.store');
         Route::get('/vehicules/{vehicle}/modifier', [VehicleController::class, 'edit'])->name('vehicles.edit');
@@ -172,4 +182,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/vehicules/{vehicle}', [VehicleController::class, 'show'])->name('vehicles.show');
     Route::get('/chambres/{room}', [HotelRoomController::class, 'show'])->name('hotel-rooms.show');
     Route::get('/sejours/{stay}', [HotelStayController::class, 'show'])->name('hotel-stays.show');
+    Route::get('/evenements/{event}', [EventController::class, 'show'])->name('events.show');
 });

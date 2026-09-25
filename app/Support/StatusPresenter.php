@@ -38,6 +38,9 @@ class StatusPresenter
         'en_cours' => ['En cours', 'ok'],
         'termine'  => ['Terminé', 'neutre'],
         'annule'   => ['Annulé', 'impaye'],
+        // Événements
+        'en_attente' => ['En attente', 'part'],
+        'confirme'   => ['Confirmé', 'ok'],
         // Paiements
         'paid'    => ['Payé', 'ok'],
         'partial' => ['Partiel', 'part'],
