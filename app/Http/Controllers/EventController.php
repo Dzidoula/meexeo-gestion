@@ -39,7 +39,7 @@ class EventController extends Controller
     public function show(Event $event): View
     {
         return view('events.show', [
-            'event' => $event->load(['reservations.equipment']),
+            'event' => $event->load(['reservations.equipment', 'payments']),
         ]);
     }
 

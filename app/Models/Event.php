@@ -30,4 +30,9 @@ class Event extends Model
     {
         return $this->hasMany(EventEquipmentReservation::class);
     }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(EventPayment::class);
+    }
 }
