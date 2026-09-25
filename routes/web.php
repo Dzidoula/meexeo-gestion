@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\Customer\AccountController as CustomerAccountController;
 use App\Http\Controllers\Customer\Auth\LoginController as CustomerLoginController;
 use App\Http\Controllers\Customer\Auth\RegisterController as CustomerRegisterController;
@@ -68,6 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/types-chambres', [HotelRoomTypeController::class, 'index'])->name('hotel-room-types.index');
     Route::get('/vehicules', [VehicleController::class, 'index'])->name('vehicles.index');
     Route::get('/chambres', [HotelRoomController::class, 'index'])->name('hotel-rooms.index');
+    Route::get('/equipements', [EquipmentController::class, 'index'])->name('equipment.index');
     Route::get('/sejours', [HotelStayController::class, 'index'])->name('hotel-stays.index');
 
     Route::get('/modules/{module}', [StaticModuleController::class, 'show'])->name('modules.show');
@@ -133,6 +135,12 @@ Route::middleware('auth')->group(function () {
         Route::patch('/sejours/{stay}/depart', [HotelStayController::class, 'checkOut'])->name('hotel-stays.check-out');
         Route::patch('/sejours/{stay}/annuler', [HotelStayController::class, 'cancel'])->name('hotel-stays.cancel');
         Route::post('/sejours/{stay}/paiements', [HotelPaymentController::class, 'store'])->name('hotel-payments.store');
+
+        Route::get('/equipements/nouveau', [EquipmentController::class, 'create'])->name('equipment.create');
+        Route::post('/equipements', [EquipmentController::class, 'store'])->name('equipment.store');
+        Route::get('/equipements/{equipment}/modifier', [EquipmentController::class, 'edit'])->name('equipment.edit');
+        Route::put('/equipements/{equipment}', [EquipmentController::class, 'update'])->name('equipment.update');
+        Route::delete('/equipements/{equipment}', [EquipmentController::class, 'destroy'])->name('equipment.destroy');
 
         Route::get('/vehicules/nouveau', [VehicleController::class, 'create'])->name('vehicles.create');
         Route::post('/vehicules', [VehicleController::class, 'store'])->name('vehicles.store');
