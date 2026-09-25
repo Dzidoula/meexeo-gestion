@@ -47,5 +47,47 @@
                 <p class="mt-5 border-t pt-5 text-sm" style="border-color:var(--color-mc-border-soft);color:var(--color-mc-ink-soft)">{{ $event->notes }}</p>
             @endif
         </div>
+
+        <div class="p-6" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-border);background:var(--color-mc-surface)">
+            <h3 class="font-titre text-lg">Équipements réservés</h3>
+            @if ($event->reservations->isEmpty())
+                <p class="mt-4 text-sm" style="color:var(--color-mc-ink-faint)">Aucun équipement réservé.</p>
+            @else
+                <ul class="mt-4 divide-y divide-[var(--color-mc-border-soft)]">
+                    @foreach ($event->reservations as $reservation)
+                        <li class="flex items-center justify-between gap-3 py-3 text-sm">
+                            <span>{{ $reservation->equipment->name }} &times; {{ $reservation->quantity }}</span>
+                            @if ($canWrite && ! in_array($event->status->value, ['termine', 'annule'], true))
+                                <form method="POST" action="{{ route('event-equipment-reservations.destroy', [$event, $reservation]) }}">
+                                    @csrf @method('DELETE')
+                                    <button class="text-sm" style="color:var(--color-mc-danger)">Retirer</button>
+                                </form>
+                            @endif
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+
+            @if ($canWrite && ! in_array($event->status->value, ['termine', 'annule'], true))
+                <form method="POST" action="{{ route('event-equipment-reservations.store', $event) }}" class="mt-5 flex flex-wrap items-end gap-3 border-t pt-5" style="border-color:var(--color-mc-border-soft)">
+                    @csrf
+                    <div>
+                        <label for="equipment_id" class="text-xs font-semibold" style="color:var(--color-mc-ink-soft)">Équipement</label>
+                        <select id="equipment_id" name="equipment_id" required class="mt-1.5 min-h-[44px] px-3 text-sm" style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border)">
+                            @foreach (\App\Models\Equipment::orderBy('name')->get() as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label for="quantity" class="text-xs font-semibold" style="color:var(--color-mc-ink-soft)">Quantité</label>
+                        <input id="quantity" name="quantity" type="number" step="1" min="1" required
+                               class="chiffre mt-1.5 min-h-[44px] w-24 px-3 text-sm" style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border)">
+                    </div>
+                    <button class="min-h-[44px] px-4 text-sm font-semibold" style="border-radius:var(--radius-mc-sm);background:var(--color-mc-accent);color:var(--color-mc-on-accent)">Réserver</button>
+                </form>
+                @error('equipment_id') <p class="mt-2 text-xs" style="color:var(--color-mc-danger)">{{ $message }}</p> @enderror
+            @endif
+        </div>
     </div>
 </x-layouts.app>

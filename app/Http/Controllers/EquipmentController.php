@@ -42,6 +42,10 @@ class EquipmentController extends Controller
 
     public function destroy(Equipment $equipment): RedirectResponse
     {
+        if ($equipment->reservations()->exists()) {
+            return back()->with('error', 'Cet équipement a des réservations, il ne peut pas être supprimé.');
+        }
+
         $equipment->delete();
 
         return redirect()->route('equipment.index')->with('status', "L'équipement a été supprimé.");

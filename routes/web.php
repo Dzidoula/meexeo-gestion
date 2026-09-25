@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventEquipmentReservationController;
 use App\Http\Controllers\Customer\AccountController as CustomerAccountController;
 use App\Http\Controllers\Customer\Auth\LoginController as CustomerLoginController;
 use App\Http\Controllers\Customer\Auth\RegisterController as CustomerRegisterController;
@@ -151,6 +152,9 @@ Route::middleware('auth')->group(function () {
         Route::patch('/evenements/{event}/confirmer', [EventController::class, 'confirm'])->name('events.confirm');
         Route::patch('/evenements/{event}/terminer', [EventController::class, 'complete'])->name('events.complete');
         Route::patch('/evenements/{event}/annuler', [EventController::class, 'cancel'])->name('events.cancel');
+
+        Route::post('/evenements/{event}/equipements', [EventEquipmentReservationController::class, 'store'])->name('event-equipment-reservations.store');
+        Route::delete('/evenements/{event}/equipements/{reservation}', [EventEquipmentReservationController::class, 'destroy'])->name('event-equipment-reservations.destroy');
 
         Route::get('/vehicules/nouveau', [VehicleController::class, 'create'])->name('vehicles.create');
         Route::post('/vehicules', [VehicleController::class, 'store'])->name('vehicles.store');

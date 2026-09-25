@@ -4,6 +4,7 @@ namespace App\Models;
 use App\Enums\EventStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Event extends Model
 {
@@ -23,5 +24,10 @@ class Event extends Model
             'deposit_amount' => 'integer',
             'status' => EventStatus::class,
         ];
+    }
+
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(EventEquipmentReservation::class);
     }
 }

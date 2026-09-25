@@ -38,7 +38,9 @@ class EventController extends Controller
 
     public function show(Event $event): View
     {
-        return view('events.show', ['event' => $event]);
+        return view('events.show', [
+            'event' => $event->load(['reservations.equipment']),
+        ]);
     }
 
     public function edit(Event $event): View|RedirectResponse

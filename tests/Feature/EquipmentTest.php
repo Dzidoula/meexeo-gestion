@@ -82,4 +82,16 @@ class EquipmentTest extends TestCase
 
         $this->assertNull($equipment->fresh());
     }
+
+    public function test_equipment_with_reservations_cannot_be_deleted(): void
+    {
+        $equipment = Equipment::factory()->create();
+        \App\Models\EventEquipmentReservation::factory()->for($equipment)->create();
+
+        $this->actingAsManager()
+            ->delete("/equipements/{$equipment->id}")
+            ->assertRedirect();
+
+        $this->assertNotNull($equipment->fresh());
+    }
 }
