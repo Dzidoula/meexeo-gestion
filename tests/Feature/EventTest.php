@@ -2,7 +2,9 @@
 namespace Tests\Feature;
 
 use App\Enums\EventStatus;
+use App\Models\Equipment;
 use App\Models\Event;
+use App\Models\EventEquipmentReservation;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -183,6 +185,40 @@ class EventTest extends TestCase
             ->assertForbidden();
 
         $this->assertSame(EventStatus::Pending, $event->fresh()->status);
+    }
+
+    public function test_editing_an_events_dates_is_refused_if_it_would_overbook_its_reserved_equipment(): void
+    {
+        $equipment = Equipment::factory()->create(['quantity_total' => 10]);
+
+        $eventA = Event::factory()->create(['start_date' => '2026-12-01', 'end_date' => '2026-12-01', 'status' => EventStatus::Confirmed]);
+        EventEquipmentReservation::factory()->for($eventA)->for($equipment)->create(['quantity' => 10]);
+
+        $eventB = Event::factory()->create(['start_date' => '2026-12-10', 'end_date' => '2026-12-10', 'status' => EventStatus::Confirmed]);
+        EventEquipmentReservation::factory()->for($eventB)->for($equipment)->create(['quantity' => 10]);
+
+        $this->actingAsManager()
+            ->put("/evenements/{$eventB->id}", $this->validPayload(['start_date' => '2026-12-01', 'end_date' => '2026-12-01']))
+            ->assertSessionHasErrors('start_date');
+
+        $this->assertEquals('2026-12-10', $eventB->fresh()->start_date->format('Y-m-d'));
+    }
+
+    public function test_editing_an_events_dates_without_a_conflict_succeeds(): void
+    {
+        $equipment = Equipment::factory()->create(['quantity_total' => 10]);
+
+        $eventA = Event::factory()->create(['start_date' => '2026-12-01', 'end_date' => '2026-12-01', 'status' => EventStatus::Confirmed]);
+        EventEquipmentReservation::factory()->for($eventA)->for($equipment)->create(['quantity' => 10]);
+
+        $eventB = Event::factory()->create(['start_date' => '2026-12-10', 'end_date' => '2026-12-10', 'status' => EventStatus::Confirmed]);
+        EventEquipmentReservation::factory()->for($eventB)->for($equipment)->create(['quantity' => 10]);
+
+        $this->actingAsManager()
+            ->put("/evenements/{$eventB->id}", $this->validPayload(['start_date' => '2026-12-11', 'end_date' => '2026-12-11']))
+            ->assertRedirect();
+
+        $this->assertEquals('2026-12-11', $eventB->fresh()->start_date->format('Y-m-d'));
     }
 
     public function test_the_event_list_links_to_the_equipment_catalog(): void

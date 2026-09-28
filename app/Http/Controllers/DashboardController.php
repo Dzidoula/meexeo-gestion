@@ -124,7 +124,7 @@ class DashboardController extends Controller
             ->where('start_date', '>=', $today->copy()->startOfDay())
             ->count();
 
-        $eventsThisMonth = Event::whereBetween('start_date', [$start, $end])->count();
+        $eventsThisMonth = Event::whereBetween('start_date', [now()->startOfMonth(), now()->endOfMonth()])->count();
 
         $weekEnd = $today->copy()->addDays(7);
         $equipmentNearCapacity = Equipment::all()

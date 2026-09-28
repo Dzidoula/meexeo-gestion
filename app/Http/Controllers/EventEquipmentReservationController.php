@@ -11,6 +11,10 @@ class EventEquipmentReservationController extends Controller
 {
     public function store(StoreEventEquipmentReservationRequest $request, Event $event): RedirectResponse
     {
+        if (in_array($event->status, [EventStatus::Completed, EventStatus::Cancelled], true)) {
+            return back()->with('error', "Cet événement est déjà terminé ou annulé, sa liste d'équipement ne peut plus être modifiée.");
+        }
+
         $event->reservations()->create($request->validated());
 
         return redirect()->route('events.show', $event)->with('status', "L'équipement a été réservé.");
@@ -18,6 +22,8 @@ class EventEquipmentReservationController extends Controller
 
     public function destroy(Event $event, EventEquipmentReservation $reservation): RedirectResponse
     {
+        abort_unless($reservation->event_id === $event->id, 404);
+
         if (in_array($event->status, [EventStatus::Completed, EventStatus::Cancelled], true)) {
             return back()->with('error', "Cet événement est déjà terminé ou annulé, sa liste d'équipement ne peut plus être modifiée.");
         }

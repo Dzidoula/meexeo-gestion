@@ -120,4 +120,31 @@ class EventEquipmentReservationTest extends TestCase
 
         $this->assertNotNull($reservation->fresh());
     }
+
+    public function test_a_reservation_cannot_be_deleted_through_a_different_events_url(): void
+    {
+        $eventA = Event::factory()->create(['status' => EventStatus::Pending]);
+        EventEquipmentReservation::factory()->for($eventA)->create();
+
+        $eventB = Event::factory()->create(['status' => EventStatus::Completed]);
+        $reservationB = EventEquipmentReservation::factory()->for($eventB)->create();
+
+        $this->actingAsManager()
+            ->delete("/evenements/{$eventA->id}/equipements/{$reservationB->id}")
+            ->assertNotFound();
+
+        $this->assertNotNull($reservationB->fresh());
+    }
+
+    public function test_a_reservation_cannot_be_added_to_a_completed_event(): void
+    {
+        $equipment = Equipment::factory()->create(['quantity_total' => 50]);
+        $event = Event::factory()->create(['status' => EventStatus::Completed]);
+
+        $this->actingAsManager()
+            ->post("/evenements/{$event->id}/equipements", ['equipment_id' => $equipment->id, 'quantity' => 5])
+            ->assertRedirect();
+
+        $this->assertSame(0, EventEquipmentReservation::count());
+    }
 }
