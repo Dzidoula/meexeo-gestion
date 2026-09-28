@@ -25,15 +25,15 @@
          son propre x-data, il hérite de la portée du body. --}}
     <aside
         :class="[menu ? 'translate-x-0' : '-translate-x-full lg:translate-x-0', collapsed ? 'lg:w-[80px]' : 'lg:w-[250px]']"
-        class="fixed inset-y-0 left-0 z-40 w-[250px] shrink-0 transition-[transform,width] lg:static"
+        class="fixed inset-y-0 left-0 z-40 w-[250px] shrink-0 transition-[transform,width] lg:sticky lg:top-0 lg:h-screen"
         style="background:var(--color-mc-sidebar);display:flex;flex-direction:column"
     >
-        <div class="flex items-center gap-2.5" style="padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.08)">
-            <div class="flex items-center justify-center" style="width:38px;height:38px;flex:none;border-radius:10px;background:linear-gradient(135deg,var(--color-mc-accent),#7C3AED);transform:rotate(45deg)">
-                <div style="width:14px;height:14px;background:#fff;border-radius:3px;transform:rotate(45deg)"></div>
+        <div class="flex items-center gap-2.5" style="padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.08)">
+            <div class="flex items-center justify-center" style="flex:none;border-radius:8px;background:#fff;padding:6px">
+                <img src="{{ asset('images/mc-store/logo_masterclays001.png') }}" alt="MASTERCLAYS"
+                     :style="collapsed ? 'height:22px;width:auto' : 'height:28px;width:auto'">
             </div>
             <div x-show="! collapsed" x-cloak>
-                <div style="font-size:15px;font-weight:800;color:var(--color-mc-on-accent);letter-spacing:.5px;line-height:1.1">MASTERCLAYS</div>
                 <div style="font-size:9.5px;font-weight:600;color:var(--color-mc-sidebar-ink);letter-spacing:1px">DASHBOARD CENTRALISÉ</div>
             </div>
         </div>
@@ -44,7 +44,7 @@
             <a href="{{ route('dashboard') }}"
                class="flex min-h-[44px] items-center gap-3 rounded-lg mb-0.5"
                style="padding:10px;{{ request()->routeIs('dashboard') ? 'background:rgba(67,56,202,.165);border-left:3px solid var(--color-mc-accent)' : 'border-left:3px solid transparent' }}">
-                <div class="flex items-center justify-center text-white font-extrabold text-xs" style="width:34px;height:34px;flex:none;border-radius:8px;background:var(--color-mc-accent)">TB</div>
+                <div class="flex items-center justify-center text-white" style="width:34px;height:34px;flex:none;border-radius:8px;background:var(--color-mc-accent)"><x-mc-icon name="layout-dashboard" class="h-[18px] w-[18px]" /></div>
                 <div x-show="! collapsed" x-cloak style="min-width:0">
                     <div style="font-size:13.5px;font-weight:700;color:var(--color-mc-on-accent)">Tableau de bord</div>
                     <div style="font-size:11px;color:var(--color-mc-sidebar-ink)">Vue d'ensemble</div>
@@ -62,7 +62,7 @@
                         @php($isActive = $moduleRoute ? request()->routeIs($moduleRoute) : request()->is("modules/{$moduleId}"))
                         <a href="{{ $href }}" class="flex min-h-[44px] items-center gap-3 rounded-lg mb-0.5"
                            style="padding:10px;{{ $isActive ? 'background:'.$module['color'].'2A;border-left:3px solid '.$module['color'] : 'border-left:3px solid transparent' }}">
-                            <div class="flex items-center justify-center text-white font-extrabold text-xs" style="width:34px;height:34px;flex:none;border-radius:8px;background:{{ $module['color'] }}">{{ $module['icon'] }}</div>
+                            <div class="flex items-center justify-center text-white" style="width:34px;height:34px;flex:none;border-radius:8px;background:{{ $module['color'] }}"><x-mc-icon :name="$module['icon']" class="h-[18px] w-[18px]" /></div>
                             <div x-show="! collapsed" x-cloak style="min-width:0">
                                 <div style="font-size:13.5px;font-weight:700;color:var(--color-mc-on-accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $module['label'] }}</div>
                                 <div style="font-size:11px;color:var(--color-mc-sidebar-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $module['sub'] }}</div>

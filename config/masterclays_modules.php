@@ -10,27 +10,27 @@ return [
 
     'modules' => [
         'hotel' => [
-            'label' => 'Hôtel', 'sub' => 'Chambres & séjours', 'icon' => 'HT',
+            'label' => 'Hôtel', 'sub' => 'Chambres & séjours', 'icon' => 'bed-double',
             'color' => '#16A34A', 'route' => 'hotel-rooms.index', 'addLabel' => 'Séjour', 'generic' => false,
             'kpis' => [], 'columns' => [], 'rows' => [],
         ],
         'locative' => [
-            'label' => 'Gestion locative', 'sub' => 'Biens & contrats', 'icon' => 'GL',
+            'label' => 'Gestion locative', 'sub' => 'Biens & contrats', 'icon' => 'building',
             'color' => '#EA580C', 'route' => 'properties.index', 'addLabel' => 'Contrat', 'generic' => false,
             'kpis' => [], 'columns' => [], 'rows' => [],
         ],
         'evenementiel' => [
-            'label' => 'Événementiel', 'sub' => 'Événements & équipements', 'icon' => 'EV',
+            'label' => 'Événementiel', 'sub' => 'Événements & équipements', 'icon' => 'calendar',
             'color' => '#7C3AED', 'route' => 'events.index', 'addLabel' => 'Événement', 'generic' => false,
             'kpis' => [], 'columns' => [], 'rows' => [],
         ],
         'vehicules' => [
-            'label' => 'Véhicules', 'sub' => 'Parc & locations', 'icon' => 'VH',
+            'label' => 'Véhicules', 'sub' => 'Parc & locations', 'icon' => 'car',
             'color' => '#0284C7', 'route' => 'vehicles.index', 'addLabel' => 'Véhicule', 'generic' => false,
             'kpis' => [], 'columns' => [], 'rows' => [],
         ],
         'stock' => [
-            'label' => 'Gestion de stock', 'sub' => 'Produits & inventaire', 'icon' => 'ST',
+            'label' => 'Gestion de stock', 'sub' => 'Produits & inventaire', 'icon' => 'package',
             'color' => '#0D9488', 'route' => null, 'addLabel' => 'Produit', 'generic' => true,
             'kpis' => [
                 ['label' => 'Articles en stock', 'value' => '1 245'],
@@ -47,7 +47,7 @@ return [
             ],
         ],
         'rh' => [
-            'label' => 'Ressources humaines', 'sub' => 'Employés & paie', 'icon' => 'RH',
+            'label' => 'Ressources humaines', 'sub' => 'Employés & paie', 'icon' => 'users',
             'color' => '#DB2777', 'route' => null, 'addLabel' => 'Employé', 'generic' => true,
             'kpis' => [
                 ['label' => 'Employés actifs', 'value' => '18'],
@@ -64,7 +64,7 @@ return [
             ],
         ],
         'clients' => [
-            'label' => 'Clients', 'sub' => 'Clients & prospects', 'icon' => 'CL',
+            'label' => 'Clients', 'sub' => 'Clients & prospects', 'icon' => 'user-round',
             'color' => '#0891B2', 'route' => null, 'addLabel' => 'Client', 'generic' => true,
             'kpis' => [
                 ['label' => 'Clients actifs', 'value' => '256'],
@@ -81,7 +81,7 @@ return [
             ],
         ],
         'fournisseurs' => [
-            'label' => 'Fournisseurs', 'sub' => 'Fournisseurs & commandes', 'icon' => 'FO',
+            'label' => 'Fournisseurs', 'sub' => 'Fournisseurs & commandes', 'icon' => 'truck',
             'color' => '#B45309', 'route' => null, 'addLabel' => 'Fournisseur', 'generic' => true,
             'kpis' => [
                 ['label' => 'Fournisseurs actifs', 'value' => '32'],
@@ -97,15 +97,15 @@ return [
             ],
         ],
         'ecommerce' => [
-            'label' => 'E-commerce', 'sub' => 'Boutique en ligne', 'icon' => 'EC',
+            'label' => 'E-commerce', 'sub' => 'Boutique en ligne', 'icon' => 'shopping-cart',
             'color' => '#E11D48', 'route' => 'products.index', 'addLabel' => 'Produit', 'generic' => false,
             'kpis' => [], 'columns' => [], 'rows' => [],
         ],
-        'finance' => ['label' => 'Comptabilité', 'sub' => 'Finances & rapports', 'icon' => 'CO', 'color' => '#059669', 'route' => 'masterclays.finance', 'generic' => false],
-        'reports' => ['label' => 'Rapports & Statistiques', 'sub' => 'Rapports & exports', 'icon' => 'RA', 'color' => '#4F46E5', 'route' => 'masterclays.reports', 'generic' => false],
-        'permissions' => ['label' => 'Utilisateurs & Permissions', 'sub' => "Comptes & droits d'accès", 'icon' => 'UP', 'color' => '#9333EA', 'route' => 'masterclays.permissions', 'generic' => false],
-        'notifications' => ['label' => 'Notifications', 'sub' => 'Alertes & rappels', 'icon' => 'NO', 'color' => '#DC2626', 'route' => 'masterclays.notifications', 'generic' => false],
-        'security' => ['label' => 'Sécurité', 'sub' => 'Connexions & journaux', 'icon' => 'SE', 'color' => '#475569', 'route' => 'masterclays.security', 'generic' => false],
-        'settings' => ['label' => 'Paramètres', 'sub' => 'Configuration du système', 'icon' => 'PA', 'color' => '#57534E', 'route' => 'masterclays.settings', 'generic' => false],
+        'finance' => ['label' => 'Comptabilité', 'sub' => 'Finances & rapports', 'icon' => 'wallet', 'color' => '#059669', 'route' => 'masterclays.finance', 'generic' => false],
+        'reports' => ['label' => 'Rapports & Statistiques', 'sub' => 'Rapports & exports', 'icon' => 'bar-chart-3', 'color' => '#4F46E5', 'route' => 'masterclays.reports', 'generic' => false],
+        'permissions' => ['label' => 'Utilisateurs & Permissions', 'sub' => "Comptes & droits d'accès", 'icon' => 'shield', 'color' => '#9333EA', 'route' => 'masterclays.permissions', 'generic' => false],
+        'notifications' => ['label' => 'Notifications', 'sub' => 'Alertes & rappels', 'icon' => 'bell', 'color' => '#DC2626', 'route' => 'masterclays.notifications', 'generic' => false],
+        'security' => ['label' => 'Sécurité', 'sub' => 'Connexions & journaux', 'icon' => 'lock', 'color' => '#475569', 'route' => 'masterclays.security', 'generic' => false],
+        'settings' => ['label' => 'Paramètres', 'sub' => 'Configuration du système', 'icon' => 'settings', 'color' => '#57534E', 'route' => 'masterclays.settings', 'generic' => false],
     ],
 ];
