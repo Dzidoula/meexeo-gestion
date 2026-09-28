@@ -118,6 +118,24 @@
         </div>
     </x-dashboard-section>
 
+    <x-dashboard-section title="Événementiel" icon="calendar" icon-color="var(--color-terre)" :href="route('events.index')" link-label="Voir les événements">
+        <div class="grid gap-4 sm:grid-cols-3">
+            <x-stat-card label="Événements confirmés à venir" :value="$eventsUpcomingConfirmed" icon="calendar" icon-color="var(--color-terre)" />
+            <x-stat-card label="Événements ce mois" :value="$eventsThisMonth" />
+            <x-stat-card label="Équipements en tension" :value="$equipmentNearCapacity->count()" :tone="$equipmentNearCapacity->count() > 0 ? 'terre' : 'lagune'" />
+        </div>
+
+        @if ($equipmentNearCapacity->isNotEmpty())
+            <p class="mt-3 text-sm" style="color:var(--color-mc-danger)">
+                Équipement(s) proche de la capacité maximale cette semaine —
+                <a href="{{ route('equipment.index') }}" style="text-decoration:underline">voir le catalogue</a> :
+                @foreach ($equipmentNearCapacity as $row)
+                    {{ $row['name'] }} ({{ $row['reserved'] }}/{{ $row['total'] }}){{ ! $loop->last ? ',' : '' }}
+                @endforeach
+            </p>
+        @endif
+    </x-dashboard-section>
+
     <x-dashboard-section title="Activité récente" icon="activity" icon-color="var(--color-mc-ink-faint)">
         @if ($recentActivity->isEmpty())
             <p class="text-sm" style="color:var(--color-mc-ink-faint)">Aucune activité récente.</p>

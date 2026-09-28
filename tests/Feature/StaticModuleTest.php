@@ -12,7 +12,7 @@ class StaticModuleTest extends TestCase
 
     public function test_a_guest_cannot_see_a_module_page(): void
     {
-        $this->get('/modules/evenementiel')->assertRedirect('/connexion');
+        $this->get('/modules/stock')->assertRedirect('/connexion');
     }
 
     #[DataProvider('genericModules')]
@@ -27,7 +27,6 @@ class StaticModuleTest extends TestCase
     public static function genericModules(): array
     {
         return [
-            ['evenementiel', 'Événementiel'],
             ['stock', 'Gestion de stock'],
             ['rh', 'Ressources humaines'],
             ['clients', 'Clients'],
@@ -45,9 +44,9 @@ class StaticModuleTest extends TestCase
     public function test_the_add_button_is_present_but_disabled(): void
     {
         $this->actingAs(User::factory()->viewer()->create())
-            ->get('/modules/evenementiel')
+            ->get('/modules/stock')
             ->assertSee('disabled', false)
-            ->assertSee('Événement');
+            ->assertSee('Produit');
     }
 
     public function test_ecommerce_is_no_longer_a_generic_static_page(): void
@@ -90,5 +89,26 @@ class StaticModuleTest extends TestCase
         $this->actingAs(User::factory()->manager()->create())
             ->get('/tableau-de-bord')
             ->assertSee(route('hotel-rooms.index'), false);
+    }
+
+    public function test_evenementiel_is_no_longer_a_generic_static_page(): void
+    {
+        $this->actingAs(User::factory()->viewer()->create())
+            ->get('/modules/evenementiel')
+            ->assertNotFound();
+    }
+
+    public function test_the_sidebar_no_longer_lists_the_fake_evenementiel_data(): void
+    {
+        $this->actingAs(User::factory()->manager()->create())
+            ->get('/tableau-de-bord')
+            ->assertDontSee('Mariage Koffi & Aya');
+    }
+
+    public function test_the_sidebar_links_evenementiel_to_the_real_module(): void
+    {
+        $this->actingAs(User::factory()->manager()->create())
+            ->get('/tableau-de-bord')
+            ->assertSee(route('events.index'), false);
     }
 }

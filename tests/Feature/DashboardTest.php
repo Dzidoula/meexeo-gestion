@@ -111,4 +111,34 @@ class DashboardTest extends TestCase
 
         $this->assertStringNotContainsString(e($lease->tenant->full_name), $dueSoonSection);
     }
+
+    public function test_the_dashboard_counts_upcoming_confirmed_events(): void
+    {
+        \App\Models\Event::factory()->create(['status' => \App\Enums\EventStatus::Confirmed, 'start_date' => now()->addWeek(), 'end_date' => now()->addWeek()]);
+        \App\Models\Event::factory()->create(['status' => \App\Enums\EventStatus::Pending, 'start_date' => now()->addWeek(), 'end_date' => now()->addWeek()]);
+        \App\Models\Event::factory()->create(['status' => \App\Enums\EventStatus::Confirmed, 'start_date' => now()->subWeek(), 'end_date' => now()->subWeek()]);
+
+        $this->actingAs(\App\Models\User::factory()->manager()->create())
+            ->get('/tableau-de-bord')
+            ->assertViewHas('eventsUpcomingConfirmed', 1);
+    }
+
+    public function test_the_dashboard_flags_equipment_near_full_utilization_this_week(): void
+    {
+        $equipment = \App\Models\Equipment::factory()->create(['name' => 'Podium modulaire', 'quantity_total' => 10]);
+        $event = \App\Models\Event::factory()->create([
+            'status' => \App\Enums\EventStatus::Confirmed,
+            'start_date' => now(),
+            'end_date' => now()->addDays(2),
+        ]);
+        \App\Models\EventEquipmentReservation::factory()->for($event)->for($equipment)->create(['quantity' => 9]);
+
+        $response = $this->actingAs(\App\Models\User::factory()->manager()->create())
+            ->get('/tableau-de-bord');
+
+        $response->assertViewHas('equipmentNearCapacity', function ($rows) {
+            return $rows->count() === 1 && $rows->first()['name'] === 'Podium modulaire';
+        });
+        $response->assertSee('Podium modulaire');
+    }
 }

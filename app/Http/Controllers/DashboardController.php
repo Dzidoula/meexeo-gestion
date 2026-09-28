@@ -1,9 +1,13 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Enums\EventStatus;
 use App\Enums\LeaseStatus;
 use App\Enums\PropertyStatus;
 use App\Models\Category;
+use App\Models\Equipment;
+use App\Models\Event;
+use App\Models\EventPayment;
 use App\Models\Lease;
 use App\Models\Payment;
 use App\Models\Product;
@@ -116,6 +120,28 @@ class DashboardController extends Controller
         $productsByCategory = Category::withCount('products')->orderByDesc('products_count')->get()
             ->map(fn (Category $c) => ['label' => $c->name, 'total' => $c->products_count]);
 
+        $eventsUpcomingConfirmed = Event::where('status', EventStatus::Confirmed)
+            ->where('start_date', '>=', $today->copy()->startOfDay())
+            ->count();
+
+        $eventsThisMonth = Event::whereBetween('start_date', [$start, $end])->count();
+
+        $weekEnd = $today->copy()->addDays(7);
+        $equipmentNearCapacity = Equipment::all()
+            ->map(function (Equipment $item) use ($today, $weekEnd) {
+                $reserved = (int) $item->reservations()
+                    ->whereHas('event', function ($q) use ($today, $weekEnd) {
+                        $q->whereIn('status', [EventStatus::Pending->value, EventStatus::Confirmed->value])
+                            ->whereDate('start_date', '<=', $weekEnd)
+                            ->whereDate('end_date', '>=', $today);
+                    })
+                    ->sum('quantity');
+
+                return ['name' => $item->name, 'reserved' => $reserved, 'total' => $item->quantity_total];
+            })
+            ->filter(fn (array $row) => $row['total'] > 0 && ($row['reserved'] / $row['total']) >= 0.9)
+            ->values();
+
         $recentActivity = collect()
             ->concat(Lease::with(['tenant'])->latest()->take(8)->get()->map(fn (Lease $l) => [
                 'at' => $l->created_at,
@@ -136,6 +162,16 @@ class DashboardController extends Controller
                 'at' => $p->created_at,
                 'label' => "Paiement enregistré — {$p->lease->tenant->full_name}",
                 'url' => route('tenants.show', $p->lease->tenant),
+            ]))
+            ->concat(Event::latest()->take(8)->get()->map(fn (Event $e) => [
+                'at' => $e->created_at,
+                'label' => "Événement ajouté — {$e->client_name}",
+                'url' => route('events.show', $e),
+            ]))
+            ->concat(EventPayment::with('event')->latest()->take(8)->get()->map(fn (EventPayment $p) => [
+                'at' => $p->created_at,
+                'label' => "Paiement événement enregistré — {$p->event->client_name}",
+                'url' => route('events.show', $p->event),
             ]))
             ->sortByDesc('at')
             ->take(8)
@@ -159,6 +195,9 @@ class DashboardController extends Controller
             'productsStockValue' => $productsStockValue,
             'productsOutOfStock' => $productsOutOfStock,
             'productsByCategory' => $productsByCategory,
+            'eventsUpcomingConfirmed' => $eventsUpcomingConfirmed,
+            'eventsThisMonth' => $eventsThisMonth,
+            'equipmentNearCapacity' => $equipmentNearCapacity,
             'recentActivity' => $recentActivity,
         ]);
     }

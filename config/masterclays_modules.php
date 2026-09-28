@@ -20,21 +20,9 @@ return [
             'kpis' => [], 'columns' => [], 'rows' => [],
         ],
         'evenementiel' => [
-            'label' => 'Événementiel', 'sub' => 'Événements & prestations', 'icon' => 'EV',
-            'color' => '#7C3AED', 'route' => null, 'addLabel' => 'Événement', 'generic' => true,
-            'kpis' => [
-                ['label' => 'Événements ce mois', 'value' => '7'],
-                ['label' => 'Équipements en stock', 'value' => '312'],
-                ['label' => 'Disponibilité équipements', 'value' => '65%'],
-            ],
-            'columns' => ['Événement', 'Date', 'Lieu', 'Responsable', 'Budget'],
-            'rows' => [
-                ['cells' => ['Mariage Koffi & Aya', '14/06/2025', 'Salle Prestige - Abidjan', 'Awa Traoré', '3 500 000 FCFA'], 'status' => 'Confirmé'],
-                ['cells' => ['Séminaire MASTERCLAYS', '02/06/2025', 'Hôtel Résidence', 'Jean Kouakou', '1 200 000 FCFA'], 'status' => 'En préparation'],
-                ['cells' => ['Anniversaire Konan', '21/05/2025', 'Villa Deluxe', 'Fatou Diarra', '800 000 FCFA'], 'status' => 'Confirmé'],
-                ['cells' => ['Baptême famille Yao', '29/05/2025', 'Résidence Les Palmiers', 'Michel Yao', '450 000 FCFA'], 'status' => 'En attente'],
-                ['cells' => ["Gala d'entreprise", '18/06/2025', 'Salle Prestige', 'Awa Traoré', '5 000 000 FCFA'], 'status' => 'Confirmé'],
-            ],
+            'label' => 'Événementiel', 'sub' => 'Événements & équipements', 'icon' => 'EV',
+            'color' => '#7C3AED', 'route' => 'events.index', 'addLabel' => 'Événement', 'generic' => false,
+            'kpis' => [], 'columns' => [], 'rows' => [],
         ],
         'vehicules' => [
             'label' => 'Véhicules', 'sub' => 'Parc & locations', 'icon' => 'VH',
