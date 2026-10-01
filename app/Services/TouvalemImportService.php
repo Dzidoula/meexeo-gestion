@@ -6,6 +6,7 @@ use App\Models\HotelGallery;
 use App\Models\HotelRoom;
 use App\Models\HotelRoomType;
 use App\Models\HotelStay;
+use App\Models\HotelContactMessage;
 use App\Models\HotelFaq;
 use App\Models\HotelTestimonial;
 use Carbon\Carbon;
@@ -152,6 +153,25 @@ class TouvalemImportService
                     'answer' => $row['answer'],
                     'order' => (int) ($row['order'] ?? 0),
                     'is_active' => (bool) ($row['is_active'] ?? true),
+                ],
+            );
+        }
+    }
+
+    /** @param array<int, array<string, mixed>> $rows */
+    public function importContactMessages(array $rows): void
+    {
+        foreach ($rows as $row) {
+            HotelContactMessage::updateOrCreate(
+                ['external_source' => self::SOURCE, 'external_id' => $row['id']],
+                [
+                    'first_name' => $row['first_name'],
+                    'last_name' => $row['last_name'],
+                    'email' => $row['email'],
+                    'phone' => $row['phone'] ?? null,
+                    'subject' => $row['subject'],
+                    'message' => $row['message'],
+                    'is_read' => (bool) ($row['is_read'] ?? false),
                 ],
             );
         }

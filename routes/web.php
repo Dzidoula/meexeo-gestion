@@ -16,6 +16,7 @@ use App\Http\Controllers\HotelRoomTypeController;
 use App\Http\Controllers\HotelGalleryController;
 use App\Http\Controllers\HotelTestimonialController;
 use App\Http\Controllers\HotelFaqController;
+use App\Http\Controllers\HotelContactMessageController;
 use App\Http\Controllers\HotelStayController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\MasterclaysAdminController;
@@ -81,6 +82,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/galerie', [HotelGalleryController::class, 'index'])->name('hotel-galleries.index');
     Route::get('/temoignages', [HotelTestimonialController::class, 'index'])->name('hotel-testimonials.index');
     Route::get('/faq', [HotelFaqController::class, 'index'])->name('hotel-faqs.index');
+    Route::get('/messages-contact', [HotelContactMessageController::class, 'index'])->name('hotel-contact-messages.index');
+    Route::get('/messages-contact/{hotelContactMessage}', [HotelContactMessageController::class, 'show'])->name('hotel-contact-messages.show');
 
     Route::get('/modules/{module}', [StaticModuleController::class, 'show'])->name('modules.show');
 
@@ -161,6 +164,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/faq/{hotelFaq}/modifier', [HotelFaqController::class, 'edit'])->name('hotel-faqs.edit');
         Route::put('/faq/{hotelFaq}', [HotelFaqController::class, 'update'])->name('hotel-faqs.update');
         Route::delete('/faq/{hotelFaq}', [HotelFaqController::class, 'destroy'])->name('hotel-faqs.destroy');
+
+        Route::delete('/messages-contact/{hotelContactMessage}', [HotelContactMessageController::class, 'destroy'])->name('hotel-contact-messages.destroy');
 
         Route::get('/equipements/nouveau', [EquipmentController::class, 'create'])->name('equipment.create');
         Route::post('/equipements', [EquipmentController::class, 'store'])->name('equipment.store');
