@@ -6,6 +6,7 @@ use App\Models\HotelGallery;
 use App\Models\HotelRoom;
 use App\Models\HotelRoomType;
 use App\Models\HotelStay;
+use App\Models\HotelTestimonial;
 use Carbon\Carbon;
 
 /**
@@ -115,6 +116,25 @@ class TouvalemImportService
                     'image_path' => $row['image_path'],
                     'title' => $row['title'] ?? null,
                     'category' => $row['category'] ?? null,
+                ],
+            );
+        }
+    }
+
+    /** @param array<int, array<string, mixed>> $rows */
+    public function importTestimonials(array $rows): void
+    {
+        foreach ($rows as $row) {
+            HotelTestimonial::updateOrCreate(
+                ['external_source' => self::SOURCE, 'external_id' => $row['id']],
+                [
+                    'author_name' => $row['author_name'],
+                    'author_subtitle' => $row['author_subtitle'] ?? null,
+                    'author_image' => $row['author_image'] ?? null,
+                    'rating' => (float) ($row['rating'] ?? 5),
+                    'title' => $row['title'],
+                    'content' => $row['content'],
+                    'is_active' => (bool) ($row['is_active'] ?? true),
                 ],
             );
         }

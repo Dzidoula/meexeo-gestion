@@ -14,6 +14,7 @@ use App\Http\Controllers\HotelPaymentController;
 use App\Http\Controllers\HotelRoomController;
 use App\Http\Controllers\HotelRoomTypeController;
 use App\Http\Controllers\HotelGalleryController;
+use App\Http\Controllers\HotelTestimonialController;
 use App\Http\Controllers\HotelStayController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\MasterclaysAdminController;
@@ -77,6 +78,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/evenements', [EventController::class, 'index'])->name('events.index');
     Route::get('/sejours', [HotelStayController::class, 'index'])->name('hotel-stays.index');
     Route::get('/galerie', [HotelGalleryController::class, 'index'])->name('hotel-galleries.index');
+    Route::get('/temoignages', [HotelTestimonialController::class, 'index'])->name('hotel-testimonials.index');
 
     Route::get('/modules/{module}', [StaticModuleController::class, 'show'])->name('modules.show');
 
@@ -145,6 +147,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/galerie/nouveau', [HotelGalleryController::class, 'create'])->name('hotel-galleries.create');
         Route::post('/galerie', [HotelGalleryController::class, 'store'])->name('hotel-galleries.store');
         Route::delete('/galerie/{hotelGallery}', [HotelGalleryController::class, 'destroy'])->name('hotel-galleries.destroy');
+
+        Route::get('/temoignages/nouveau', [HotelTestimonialController::class, 'create'])->name('hotel-testimonials.create');
+        Route::post('/temoignages', [HotelTestimonialController::class, 'store'])->name('hotel-testimonials.store');
+        Route::get('/temoignages/{hotelTestimonial}/modifier', [HotelTestimonialController::class, 'edit'])->name('hotel-testimonials.edit');
+        Route::put('/temoignages/{hotelTestimonial}', [HotelTestimonialController::class, 'update'])->name('hotel-testimonials.update');
+        Route::delete('/temoignages/{hotelTestimonial}', [HotelTestimonialController::class, 'destroy'])->name('hotel-testimonials.destroy');
 
         Route::get('/equipements/nouveau', [EquipmentController::class, 'create'])->name('equipment.create');
         Route::post('/equipements', [EquipmentController::class, 'store'])->name('equipment.store');

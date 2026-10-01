@@ -51,6 +51,30 @@ class TouvalemSyncController extends Controller
         return response()->json(['deleted' => true]);
     }
 
+    public function testimonials(Request $request, TouvalemImportService $service)
+    {
+        if (!$this->authorized($request)) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        $service->importTestimonials([$request->all()]);
+
+        return response()->json(['synced' => true], 201);
+    }
+
+    public function testimonialsDestroy(Request $request)
+    {
+        if (!$this->authorized($request)) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        \App\Models\HotelTestimonial::where('external_source', 'residence_touvalem')
+            ->where('external_id', $request->input('id'))
+            ->delete();
+
+        return response()->json(['deleted' => true]);
+    }
+
     private function authorized(Request $request): bool
     {
         $configuredToken = config('services.touvalem_sync.token');
