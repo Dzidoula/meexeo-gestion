@@ -6,6 +6,7 @@ use App\Models\HotelGallery;
 use App\Models\HotelRoom;
 use App\Models\HotelRoomType;
 use App\Models\HotelStay;
+use App\Models\HotelFaq;
 use App\Models\HotelTestimonial;
 use Carbon\Carbon;
 
@@ -134,6 +135,22 @@ class TouvalemImportService
                     'rating' => (float) ($row['rating'] ?? 5),
                     'title' => $row['title'],
                     'content' => $row['content'],
+                    'is_active' => (bool) ($row['is_active'] ?? true),
+                ],
+            );
+        }
+    }
+
+    /** @param array<int, array<string, mixed>> $rows */
+    public function importFaqs(array $rows): void
+    {
+        foreach ($rows as $row) {
+            HotelFaq::updateOrCreate(
+                ['external_source' => self::SOURCE, 'external_id' => $row['id']],
+                [
+                    'question' => $row['question'],
+                    'answer' => $row['answer'],
+                    'order' => (int) ($row['order'] ?? 0),
                     'is_active' => (bool) ($row['is_active'] ?? true),
                 ],
             );

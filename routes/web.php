@@ -15,6 +15,7 @@ use App\Http\Controllers\HotelRoomController;
 use App\Http\Controllers\HotelRoomTypeController;
 use App\Http\Controllers\HotelGalleryController;
 use App\Http\Controllers\HotelTestimonialController;
+use App\Http\Controllers\HotelFaqController;
 use App\Http\Controllers\HotelStayController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\MasterclaysAdminController;
@@ -79,6 +80,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/sejours', [HotelStayController::class, 'index'])->name('hotel-stays.index');
     Route::get('/galerie', [HotelGalleryController::class, 'index'])->name('hotel-galleries.index');
     Route::get('/temoignages', [HotelTestimonialController::class, 'index'])->name('hotel-testimonials.index');
+    Route::get('/faq', [HotelFaqController::class, 'index'])->name('hotel-faqs.index');
 
     Route::get('/modules/{module}', [StaticModuleController::class, 'show'])->name('modules.show');
 
@@ -153,6 +155,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/temoignages/{hotelTestimonial}/modifier', [HotelTestimonialController::class, 'edit'])->name('hotel-testimonials.edit');
         Route::put('/temoignages/{hotelTestimonial}', [HotelTestimonialController::class, 'update'])->name('hotel-testimonials.update');
         Route::delete('/temoignages/{hotelTestimonial}', [HotelTestimonialController::class, 'destroy'])->name('hotel-testimonials.destroy');
+
+        Route::get('/faq/nouveau', [HotelFaqController::class, 'create'])->name('hotel-faqs.create');
+        Route::post('/faq', [HotelFaqController::class, 'store'])->name('hotel-faqs.store');
+        Route::get('/faq/{hotelFaq}/modifier', [HotelFaqController::class, 'edit'])->name('hotel-faqs.edit');
+        Route::put('/faq/{hotelFaq}', [HotelFaqController::class, 'update'])->name('hotel-faqs.update');
+        Route::delete('/faq/{hotelFaq}', [HotelFaqController::class, 'destroy'])->name('hotel-faqs.destroy');
 
         Route::get('/equipements/nouveau', [EquipmentController::class, 'create'])->name('equipment.create');
         Route::post('/equipements', [EquipmentController::class, 'store'])->name('equipment.store');
