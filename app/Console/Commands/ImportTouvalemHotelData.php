@@ -33,6 +33,30 @@ class ImportTouvalemHotelData extends Command
         $this->info(sprintf('Réservations trouvées : %d', count($bookings)));
         $service->importBookings($bookings);
 
+        $galleries = $source->table('galleries')->get()->map(fn ($row) => (array) $row)->all();
+        $this->info(sprintf('Photos de galerie trouvées : %d', count($galleries)));
+        $service->importGalleries($galleries);
+
+        $testimonials = $source->table('testimonials')->get()->map(fn ($row) => (array) $row)->all();
+        $this->info(sprintf('Témoignages trouvés : %d', count($testimonials)));
+        $service->importTestimonials($testimonials);
+
+        $faqs = $source->table('faqs')->get()->map(fn ($row) => (array) $row)->all();
+        $this->info(sprintf('FAQ trouvées : %d', count($faqs)));
+        $service->importFaqs($faqs);
+
+        $contactMessages = $source->table('contact_messages')->get()->map(fn ($row) => (array) $row)->all();
+        $this->info(sprintf('Messages de contact trouvés : %d', count($contactMessages)));
+        $service->importContactMessages($contactMessages);
+
+        $newsletterSubscribers = $source->table('newsletters')->get()->map(fn ($row) => (array) $row)->all();
+        $this->info(sprintf('Abonnés newsletter trouvés : %d', count($newsletterSubscribers)));
+        $service->importNewsletterSubscribers($newsletterSubscribers);
+
+        $promoCodes = $source->table('promo_codes')->get()->map(fn ($row) => (array) $row)->all();
+        $this->info(sprintf('Codes promo trouvés : %d', count($promoCodes)));
+        $service->importPromoCodes($promoCodes);
+
         $this->info('Import terminé.');
 
         return self::SUCCESS;
