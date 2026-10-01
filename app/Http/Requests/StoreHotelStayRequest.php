@@ -15,11 +15,13 @@ class StoreHotelStayRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'type' => ['nullable', 'in:chambre,privatisation'],
             'hotel_room_id' => [
-                'required',
+                'required_if:type,chambre',
+                'nullable',
                 'exists:hotel_rooms,id',
                 function (string $attribute, mixed $value, \Closure $fail): void {
-                    if (! $this->filled(['arrival_date', 'departure_date'])) {
+                    if ($value === null || ! $this->filled(['arrival_date', 'departure_date'])) {
                         return;
                     }
 
@@ -48,7 +50,7 @@ class StoreHotelStayRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'hotel_room_id.required' => 'Choisissez une chambre.',
+            'hotel_room_id.required_if' => 'Choisissez une chambre.',
             'hotel_room_id.exists' => "Cette chambre n'existe pas.",
             'guest_name.required' => 'Indiquez le nom du client.',
             'guest_phone.required' => 'Indiquez le téléphone du client.',
@@ -57,5 +59,10 @@ class StoreHotelStayRequest extends FormRequest
             'total_amount.min' => 'Le montant ne peut pas être négatif.',
             'deposit_amount.min' => "L'acompte ne peut pas être négatif.",
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge(['type' => $this->input('type', 'chambre')]);
     }
 }

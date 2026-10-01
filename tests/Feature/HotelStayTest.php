@@ -257,6 +257,130 @@ class HotelStayTest extends TestCase
             ->assertSee($expectedBalance);
     }
 
+    public function test_a_manager_can_create_a_privatisation_stay_with_no_room(): void
+    {
+        $this->actingAsManager()
+            ->post('/sejours', [
+                'type' => 'privatisation',
+                'guest_name' => 'Awa Koné',
+                'guest_phone' => '0102030405',
+                'arrival_date' => '2026-10-10',
+                'departure_date' => '2026-10-12',
+                'total_amount' => 600000,
+                'deposit_amount' => 0,
+            ])
+            ->assertRedirect();
+
+        $stay = HotelStay::sole();
+        $this->assertSame('privatisation', $stay->type);
+        $this->assertNull($stay->hotel_room_id);
+    }
+
+    public function test_a_privatisation_stay_does_not_require_a_room(): void
+    {
+        $this->actingAsManager()
+            ->post('/sejours', [
+                'type' => 'privatisation',
+                'guest_name' => 'Awa Koné',
+                'guest_phone' => '0102030405',
+                'arrival_date' => '2026-10-10',
+                'departure_date' => '2026-10-12',
+                'total_amount' => 600000,
+                'deposit_amount' => 0,
+            ])
+            ->assertSessionDoesntHaveErrors('hotel_room_id');
+    }
+
+    public function test_a_chambre_stay_still_requires_a_room(): void
+    {
+        $this->actingAsManager()
+            ->post('/sejours', [
+                'type' => 'chambre',
+                'guest_name' => 'Awa Koné',
+                'guest_phone' => '0102030405',
+                'arrival_date' => '2026-10-10',
+                'departure_date' => '2026-10-12',
+                'total_amount' => 90000,
+                'deposit_amount' => 0,
+            ])
+            ->assertSessionHasErrors('hotel_room_id');
+    }
+
+    public function test_the_stay_list_shows_privatisation_without_crashing_on_the_missing_room(): void
+    {
+        HotelStay::factory()->create([
+            'hotel_room_id' => null,
+            'type' => 'privatisation',
+            'guest_name' => 'Famille Yao',
+        ]);
+
+        $this->actingAsManager()
+            ->get('/sejours')
+            ->assertOk()
+            ->assertSee('Famille Yao')
+            ->assertSee('Privatisation');
+    }
+
+    public function test_a_privatisation_stays_detail_page_does_not_crash_on_the_missing_room(): void
+    {
+        $stay = HotelStay::factory()->create([
+            'hotel_room_id' => null,
+            'type' => 'privatisation',
+            'guest_name' => 'Famille Yao',
+        ]);
+
+        $this->actingAsManager()
+            ->get("/sejours/{$stay->id}")
+            ->assertOk()
+            ->assertSee('Privatisation');
+    }
+
+    public function test_checking_in_a_privatisation_stay_does_not_crash_on_the_missing_room(): void
+    {
+        $stay = HotelStay::factory()->create([
+            'hotel_room_id' => null,
+            'type' => 'privatisation',
+            'status' => HotelStayStatus::Reserved,
+        ]);
+
+        $this->actingAsManager()
+            ->patch("/sejours/{$stay->id}/arrivee")
+            ->assertRedirect();
+
+        $this->assertSame(HotelStayStatus::InProgress, $stay->fresh()->status);
+    }
+
+    public function test_checking_out_a_privatisation_stay_does_not_crash_on_the_missing_room(): void
+    {
+        $stay = HotelStay::factory()->create([
+            'hotel_room_id' => null,
+            'type' => 'privatisation',
+            'status' => HotelStayStatus::InProgress,
+            'checked_in_at' => now(),
+        ]);
+
+        $this->actingAsManager()
+            ->patch("/sejours/{$stay->id}/depart")
+            ->assertRedirect();
+
+        $this->assertSame(HotelStayStatus::Completed, $stay->fresh()->status);
+    }
+
+    public function test_cancelling_a_privatisation_stay_does_not_crash_on_the_missing_room(): void
+    {
+        $stay = HotelStay::factory()->create([
+            'hotel_room_id' => null,
+            'type' => 'privatisation',
+            'status' => HotelStayStatus::Reserved,
+        ]);
+
+        $this->actingAsManager()
+            ->patch("/sejours/{$stay->id}/annuler")
+            ->assertRedirect();
+
+        $this->assertSame(HotelStayStatus::Cancelled, $stay->fresh()->status);
+    }
+
     public function test_cancelling_an_in_progress_stay_frees_the_room(): void
     {
         $room = HotelRoom::factory()->create(['status' => HotelRoomStatus::Occupied]);

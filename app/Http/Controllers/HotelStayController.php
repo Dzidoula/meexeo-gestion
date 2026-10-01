@@ -54,7 +54,7 @@ class HotelStayController extends Controller
         }
 
         $stay->update(['status' => HotelStayStatus::InProgress, 'checked_in_at' => now()]);
-        $stay->room->update(['status' => HotelRoomStatus::Occupied]);
+        $stay->room?->update(['status' => HotelRoomStatus::Occupied]);
 
         return redirect()->route('hotel-stays.show', $stay)->with('status', 'Arrivée enregistrée.');
     }
@@ -67,7 +67,7 @@ class HotelStayController extends Controller
 
         $stay->update(['status' => HotelStayStatus::Completed, 'checked_out_at' => now()]);
 
-        if ($stay->room->status === HotelRoomStatus::Occupied) {
+        if ($stay->room?->status === HotelRoomStatus::Occupied) {
             $stay->room->update(['status' => HotelRoomStatus::Available]);
         }
 
@@ -83,7 +83,7 @@ class HotelStayController extends Controller
         $wasOccupying = $stay->status === HotelStayStatus::InProgress;
         $stay->update(['status' => HotelStayStatus::Cancelled]);
 
-        if ($wasOccupying && $stay->room->status === HotelRoomStatus::Occupied) {
+        if ($wasOccupying && $stay->room?->status === HotelRoomStatus::Occupied) {
             $stay->room->update(['status' => HotelRoomStatus::Available]);
         }
 

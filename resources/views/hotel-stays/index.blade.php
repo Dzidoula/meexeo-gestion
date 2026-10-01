@@ -53,7 +53,7 @@
                             <td class="px-4 py-3">
                                 <a href="{{ route('hotel-stays.show', $stay) }}" style="font-size:14px;font-weight:700;color:var(--color-mc-ink)">{{ $stay->guest_name }}</a>
                             </td>
-                            <td class="px-4 py-3" style="font-size:12px;color:var(--color-mc-ink-soft)">{{ $stay->room->number }}</td>
+                            <td class="px-4 py-3" style="font-size:12px;color:var(--color-mc-ink-soft)">{{ $stay->room->number ?? 'Privatisation (villa entière)' }}</td>
                             <td class="px-4 py-3" style="font-size:12px;color:var(--color-mc-ink-soft)">{{ $stay->arrival_date->format('d/m/Y') }}</td>
                             <td class="px-4 py-3" style="font-size:12px;color:var(--color-mc-ink-soft)">{{ $stay->departure_date->format('d/m/Y') }}</td>
                             <td class="chiffre px-4 py-3 text-right font-semibold">{{ \App\Support\Money::fcfa($stay->total_amount) }}</td>

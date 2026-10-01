@@ -1,7 +1,7 @@
 @php($canWrite = in_array(auth()->user()->role, [\App\Enums\Role::Admin, \App\Enums\Role::Manager], true))
 @php($balance = $stay->total_amount - $stay->deposit_amount - $stay->payments->sum('amount'))
 <x-layouts.app :title="'Séjour de '.$stay->guest_name.' — MASTERCLAYS'">
-    <x-page-header :title="'Séjour de '.$stay->guest_name" :subtitle="'Chambre '.$stay->room->number">
+    <x-page-header :title="'Séjour de '.$stay->guest_name" :subtitle="$stay->room ? 'Chambre '.$stay->room->number : 'Privatisation (villa entière)'">
         <x-slot:actions>
             @if ($canWrite)
                 @if ($stay->status->value === 'reserve')
