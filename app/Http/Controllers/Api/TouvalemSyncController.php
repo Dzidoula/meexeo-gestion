@@ -147,6 +147,30 @@ class TouvalemSyncController extends Controller
         return response()->json(['deleted' => true]);
     }
 
+    public function promoCodes(Request $request, TouvalemImportService $service)
+    {
+        if (!$this->authorized($request)) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        $service->importPromoCodes([$request->all()]);
+
+        return response()->json(['synced' => true], 201);
+    }
+
+    public function promoCodesDestroy(Request $request)
+    {
+        if (!$this->authorized($request)) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        \App\Models\HotelPromoCode::where('external_source', 'residence_touvalem')
+            ->where('external_id', $request->input('id'))
+            ->delete();
+
+        return response()->json(['deleted' => true]);
+    }
+
     private function authorized(Request $request): bool
     {
         $configuredToken = config('services.touvalem_sync.token');

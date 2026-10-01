@@ -18,6 +18,7 @@ use App\Http\Controllers\HotelTestimonialController;
 use App\Http\Controllers\HotelFaqController;
 use App\Http\Controllers\HotelContactMessageController;
 use App\Http\Controllers\HotelNewsletterSubscriberController;
+use App\Http\Controllers\HotelPromoCodeController;
 use App\Http\Controllers\HotelStayController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\MasterclaysAdminController;
@@ -86,6 +87,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/messages-contact', [HotelContactMessageController::class, 'index'])->name('hotel-contact-messages.index');
     Route::get('/messages-contact/{hotelContactMessage}', [HotelContactMessageController::class, 'show'])->name('hotel-contact-messages.show');
     Route::get('/newsletter', [HotelNewsletterSubscriberController::class, 'index'])->name('hotel-newsletter-subscribers.index');
+    Route::get('/codes-promo', [HotelPromoCodeController::class, 'index'])->name('hotel-promo-codes.index');
 
     Route::get('/modules/{module}', [StaticModuleController::class, 'show'])->name('modules.show');
 
@@ -170,6 +172,13 @@ Route::middleware('auth')->group(function () {
         Route::delete('/messages-contact/{hotelContactMessage}', [HotelContactMessageController::class, 'destroy'])->name('hotel-contact-messages.destroy');
 
         Route::delete('/newsletter/{hotelNewsletterSubscriber}', [HotelNewsletterSubscriberController::class, 'destroy'])->name('hotel-newsletter-subscribers.destroy');
+
+        Route::get('/codes-promo/nouveau', [HotelPromoCodeController::class, 'create'])->name('hotel-promo-codes.create');
+        Route::post('/codes-promo', [HotelPromoCodeController::class, 'store'])->name('hotel-promo-codes.store');
+        Route::get('/codes-promo/{hotelPromoCode}/modifier', [HotelPromoCodeController::class, 'edit'])->name('hotel-promo-codes.edit');
+        Route::put('/codes-promo/{hotelPromoCode}', [HotelPromoCodeController::class, 'update'])->name('hotel-promo-codes.update');
+        Route::delete('/codes-promo/{hotelPromoCode}', [HotelPromoCodeController::class, 'destroy'])->name('hotel-promo-codes.destroy');
+        Route::patch('/codes-promo/{hotelPromoCode}/basculer', [HotelPromoCodeController::class, 'toggleStatus'])->name('hotel-promo-codes.toggle-status');
 
         Route::get('/equipements/nouveau', [EquipmentController::class, 'create'])->name('equipment.create');
         Route::post('/equipements', [EquipmentController::class, 'store'])->name('equipment.store');

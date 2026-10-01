@@ -9,6 +9,7 @@ use App\Models\HotelStay;
 use App\Models\HotelContactMessage;
 use App\Models\HotelFaq;
 use App\Models\HotelNewsletterSubscriber;
+use App\Models\HotelPromoCode;
 use App\Models\HotelTestimonial;
 use Carbon\Carbon;
 
@@ -185,6 +186,27 @@ class TouvalemImportService
             HotelNewsletterSubscriber::updateOrCreate(
                 ['external_source' => self::SOURCE, 'external_id' => $row['id']],
                 ['email' => $row['email']],
+            );
+        }
+    }
+
+    /** @param array<int, array<string, mixed>> $rows */
+    public function importPromoCodes(array $rows): void
+    {
+        foreach ($rows as $row) {
+            HotelPromoCode::updateOrCreate(
+                ['external_source' => self::SOURCE, 'external_id' => $row['id']],
+                [
+                    'code' => $row['code'],
+                    'discount_type' => $row['discount_type'],
+                    'discount_value' => (float) $row['discount_value'],
+                    'min_total' => isset($row['min_total']) ? (float) $row['min_total'] : null,
+                    'max_uses' => $row['max_uses'] ?? null,
+                    'uses_count' => (int) ($row['uses_count'] ?? 0),
+                    'starts_at' => $row['starts_at'] ?? null,
+                    'expires_at' => $row['expires_at'] ?? null,
+                    'is_active' => (bool) ($row['is_active'] ?? true),
+                ],
             );
         }
     }
