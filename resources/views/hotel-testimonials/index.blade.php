@@ -21,10 +21,14 @@
                         <td>{{ str_repeat('★', (int) round($testimonial->rating)) }}</td>
                         <td>{{ $testimonial->is_active ? 'Actif' : 'Inactif' }}</td>
                         <td>
-                            <a href="{{ route('hotel-testimonials.edit', $testimonial) }}" class="text-xs font-semibold" style="color:var(--color-mc-accent)">Modifier</a>
-                            <form method="POST" action="{{ route('hotel-testimonials.destroy', $testimonial) }}" class="inline">
+                            <a href="{{ route('hotel-testimonials.edit', $testimonial) }}" title="Modifier" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[color:var(--color-mc-ink-faint)] hover:bg-[var(--color-mc-canvas)] hover:text-[color:var(--color-mc-accent)]">
+                                <x-mc-icon name="pencil" class="h-4 w-4" />
+                            </a>
+                            <form method="POST" action="{{ route('hotel-testimonials.destroy', $testimonial) }}" class="inline" onsubmit="return confirm('Supprimer définitivement ce témoignage ?')">
                                 @csrf @method('DELETE')
-                                <button class="ml-2 text-xs" style="color:var(--color-mc-danger)">Supprimer</button>
+                                <button type="submit" title="Supprimer" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[color:var(--color-mc-danger)] hover:bg-red-50">
+                                    <x-mc-icon name="trash-2" class="h-4 w-4" />
+                                </button>
                             </form>
                         </td>
                     </tr>

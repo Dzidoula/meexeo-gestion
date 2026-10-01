@@ -40,7 +40,9 @@
                             <td class="chiffre px-4 py-3 text-right">{{ $type->vehicles_count }}</td>
                             <td class="px-4 py-3 text-right">
                                 @if ($canWrite)
-                                    <a href="{{ route('vehicle-types.edit', $type) }}" class="min-h-[44px] text-sm" style="color:var(--color-mc-ink-faint)">Modifier</a>
+                                    <a href="{{ route('vehicle-types.edit', $type) }}" title="Modifier" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[color:var(--color-mc-ink-faint)] hover:bg-[var(--color-mc-canvas)] hover:text-[color:var(--color-mc-accent)]">
+                                        <x-mc-icon name="pencil" class="h-4 w-4" />
+                                    </a>
                                 @endif
                             </td>
                         </tr>

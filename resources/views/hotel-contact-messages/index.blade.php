@@ -11,9 +11,11 @@
                         <td>{{ $message->subject }}</td>
                         <td>{{ $message->created_at->format('d/m/Y H:i') }}</td>
                         <td>
-                            <form method="POST" action="{{ route('hotel-contact-messages.destroy', $message) }}">
+                            <form method="POST" action="{{ route('hotel-contact-messages.destroy', $message) }}" onsubmit="return confirm('Supprimer définitivement ce message ?')">
                                 @csrf @method('DELETE')
-                                <button class="text-xs" style="color:var(--color-mc-danger)">Supprimer</button>
+                                <button type="submit" title="Supprimer" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[color:var(--color-mc-danger)] hover:bg-red-50">
+                                    <x-mc-icon name="trash-2" class="h-4 w-4" />
+                                </button>
                             </form>
                         </td>
                     </tr>

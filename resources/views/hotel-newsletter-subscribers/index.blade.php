@@ -10,9 +10,11 @@
                         <td class="py-2">{{ $subscriber->email }}</td>
                         <td>{{ $subscriber->created_at->format('d/m/Y') }}</td>
                         <td>
-                            <form method="POST" action="{{ route('hotel-newsletter-subscribers.destroy', $subscriber) }}">
+                            <form method="POST" action="{{ route('hotel-newsletter-subscribers.destroy', $subscriber) }}" onsubmit="return confirm('Supprimer définitivement cet abonné ?')">
                                 @csrf @method('DELETE')
-                                <button class="text-xs" style="color:var(--color-mc-danger)">Supprimer</button>
+                                <button type="submit" title="Supprimer" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[color:var(--color-mc-danger)] hover:bg-red-50">
+                                    <x-mc-icon name="trash-2" class="h-4 w-4" />
+                                </button>
                             </form>
                         </td>
                     </tr>

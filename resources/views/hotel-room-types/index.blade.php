@@ -47,12 +47,16 @@
                             <td class="chiffre px-4 py-3 text-right">{{ $type->rooms_count }}</td>
                             <td class="px-4 py-3 text-right">
                                 @if ($canWrite)
-                                    <a href="{{ route('hotel-room-types.edit', $type) }}" class="min-h-[44px] text-sm" style="color:var(--color-mc-ink-faint)">Modifier</a>
+                                    <a href="{{ route('hotel-room-types.edit', $type) }}" title="Modifier" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[color:var(--color-mc-ink-faint)] hover:bg-[var(--color-mc-canvas)] hover:text-[color:var(--color-mc-accent)]">
+                                        <x-mc-icon name="pencil" class="h-4 w-4" />
+                                    </a>
                                     @if ($type->rooms_count === 0)
-                                        <form method="POST" action="{{ route('hotel-room-types.destroy', $type) }}" class="ml-3 inline">
+                                        <form method="POST" action="{{ route('hotel-room-types.destroy', $type) }}" class="inline" onsubmit="return confirm('Supprimer définitivement ce type de chambre ?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="min-h-[44px] text-sm" style="color:var(--color-mc-danger)">Supprimer</button>
+                                            <button type="submit" title="Supprimer" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[color:var(--color-mc-danger)] hover:bg-red-50">
+                                                <x-mc-icon name="trash-2" class="h-4 w-4" />
+                                            </button>
                                         </form>
                                     @endif
                                 @endif
