@@ -13,7 +13,7 @@ class HotelStay extends Model
 
     protected $fillable = [
         'hotel_room_id', 'type', 'guest_name', 'guest_phone', 'guest_email', 'arrival_date', 'departure_date',
-        'guests', 'total_amount', 'deposit_amount', 'status', 'checked_in_at', 'checked_out_at', 'notes',
+        'guests', 'total_amount', 'deposit_amount', 'status', 'confirmation_status', 'checked_in_at', 'checked_out_at', 'notes',
         'special_requests', 'external_source', 'external_id',
     ];
 

@@ -151,6 +151,8 @@ Route::middleware('auth')->group(function () {
         Route::patch('/sejours/{stay}/arrivee', [HotelStayController::class, 'checkIn'])->name('hotel-stays.check-in');
         Route::patch('/sejours/{stay}/depart', [HotelStayController::class, 'checkOut'])->name('hotel-stays.check-out');
         Route::patch('/sejours/{stay}/annuler', [HotelStayController::class, 'cancel'])->name('hotel-stays.cancel');
+        Route::patch('/sejours/{stay}/confirmer', [HotelStayController::class, 'confirm'])->name('hotel-stays.confirm');
+        Route::patch('/sejours/{stay}/refuser', [HotelStayController::class, 'refuse'])->name('hotel-stays.refuse');
         Route::post('/sejours/{stay}/paiements', [HotelPaymentController::class, 'store'])->name('hotel-payments.store');
 
         Route::get('/galerie/nouveau', [HotelGalleryController::class, 'create'])->name('hotel-galleries.create');

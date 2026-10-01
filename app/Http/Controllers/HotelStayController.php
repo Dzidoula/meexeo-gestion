@@ -6,6 +6,7 @@ use App\Enums\HotelStayStatus;
 use App\Http\Requests\StoreHotelStayRequest;
 use App\Models\HotelRoom;
 use App\Models\HotelStay;
+use App\Services\TouvalemSyncPusher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -88,5 +89,29 @@ class HotelStayController extends Controller
         }
 
         return redirect()->route('hotel-stays.show', $stay)->with('status', 'Séjour annulé.');
+    }
+
+    public function confirm(HotelStay $stay, TouvalemSyncPusher $pusher): RedirectResponse
+    {
+        if ($stay->confirmation_status !== 'pending') {
+            return back()->with('error', "Ce séjour n'est pas en attente de confirmation.");
+        }
+
+        $stay->update(['confirmation_status' => 'confirmed']);
+        $pusher->push('booking-status', $stay, ['status' => 'confirmed']);
+
+        return redirect()->route('hotel-stays.show', $stay)->with('status', 'Réservation confirmée.');
+    }
+
+    public function refuse(HotelStay $stay, TouvalemSyncPusher $pusher): RedirectResponse
+    {
+        if ($stay->confirmation_status !== 'pending') {
+            return back()->with('error', "Ce séjour n'est pas en attente de confirmation.");
+        }
+
+        $stay->update(['confirmation_status' => 'refused', 'status' => HotelStayStatus::Cancelled]);
+        $pusher->push('booking-status', $stay, ['status' => 'cancelled']);
+
+        return redirect()->route('hotel-stays.show', $stay)->with('status', 'Réservation refusée.');
     }
 }

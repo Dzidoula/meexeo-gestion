@@ -4,6 +4,16 @@
     <x-page-header :title="'Séjour de '.$stay->guest_name" :subtitle="$stay->room ? 'Chambre '.$stay->room->number : 'Privatisation (villa entière)'">
         <x-slot:actions>
             @if ($canWrite)
+                @if ($stay->confirmation_status === 'pending')
+                    <form method="POST" action="{{ route('hotel-stays.confirm', $stay) }}">
+                        @csrf @method('PATCH')
+                        <button class="inline-flex min-h-[44px] items-center px-4 text-sm font-semibold" style="border-radius:var(--radius-mc-sm);background:var(--color-mc-success);color:#fff">Confirmer</button>
+                    </form>
+                    <form method="POST" action="{{ route('hotel-stays.refuse', $stay) }}">
+                        @csrf @method('PATCH')
+                        <button class="inline-flex min-h-[44px] items-center px-4 text-sm font-semibold" style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-danger);color:var(--color-mc-danger)">Refuser</button>
+                    </form>
+                @endif
                 @if ($stay->status->value === 'reserve')
                     <form method="POST" action="{{ route('hotel-stays.check-in', $stay) }}">
                         @csrf @method('PATCH')

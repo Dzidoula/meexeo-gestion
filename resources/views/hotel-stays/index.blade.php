@@ -58,7 +58,12 @@
                             <td class="px-4 py-3" style="font-size:12px;color:var(--color-mc-ink-soft)">{{ $stay->arrival_date->format('d/m/Y') }}</td>
                             <td class="px-4 py-3" style="font-size:12px;color:var(--color-mc-ink-soft)">{{ $stay->departure_date->format('d/m/Y') }}</td>
                             <td class="chiffre px-4 py-3 text-right font-semibold">{{ \App\Support\Money::fcfa($stay->total_amount) }}</td>
-                            <td class="px-4 py-3"><x-status-badge :status="$stay->status->value" /></td>
+                            <td class="px-4 py-3">
+                                <x-status-badge :status="$stay->status->value" />
+                                @if ($stay->confirmation_status === 'pending')
+                                    <span class="ml-1 inline-flex items-center px-2 py-0.5 text-xs font-semibold" style="border-radius:var(--radius-mc-sm);background:#FEF3C7;color:#92400E">En attente de confirmation</span>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
