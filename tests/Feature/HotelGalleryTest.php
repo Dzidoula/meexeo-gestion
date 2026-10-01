@@ -38,7 +38,10 @@ class HotelGalleryTest extends TestCase
         $gallery = HotelGallery::sole();
         $this->assertSame('Vue sur mer', $gallery->title);
         Storage::disk('public')->assertExists($gallery->image_path);
-        Http::assertSent(fn ($r) => $r->url() === 'https://residencetouvalem.com/api/masterclays-sync/galleries');
+        Http::assertSent(fn ($r) =>
+            $r->url() === 'https://residencetouvalem.com/api/masterclays-sync/galleries'
+            && $r['image_path'] === $gallery->image_path
+        );
     }
 
     public function test_a_manager_can_delete_a_gallery_image(): void

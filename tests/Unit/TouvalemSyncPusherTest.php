@@ -59,6 +59,17 @@ class TouvalemSyncPusherTest extends TestCase
         Log::shouldHaveReceived('warning')->once();
     }
 
+    public function test_an_http_error_response_is_logged_too_not_just_connection_failures(): void
+    {
+        Http::fake(['residencetouvalem.com/*' => Http::response(['message' => 'Forbidden'], 403)]);
+        Log::spy();
+        $faq = HotelFaq::create(['question' => 'Q', 'answer' => 'A']);
+
+        app(TouvalemSyncPusher::class)->push('faqs', $faq, ['question' => 'Q']);
+
+        Log::shouldHaveReceived('warning')->once();
+    }
+
     public function test_push_delete_sends_the_right_identity(): void
     {
         Http::fake(['residencetouvalem.com/*' => Http::response(['deleted' => true])]);

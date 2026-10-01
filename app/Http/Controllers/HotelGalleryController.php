@@ -33,6 +33,7 @@ class HotelGalleryController extends Controller
         ]);
 
         $pusher->push('galleries', $gallery, [
+            'image_path' => $gallery->image_path,
             'title' => $gallery->title,
             'category' => $gallery->category,
         ]);

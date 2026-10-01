@@ -37,6 +37,18 @@ class HotelFaqSyncApiTest extends TestCase
         $this->assertSame('Question renommée', HotelFaq::sole()->question);
     }
 
+    public function test_an_edit_of_a_masterclays_native_faq_pushed_back_by_touvalem_updates_in_place(): void
+    {
+        $faq = HotelFaq::create(['question' => 'Ancienne', 'answer' => 'A', 'order' => 1]);
+
+        $this->postJson('/api/v1/touvalem-sync/faqs', [
+            'masterclays_id' => $faq->id, 'question' => 'Nouvelle', 'answer' => 'A', 'order' => 1, 'is_active' => true,
+        ], ['X-Sync-Token' => 'test-secret-token'])->assertCreated();
+
+        $this->assertSame('Nouvelle', $faq->fresh()->question);
+        $this->assertSame(1, HotelFaq::count());
+    }
+
     public function test_a_touvalem_faq_deletion_is_synced_in(): void
     {
         $faq = HotelFaq::create(['question' => 'Q', 'answer' => 'A', 'external_source' => 'residence_touvalem', 'external_id' => 4]);

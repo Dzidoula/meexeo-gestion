@@ -40,7 +40,7 @@ class TouvalemSyncPusher
         }
 
         try {
-            Http::timeout(5)->withHeader('X-Sync-Token', $token)->post($url, $payload);
+            Http::timeout(5)->withHeader('X-Sync-Token', $token)->post($url, $payload)->throw();
         } catch (\Throwable $e) {
             Log::warning("Échec de la synchronisation {$resource} vers Touvalem.", ['error' => $e->getMessage()]);
         }
