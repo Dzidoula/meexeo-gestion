@@ -18,14 +18,30 @@ class TouvalemSyncController extends Controller
 {
     public function bookings(Request $request, TouvalemImportService $service)
     {
-        $configuredToken = config('services.touvalem_sync.token');
-
-        if (!$configuredToken || $request->header('X-Sync-Token') !== $configuredToken) {
+        if (!$this->authorized($request)) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
         $service->importBookings([$request->all()]);
 
         return response()->json(['synced' => true], 201);
+    }
+
+    public function galleries(Request $request, TouvalemImportService $service)
+    {
+        if (!$this->authorized($request)) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        $service->importGalleries([$request->all()]);
+
+        return response()->json(['synced' => true], 201);
+    }
+
+    private function authorized(Request $request): bool
+    {
+        $configuredToken = config('services.touvalem_sync.token');
+
+        return $configuredToken && $request->header('X-Sync-Token') === $configuredToken;
     }
 }

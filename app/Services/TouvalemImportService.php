@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\HotelGallery;
 use App\Models\HotelRoom;
 use App\Models\HotelRoomType;
 use App\Models\HotelStay;
@@ -99,6 +100,21 @@ class TouvalemImportService
                     'deposit_amount' => 0,
                     'status' => $this->mapBookingStatus($row['status'], $row['check_in'], $row['check_out']),
                     'special_requests' => $row['special_requests'] ?? null,
+                ],
+            );
+        }
+    }
+
+    /** @param array<int, array<string, mixed>> $rows */
+    public function importGalleries(array $rows): void
+    {
+        foreach ($rows as $row) {
+            HotelGallery::updateOrCreate(
+                ['external_source' => self::SOURCE, 'external_id' => $row['id']],
+                [
+                    'image_path' => $row['image_path'],
+                    'title' => $row['title'] ?? null,
+                    'category' => $row['category'] ?? null,
                 ],
             );
         }

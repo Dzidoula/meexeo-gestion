@@ -13,6 +13,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HotelPaymentController;
 use App\Http\Controllers\HotelRoomController;
 use App\Http\Controllers\HotelRoomTypeController;
+use App\Http\Controllers\HotelGalleryController;
 use App\Http\Controllers\HotelStayController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\MasterclaysAdminController;
@@ -75,6 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/equipements', [EquipmentController::class, 'index'])->name('equipment.index');
     Route::get('/evenements', [EventController::class, 'index'])->name('events.index');
     Route::get('/sejours', [HotelStayController::class, 'index'])->name('hotel-stays.index');
+    Route::get('/galerie', [HotelGalleryController::class, 'index'])->name('hotel-galleries.index');
 
     Route::get('/modules/{module}', [StaticModuleController::class, 'show'])->name('modules.show');
 
@@ -139,6 +141,10 @@ Route::middleware('auth')->group(function () {
         Route::patch('/sejours/{stay}/depart', [HotelStayController::class, 'checkOut'])->name('hotel-stays.check-out');
         Route::patch('/sejours/{stay}/annuler', [HotelStayController::class, 'cancel'])->name('hotel-stays.cancel');
         Route::post('/sejours/{stay}/paiements', [HotelPaymentController::class, 'store'])->name('hotel-payments.store');
+
+        Route::get('/galerie/nouveau', [HotelGalleryController::class, 'create'])->name('hotel-galleries.create');
+        Route::post('/galerie', [HotelGalleryController::class, 'store'])->name('hotel-galleries.store');
+        Route::delete('/galerie/{hotelGallery}', [HotelGalleryController::class, 'destroy'])->name('hotel-galleries.destroy');
 
         Route::get('/equipements/nouveau', [EquipmentController::class, 'create'])->name('equipment.create');
         Route::post('/equipements', [EquipmentController::class, 'store'])->name('equipment.store');
