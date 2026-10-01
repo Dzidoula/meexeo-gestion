@@ -11,4 +11,5 @@ Route::prefix('v1')->group(function () {
     Route::post('/bookings', [HotelBookingController::class, 'store']);
     Route::post('/touvalem-sync/bookings', [TouvalemSyncController::class, 'bookings']);
     Route::post('/touvalem-sync/galleries', [TouvalemSyncController::class, 'galleries']);
+    Route::post('/touvalem-sync/galleries/delete', [TouvalemSyncController::class, 'galleriesDestroy']);
 });

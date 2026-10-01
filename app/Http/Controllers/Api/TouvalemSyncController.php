@@ -38,6 +38,19 @@ class TouvalemSyncController extends Controller
         return response()->json(['synced' => true], 201);
     }
 
+    public function galleriesDestroy(Request $request)
+    {
+        if (!$this->authorized($request)) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        \App\Models\HotelGallery::where('external_source', 'residence_touvalem')
+            ->where('external_id', $request->input('id'))
+            ->delete();
+
+        return response()->json(['deleted' => true]);
+    }
+
     private function authorized(Request $request): bool
     {
         $configuredToken = config('services.touvalem_sync.token');
