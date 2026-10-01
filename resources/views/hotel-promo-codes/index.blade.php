@@ -10,17 +10,25 @@
         <p class="mt-4 text-sm" style="color:var(--color-mc-success)">{{ session('status') }}</p>
     @endif
 
-    <div class="mt-6 overflow-x-auto">
+    <div class="mt-6 overflow-x-auto" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-border);background:var(--color-mc-surface)">
         <table class="w-full text-sm">
-            <thead><tr style="color:var(--color-mc-ink-soft)"><th class="text-left">Code</th><th class="text-left">Remise</th><th class="text-left">Utilisations</th><th class="text-left">Statut</th><th></th></tr></thead>
+            <thead>
+                <tr style="border-bottom:1px solid var(--color-mc-border);background:var(--color-mc-table-head)">
+                    <th class="px-4 py-3 text-left" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">CODE</th>
+                    <th class="px-4 py-3 text-left" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">REMISE</th>
+                    <th class="px-4 py-3 text-left" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">UTILISATIONS</th>
+                    <th class="px-4 py-3 text-left" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">STATUT</th>
+                    <th class="px-4 py-3"></th>
+                </tr>
+            </thead>
             <tbody>
                 @foreach ($promoCodes as $promoCode)
-                    <tr style="border-top:1px solid var(--color-mc-border)">
-                        <td class="py-2">{{ $promoCode->code }}</td>
-                        <td>{{ $promoCode->discount_type === 'percent' ? $promoCode->discount_value.'%' : \App\Support\Money::fcfa($promoCode->discount_value) }}</td>
-                        <td>{{ $promoCode->uses_count }}@if($promoCode->max_uses) / {{ $promoCode->max_uses }} @endif</td>
-                        <td>{{ $promoCode->is_active ? 'Actif' : 'Inactif' }}</td>
-                        <td>
+                    <tr style="border-bottom:1px solid var(--color-mc-border-soft)">
+                        <td class="px-4 py-3" style="font-size:14px;font-weight:700;color:var(--color-mc-ink)">{{ $promoCode->code }}</td>
+                        <td class="px-4 py-3">{{ $promoCode->discount_type === 'percent' ? $promoCode->discount_value.'%' : \App\Support\Money::fcfa($promoCode->discount_value) }}</td>
+                        <td class="px-4 py-3">{{ $promoCode->uses_count }}@if($promoCode->max_uses) / {{ $promoCode->max_uses }} @endif</td>
+                        <td class="px-4 py-3">{{ $promoCode->is_active ? 'Actif' : 'Inactif' }}</td>
+                        <td class="px-4 py-3">
                             <a href="{{ route('hotel-promo-codes.edit', $promoCode) }}" title="Modifier" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[color:var(--color-mc-ink-faint)] hover:bg-[var(--color-mc-canvas)] hover:text-[color:var(--color-mc-accent)]">
                                 <x-mc-icon name="pencil" class="h-4 w-4" />
                             </a>
