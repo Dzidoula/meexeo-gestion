@@ -10,7 +10,20 @@ class HotelRoomType extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug'];
+    protected $fillable = [
+        'name', 'slug', 'description', 'base_price', 'rating', 'capacity',
+        'bed_count', 'bath_count', 'area', 'image', 'images', 'amenities',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'base_price' => 'integer',
+            'rating' => 'float',
+            'images' => 'array',
+            'amenities' => 'array',
+        ];
+    }
 
     protected static function booted(): void
     {

@@ -12,8 +12,9 @@ class HotelStay extends Model
     use HasFactory;
 
     protected $fillable = [
-        'hotel_room_id', 'guest_name', 'guest_phone', 'arrival_date', 'departure_date',
-        'total_amount', 'deposit_amount', 'status', 'checked_in_at', 'checked_out_at', 'notes',
+        'hotel_room_id', 'type', 'guest_name', 'guest_phone', 'guest_email', 'arrival_date', 'departure_date',
+        'guests', 'total_amount', 'deposit_amount', 'status', 'checked_in_at', 'checked_out_at', 'notes',
+        'special_requests', 'external_source', 'external_id',
     ];
 
     protected function casts(): array
@@ -27,6 +28,12 @@ class HotelStay extends Model
             'checked_in_at' => 'datetime',
             'checked_out_at' => 'datetime',
         ];
+    }
+
+    /** True for a whole-property privatisation stay, which has no single room. */
+    public function isPrivatisation(): bool
+    {
+        return $this->type === 'privatisation';
     }
 
     public function room(): BelongsTo
