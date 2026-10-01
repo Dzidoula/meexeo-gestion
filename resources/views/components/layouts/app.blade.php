@@ -122,7 +122,9 @@
 
             <div class="relative">
                 <button type="button" aria-label="Notifications" @click="openDropdown = openDropdown === 'notif' ? null : 'notif'"
-                        class="min-h-[44px]" style="width:38px;height:38px;border-radius:var(--radius-mc-sm);border:none;background:var(--color-mc-canvas)">🔔</button>
+                        class="min-h-[44px] flex items-center justify-center" style="width:38px;height:38px;border-radius:var(--radius-mc-sm);border:none;background:var(--color-mc-canvas)">
+                    <x-mc-icon name="bell" class="h-5 w-5" style="color:var(--color-mc-ink-soft)" />
+                </button>
                 <div x-show="openDropdown === 'notif'" x-cloak style="position:absolute;top:48px;right:0;width:300px;background:#fff;border:1px solid var(--color-mc-border);border-radius:var(--radius-mc);box-shadow:0 16px 40px rgba(20,20,40,.18);padding:14px">
                     <div style="font-size:12.5px;font-weight:800;color:#5D6285;letter-spacing:.5px;margin-bottom:8px">NOTIFICATIONS</div>
                     <div style="font-size:12.5px;color:var(--color-mc-ink-soft)">Aucune notification pour le moment.</div>
@@ -131,7 +133,9 @@
 
             <div class="relative">
                 <button type="button" aria-label="Messages" @click="openDropdown = openDropdown === 'mail' ? null : 'mail'"
-                        class="min-h-[44px]" style="width:38px;height:38px;border-radius:var(--radius-mc-sm);border:none;background:var(--color-mc-canvas)">✉️</button>
+                        class="min-h-[44px] flex items-center justify-center" style="width:38px;height:38px;border-radius:var(--radius-mc-sm);border:none;background:var(--color-mc-canvas)">
+                    <x-mc-icon name="mail" class="h-5 w-5" style="color:var(--color-mc-ink-soft)" />
+                </button>
                 <div x-show="openDropdown === 'mail'" x-cloak style="position:absolute;top:48px;right:0;width:300px;background:#fff;border:1px solid var(--color-mc-border);border-radius:var(--radius-mc);box-shadow:0 16px 40px rgba(20,20,40,.18);padding:14px">
                     <div style="font-size:12.5px;font-weight:800;color:#5D6285;letter-spacing:.5px;margin-bottom:8px">MESSAGES</div>
                     <div style="font-size:12.5px;color:var(--color-mc-ink-soft)">Aucun message pour le moment.</div>
