@@ -30,7 +30,7 @@
         <div style="background:var(--color-mc-surface);border:1px solid var(--color-mc-border);border-radius:var(--radius-mc);overflow:hidden">
             <div class="grid" style="grid-template-columns:repeat({{ count($module['columns']) }}, 1fr) 0.8fr;padding:14px 20px;background:var(--color-mc-table-head);border-bottom:1px solid var(--color-mc-border)">
                 @foreach ($module['columns'] as $column)
-                    <div style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">{{ strtoupper($column) }}</div>
+                    <div style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">{{ mb_strtoupper($column, 'UTF-8') }}</div>
                 @endforeach
                 <div style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">STATUT</div>
             </div>
