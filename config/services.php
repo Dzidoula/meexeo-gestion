@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    // Shared secret residencetouvalem.com sends in X-Sync-Token on every
+    // POST /api/v1/touvalem-sync/bookings call (see TouvalemSyncController).
+    'touvalem_sync' => [
+        'token' => env('TOUVALEM_SYNC_TOKEN'),
+    ],
+
 ];
