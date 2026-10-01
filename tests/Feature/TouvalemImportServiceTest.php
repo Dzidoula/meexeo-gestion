@@ -187,6 +187,19 @@ class TouvalemImportServiceTest extends TestCase
         $this->assertSame('Jean Kouassi (updated)', HotelStay::first()->guest_name);
     }
 
+    public function test_confirmation_status_mirrors_the_touvalem_status_pending_and_confirmed_cancelled_clears_it(): void
+    {
+        $service = app(TouvalemImportService::class);
+
+        $service->importBookings([$this->bookingRow(['id' => 201, 'status' => 'pending'])]);
+        $service->importBookings([$this->bookingRow(['id' => 202, 'status' => 'confirmed'])]);
+        $service->importBookings([$this->bookingRow(['id' => 203, 'status' => 'cancelled'])]);
+
+        $this->assertSame('pending', HotelStay::where('external_id', 201)->first()->confirmation_status);
+        $this->assertSame('confirmed', HotelStay::where('external_id', 202)->first()->confirmation_status);
+        $this->assertNull(HotelStay::where('external_id', 203)->first()->confirmation_status);
+    }
+
     public function test_a_room_booking_whose_type_has_no_imported_room_is_imported_with_no_room_assigned(): void
     {
         // Defensive case: a booking references a room_type_id that was

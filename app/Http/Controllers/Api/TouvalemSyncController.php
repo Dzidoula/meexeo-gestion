@@ -39,6 +39,29 @@ class TouvalemSyncController extends Controller
         return response()->json(['synced' => true], 201);
     }
 
+    public function bookingStatus(Request $request)
+    {
+        if (!$this->authorized($request)) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        $stay = \App\Models\HotelStay::where('external_source', 'residence_touvalem')
+            ->where('external_id', $request->input('touvalem_id'))
+            ->first();
+
+        if (!$stay) {
+            return response()->json(['message' => 'Not Found'], 404);
+        }
+
+        if ($request->input('status') === 'cancelled') {
+            $stay->update(['confirmation_status' => 'refused', 'status' => \App\Enums\HotelStayStatus::Cancelled]);
+        } else {
+            $stay->update(['confirmation_status' => $request->input('status')]);
+        }
+
+        return response()->json(['synced' => true]);
+    }
+
     public function galleries(Request $request, TouvalemImportService $service)
     {
         if (!$this->authorized($request)) {

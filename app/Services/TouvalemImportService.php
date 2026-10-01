@@ -104,6 +104,7 @@ class TouvalemImportService
                     'total_amount' => (int) round((float) $row['total_price']),
                     'deposit_amount' => 0,
                     'status' => $this->mapBookingStatus($row['status'], $row['check_in'], $row['check_out']),
+                    'confirmation_status' => $this->mapConfirmationStatus($row['status']),
                     'special_requests' => $row['special_requests'] ?? null,
                 ],
             );
@@ -217,6 +218,15 @@ class TouvalemImportService
             'booked' => 'occupee',
             'maintenance' => 'maintenance_chambre',
             default => 'disponible_chambre',
+        };
+    }
+
+    private function mapConfirmationStatus(string $touvalemStatus): ?string
+    {
+        return match ($touvalemStatus) {
+            'pending' => 'pending',
+            'confirmed' => 'confirmed',
+            default => null, // cancelled, or any future value — confirmation no longer applies
         };
     }
 

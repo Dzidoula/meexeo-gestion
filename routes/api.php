@@ -10,6 +10,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/room-types/{hotelRoomType}', [HotelRoomTypeController::class, 'show']);
     Route::post('/bookings', [HotelBookingController::class, 'store']);
     Route::post('/touvalem-sync/bookings', [TouvalemSyncController::class, 'bookings']);
+    Route::post('/touvalem-sync/booking-status', [TouvalemSyncController::class, 'bookingStatus']);
     Route::post('/touvalem-sync/galleries', [TouvalemSyncController::class, 'galleries']);
     Route::post('/touvalem-sync/galleries/delete', [TouvalemSyncController::class, 'galleriesDestroy']);
     Route::post('/touvalem-sync/testimonials', [TouvalemSyncController::class, 'testimonials']);
