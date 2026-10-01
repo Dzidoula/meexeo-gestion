@@ -82,7 +82,7 @@ class HotelStayController extends Controller
         }
 
         $wasOccupying = $stay->status === HotelStayStatus::InProgress;
-        $stay->update(['status' => HotelStayStatus::Cancelled]);
+        $stay->update(['status' => HotelStayStatus::Cancelled, 'confirmation_status' => null]);
 
         if ($wasOccupying && $stay->room?->status === HotelRoomStatus::Occupied) {
             $stay->room->update(['status' => HotelRoomStatus::Available]);
@@ -109,7 +109,13 @@ class HotelStayController extends Controller
             return back()->with('error', "Ce séjour n'est pas en attente de confirmation.");
         }
 
+        $wasOccupying = $stay->status === HotelStayStatus::InProgress;
         $stay->update(['confirmation_status' => 'refused', 'status' => HotelStayStatus::Cancelled]);
+
+        if ($wasOccupying && $stay->room?->status === HotelRoomStatus::Occupied) {
+            $stay->room->update(['status' => HotelRoomStatus::Available]);
+        }
+
         $pusher->push('booking-status', $stay, ['status' => 'cancelled']);
 
         return redirect()->route('hotel-stays.show', $stay)->with('status', 'Réservation refusée.');

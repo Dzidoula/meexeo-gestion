@@ -54,7 +54,16 @@ class TouvalemSyncController extends Controller
         }
 
         if ($request->input('status') === 'cancelled') {
-            $stay->update(['confirmation_status' => 'refused', 'status' => \App\Enums\HotelStayStatus::Cancelled]);
+            $wasOccupying = $stay->status === \App\Enums\HotelStayStatus::InProgress;
+
+            $stay->update([
+                'confirmation_status' => $stay->confirmation_status === 'pending' ? 'refused' : null,
+                'status' => \App\Enums\HotelStayStatus::Cancelled,
+            ]);
+
+            if ($wasOccupying && $stay->room?->status === \App\Enums\HotelRoomStatus::Occupied) {
+                $stay->room->update(['status' => \App\Enums\HotelRoomStatus::Available]);
+            }
         } else {
             $stay->update(['confirmation_status' => $request->input('status')]);
         }

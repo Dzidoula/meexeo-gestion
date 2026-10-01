@@ -47,6 +47,40 @@ class HotelStayBookingStatusSyncApiTest extends TestCase
         $this->assertSame(HotelStayStatus::Cancelled, $fresh->status);
     }
 
+    public function test_cancelling_an_already_confirmed_stay_clears_confirmation_status_instead_of_marking_it_refused(): void
+    {
+        $stay = HotelStay::factory()->create([
+            'status' => HotelStayStatus::Reserved,
+            'confirmation_status' => 'confirmed',
+            'external_source' => 'residence_touvalem', 'external_id' => 42,
+        ]);
+
+        $this->postJson('/api/v1/touvalem-sync/booking-status', [
+            'touvalem_id' => 42, 'status' => 'cancelled',
+        ], ['X-Sync-Token' => 'test-secret-token'])->assertOk();
+
+        $fresh = $stay->fresh();
+        $this->assertNull($fresh->confirmation_status);
+        $this->assertSame(HotelStayStatus::Cancelled, $fresh->status);
+    }
+
+    public function test_cancelling_a_stay_in_progress_frees_its_room(): void
+    {
+        $room = \App\Models\HotelRoom::factory()->create(['status' => \App\Enums\HotelRoomStatus::Occupied]);
+        $stay = HotelStay::factory()->create([
+            'hotel_room_id' => $room->id,
+            'status' => HotelStayStatus::InProgress,
+            'confirmation_status' => 'confirmed',
+            'external_source' => 'residence_touvalem', 'external_id' => 42,
+        ]);
+
+        $this->postJson('/api/v1/touvalem-sync/booking-status', [
+            'touvalem_id' => 42, 'status' => 'cancelled',
+        ], ['X-Sync-Token' => 'test-secret-token'])->assertOk();
+
+        $this->assertSame(\App\Enums\HotelRoomStatus::Available, $room->fresh()->status);
+    }
+
     public function test_an_unknown_touvalem_id_does_not_500(): void
     {
         $this->postJson('/api/v1/touvalem-sync/booking-status', [
