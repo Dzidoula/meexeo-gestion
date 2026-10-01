@@ -4,6 +4,8 @@ namespace Tests\Feature;
 use App\Models\HotelRoomType;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class HotelRoomTypeTest extends TestCase
@@ -144,5 +146,57 @@ class HotelRoomTypeTest extends TestCase
             ->assertRedirect();
 
         $this->assertNull($type->fresh());
+    }
+
+    public function test_a_manager_can_upload_photos_when_creating_a_room_type(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAsManager()
+            ->post('/types-chambres', [
+                'name' => 'Suite avec Photos',
+                'photos' => [
+                    UploadedFile::fake()->image('vue-mer.jpg'),
+                    UploadedFile::fake()->image('salon.jpg'),
+                ],
+            ])
+            ->assertRedirect();
+
+        $type = HotelRoomType::sole();
+        $this->assertCount(2, $type->images);
+        foreach ($type->images as $path) {
+            Storage::disk('public')->assertExists(ltrim(str_replace('/storage/', '', $path), '/'));
+        }
+    }
+
+    public function test_uploaded_photos_are_appended_to_existing_ones_on_update(): void
+    {
+        Storage::fake('public');
+        $type = HotelRoomType::factory()->create(['images' => ['/storage/rooms/gallery/ancienne.jpg']]);
+
+        $this->actingAsManager()
+            ->put("/types-chambres/{$type->id}", [
+                'name' => $type->name,
+                'photos' => [UploadedFile::fake()->image('nouvelle.jpg')],
+            ])
+            ->assertRedirect();
+
+        $images = $type->fresh()->images;
+        $this->assertCount(2, $images);
+        $this->assertContains('/storage/rooms/gallery/ancienne.jpg', $images);
+    }
+
+    public function test_a_photo_must_be_a_real_image(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAsManager()
+            ->post('/types-chambres', [
+                'name' => 'Suite Invalide',
+                'photos' => [UploadedFile::fake()->create('document.pdf', 100)],
+            ])
+            ->assertSessionHasErrors('photos.0');
+
+        $this->assertSame(0, HotelRoomType::count());
     }
 }

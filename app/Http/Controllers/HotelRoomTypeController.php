@@ -23,7 +23,8 @@ class HotelRoomTypeController extends Controller
 
     public function store(StoreHotelRoomTypeRequest $request): RedirectResponse
     {
-        HotelRoomType::create($request->validated());
+        $hotelRoomType = HotelRoomType::create($request->validated());
+        $this->attachUploadedPhotos($hotelRoomType, $request->file('photos', []));
 
         return redirect()->route('hotel-room-types.index')->with('status', 'Le type de chambre a été créé.');
     }
@@ -36,8 +37,26 @@ class HotelRoomTypeController extends Controller
     public function update(UpdateHotelRoomTypeRequest $request, HotelRoomType $hotelRoomType): RedirectResponse
     {
         $hotelRoomType->update($request->validated());
+        $this->attachUploadedPhotos($hotelRoomType, $request->file('photos', []));
 
         return redirect()->route('hotel-room-types.index')->with('status', 'Le type de chambre a été mis à jour.');
+    }
+
+    /** @param array<\Illuminate\Http\UploadedFile> $photos */
+    private function attachUploadedPhotos(HotelRoomType $hotelRoomType, array $photos): void
+    {
+        if (empty($photos)) {
+            return;
+        }
+
+        $newPaths = collect($photos)
+            ->filter()
+            ->map(fn ($photo) => '/storage/' . $photo->store('hotel-room-types', 'public'))
+            ->all();
+
+        $hotelRoomType->update([
+            'images' => array_merge($hotelRoomType->images ?? [], $newPaths),
+        ]);
     }
 
     public function destroy(HotelRoomType $hotelRoomType): RedirectResponse

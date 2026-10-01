@@ -1,7 +1,7 @@
 <x-layouts.app :title="($hotelRoomType->exists ? 'Modifier' : 'Ajouter').' un type de chambre — MASTERCLAYS'">
     <x-page-header :title="$hotelRoomType->exists ? 'Modifier le type de chambre' : 'Ajouter un type de chambre'" />
 
-    <form method="POST" action="{{ $hotelRoomType->exists ? route('hotel-room-types.update', $hotelRoomType) : route('hotel-room-types.store') }}" class="mt-6 max-w-lg space-y-4">
+    <form method="POST" action="{{ $hotelRoomType->exists ? route('hotel-room-types.update', $hotelRoomType) : route('hotel-room-types.store') }}" enctype="multipart/form-data" class="mt-6 max-w-lg space-y-4">
         @csrf
         @if ($hotelRoomType->exists) @method('PUT') @endif
 
@@ -68,12 +68,33 @@
             @error('amenities') <p class="mt-1 text-xs" style="color:var(--color-mc-danger)">{{ $message }}</p> @enderror
         </div>
 
-        @if ($hotelRoomType->exists && !empty($hotelRoomType->images))
+        @php
+            $localImages = collect($hotelRoomType->images ?? [])->filter(fn ($path) => str_starts_with($path, '/storage/hotel-room-types/'));
+            $otherImagesCount = count($hotelRoomType->images ?? []) - $localImages->count();
+        @endphp
+
+        @if ($hotelRoomType->exists && ($localImages->isNotEmpty() || $otherImagesCount > 0))
             <div>
-                <span class="text-xs font-semibold" style="color:var(--color-mc-ink-soft)">Photos</span>
-                <p class="mt-1 text-xs" style="color:var(--color-mc-ink-faint)">{{ count($hotelRoomType->images) }} photo(s) importée(s) — la gestion des photos depuis ce formulaire n'est pas encore disponible.</p>
+                <span class="text-xs font-semibold" style="color:var(--color-mc-ink-soft)">Photos actuelles</span>
+                @if ($localImages->isNotEmpty())
+                    <div class="mt-1.5 flex flex-wrap gap-2">
+                        @foreach ($localImages as $path)
+                            <img src="{{ asset($path) }}" alt="Photo du type de chambre" class="h-16 w-16 object-cover" style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border)">
+                        @endforeach
+                    </div>
+                @endif
+                @if ($otherImagesCount > 0)
+                    <p class="mt-1 text-xs" style="color:var(--color-mc-ink-faint)">{{ $otherImagesCount }} photo(s) importée(s) depuis Résidence Touvalem.</p>
+                @endif
             </div>
         @endif
+
+        <div>
+            <label for="photos" class="text-xs font-semibold" style="color:var(--color-mc-ink-soft)">Ajouter des photos</label>
+            <input id="photos" name="photos[]" type="file" accept="image/*" multiple
+                   class="mt-1.5 w-full text-sm">
+            @error('photos.*') <p class="mt-1 text-xs" style="color:var(--color-mc-danger)">{{ $message }}</p> @enderror
+        </div>
 
         <button class="min-h-[44px] px-5 text-sm font-semibold" style="border-radius:var(--radius-mc-sm);background:var(--color-mc-accent);color:var(--color-mc-on-accent)">
             Enregistrer

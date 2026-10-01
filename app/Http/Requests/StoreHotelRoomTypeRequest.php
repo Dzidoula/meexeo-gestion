@@ -22,6 +22,8 @@ class StoreHotelRoomTypeRequest extends FormRequest
             'bath_count' => ['nullable', 'integer', 'min:0'],
             'area' => ['nullable', 'integer', 'min:0'],
             'amenities' => ['nullable', 'string'],
+            'photos' => ['nullable', 'array'],
+            'photos.*' => ['image', 'max:4096'],
         ];
     }
 
@@ -43,6 +45,8 @@ class StoreHotelRoomTypeRequest extends FormRequest
         if (array_key_exists('amenities', $data)) {
             $data['amenities'] = $this->parseAmenities($data['amenities']);
         }
+
+        unset($data['photos']);
 
         return $data;
     }
