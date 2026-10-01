@@ -65,6 +65,64 @@ class HotelRoomTypeTest extends TestCase
         $this->assertSame('Nouveau nom', $type->fresh()->name);
     }
 
+    public function test_a_manager_can_set_the_real_content_fields(): void
+    {
+        $this->actingAsManager()
+            ->post('/types-chambres', [
+                'name' => 'Suite Royale',
+                'description' => 'Une suite spacieuse avec vue sur mer.',
+                'base_price' => 600000,
+                'rating' => 4.8,
+                'capacity' => 4,
+                'bed_count' => 4,
+                'bath_count' => 4,
+                'area' => 76,
+                'amenities' => "Wi-Fi gratuit\nClimatisation\nMini-bar",
+            ])
+            ->assertRedirect();
+
+        $type = HotelRoomType::sole();
+        $this->assertSame('Une suite spacieuse avec vue sur mer.', $type->description);
+        $this->assertSame(600000, $type->base_price);
+        $this->assertSame(4.8, $type->rating);
+        $this->assertSame(4, $type->capacity);
+        $this->assertSame(['Wi-Fi gratuit', 'Climatisation', 'Mini-bar'], $type->amenities);
+    }
+
+    public function test_the_real_content_fields_are_optional(): void
+    {
+        $this->actingAsManager()
+            ->post('/types-chambres', ['name' => 'Chambre Simple'])
+            ->assertRedirect();
+
+        $type = HotelRoomType::sole();
+        $this->assertNull($type->description);
+        $this->assertNull($type->rating);
+        $this->assertNull($type->amenities);
+    }
+
+    public function test_the_rating_must_stay_within_zero_and_five(): void
+    {
+        $this->actingAsManager()
+            ->post('/types-chambres', ['name' => 'Chambre Test', 'rating' => 7.2])
+            ->assertSessionHasErrors('rating');
+    }
+
+    public function test_the_edit_form_shows_the_existing_real_content(): void
+    {
+        $type = HotelRoomType::factory()->create([
+            'name' => 'Chambre Perle',
+            'description' => 'Une vraie description.',
+            'amenities' => ['Wi-Fi gratuit', 'Climatisation'],
+        ]);
+
+        $this->actingAsManager()
+            ->get("/types-chambres/{$type->id}/modifier")
+            ->assertOk()
+            ->assertSee('Une vraie description.')
+            ->assertSee('Wi-Fi gratuit');
+    }
+
     public function test_a_room_type_with_rooms_cannot_be_deleted(): void
     {
         $type = HotelRoomType::factory()->create();

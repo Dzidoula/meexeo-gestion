@@ -33,6 +33,7 @@
                 <thead>
                     <tr style="border-bottom:1px solid var(--color-mc-border);background:var(--color-mc-table-head)">
                         <th class="px-4 py-3 text-left" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">NOM</th>
+                        <th class="px-4 py-3 text-right" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">PRIX/NUIT</th>
                         <th class="px-4 py-3 text-right" style="font-size:11.5px;font-weight:700;color:var(--color-mc-ink-soft);letter-spacing:.4px">CHAMBRES</th>
                         <th class="px-4 py-3"></th>
                     </tr>
@@ -41,6 +42,7 @@
                     @foreach ($hotelRoomTypes as $type)
                         <tr style="border-bottom:1px solid var(--color-mc-border-soft)">
                             <td class="px-4 py-3" style="font-size:14px;font-weight:700;color:var(--color-mc-ink)">{{ $type->name }}</td>
+                            <td class="chiffre px-4 py-3 text-right">{{ $type->base_price !== null ? \App\Support\Money::fcfa($type->base_price) : '—' }}</td>
                             <td class="chiffre px-4 py-3 text-right">{{ $type->rooms_count }}</td>
                             <td class="px-4 py-3 text-right">
                                 @if ($canWrite)
