@@ -2,8 +2,10 @@
     <div style="font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--color-mc-ink)">
         <div class="flex items-center justify-between gap-4" style="margin-bottom:20px">
             <div class="flex items-center gap-3.5">
-                <div class="flex items-center justify-center text-white font-extrabold text-sm"
-                     style="width:46px;height:46px;border-radius:11px;background:{{ $module['color'] }}">{{ $module['icon'] }}</div>
+                <div class="flex items-center justify-center text-white"
+                     style="width:46px;height:46px;border-radius:11px;background:{{ $module['color'] }}">
+                    <x-mc-icon :name="$module['icon']" class="h-5 w-5" />
+                </div>
                 <div>
                     <div style="font-size:20px;font-weight:800">{{ $module['label'] }}</div>
                     <div style="font-size:13px;color:var(--color-mc-ink-soft)">{{ $module['sub'] }}</div>
