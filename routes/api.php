@@ -18,4 +18,6 @@ Route::prefix('v1')->group(function () {
     Route::post('/touvalem-sync/faqs/delete', [TouvalemSyncController::class, 'faqsDestroy']);
     Route::post('/touvalem-sync/contact-messages', [TouvalemSyncController::class, 'contactMessages']);
     Route::post('/touvalem-sync/contact-messages/delete', [TouvalemSyncController::class, 'contactMessagesDestroy']);
+    Route::post('/touvalem-sync/newsletter-subscribers', [TouvalemSyncController::class, 'newsletterSubscribers']);
+    Route::post('/touvalem-sync/newsletter-subscribers/delete', [TouvalemSyncController::class, 'newsletterSubscribersDestroy']);
 });

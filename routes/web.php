@@ -17,6 +17,7 @@ use App\Http\Controllers\HotelGalleryController;
 use App\Http\Controllers\HotelTestimonialController;
 use App\Http\Controllers\HotelFaqController;
 use App\Http\Controllers\HotelContactMessageController;
+use App\Http\Controllers\HotelNewsletterSubscriberController;
 use App\Http\Controllers\HotelStayController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\MasterclaysAdminController;
@@ -84,6 +85,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/faq', [HotelFaqController::class, 'index'])->name('hotel-faqs.index');
     Route::get('/messages-contact', [HotelContactMessageController::class, 'index'])->name('hotel-contact-messages.index');
     Route::get('/messages-contact/{hotelContactMessage}', [HotelContactMessageController::class, 'show'])->name('hotel-contact-messages.show');
+    Route::get('/newsletter', [HotelNewsletterSubscriberController::class, 'index'])->name('hotel-newsletter-subscribers.index');
 
     Route::get('/modules/{module}', [StaticModuleController::class, 'show'])->name('modules.show');
 
@@ -166,6 +168,8 @@ Route::middleware('auth')->group(function () {
         Route::delete('/faq/{hotelFaq}', [HotelFaqController::class, 'destroy'])->name('hotel-faqs.destroy');
 
         Route::delete('/messages-contact/{hotelContactMessage}', [HotelContactMessageController::class, 'destroy'])->name('hotel-contact-messages.destroy');
+
+        Route::delete('/newsletter/{hotelNewsletterSubscriber}', [HotelNewsletterSubscriberController::class, 'destroy'])->name('hotel-newsletter-subscribers.destroy');
 
         Route::get('/equipements/nouveau', [EquipmentController::class, 'create'])->name('equipment.create');
         Route::post('/equipements', [EquipmentController::class, 'store'])->name('equipment.store');

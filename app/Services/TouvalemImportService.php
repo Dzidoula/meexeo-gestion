@@ -8,6 +8,7 @@ use App\Models\HotelRoomType;
 use App\Models\HotelStay;
 use App\Models\HotelContactMessage;
 use App\Models\HotelFaq;
+use App\Models\HotelNewsletterSubscriber;
 use App\Models\HotelTestimonial;
 use Carbon\Carbon;
 
@@ -173,6 +174,17 @@ class TouvalemImportService
                     'message' => $row['message'],
                     'is_read' => (bool) ($row['is_read'] ?? false),
                 ],
+            );
+        }
+    }
+
+    /** @param array<int, array<string, mixed>> $rows */
+    public function importNewsletterSubscribers(array $rows): void
+    {
+        foreach ($rows as $row) {
+            HotelNewsletterSubscriber::updateOrCreate(
+                ['external_source' => self::SOURCE, 'external_id' => $row['id']],
+                ['email' => $row['email']],
             );
         }
     }
