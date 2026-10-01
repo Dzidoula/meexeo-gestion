@@ -13,6 +13,7 @@ class HotelRoomType extends Model
     protected $fillable = [
         'name', 'slug', 'description', 'base_price', 'rating', 'capacity',
         'bed_count', 'bath_count', 'area', 'image', 'images', 'amenities',
+        'external_source', 'external_id',
     ];
 
     protected function casts(): array

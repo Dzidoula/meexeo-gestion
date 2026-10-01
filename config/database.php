@@ -64,6 +64,23 @@ return [
             ]) : [],
         ],
 
+        // Read-only source for the one-off import of Résidence Touvalem's
+        // real hotel data (see App\Console\Commands\ImportTouvalemHotelData).
+        // Never write through this connection.
+        'touvalem' => [
+            'driver' => 'mysql',
+            'host' => env('TOUVALEM_DB_HOST', '127.0.0.1'),
+            'port' => env('TOUVALEM_DB_PORT', '3306'),
+            'database' => env('TOUVALEM_DB_DATABASE', ''),
+            'username' => env('TOUVALEM_DB_USERNAME', ''),
+            'password' => env('TOUVALEM_DB_PASSWORD', ''),
+            'charset' => env('DB_CHARSET', 'utf8mb4'),
+            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),

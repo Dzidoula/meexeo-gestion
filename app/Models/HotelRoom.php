@@ -11,7 +11,10 @@ class HotelRoom extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['hotel_room_type_id', 'number', 'nightly_rate', 'amenities', 'status'];
+    protected $fillable = [
+        'hotel_room_type_id', 'number', 'nightly_rate', 'amenities', 'status',
+        'external_source', 'external_id',
+    ];
 
     protected function casts(): array
     {
