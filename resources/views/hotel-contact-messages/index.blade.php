@@ -1,5 +1,6 @@
 <x-layouts.app title="Messages de contact — MASTERCLAYS">
     <x-page-header title="Messages de contact" />
+    @include('hotel._subnav')
     <div class="mt-6 overflow-x-auto">
         <table class="w-full text-sm">
             <thead><tr style="color:var(--color-mc-ink-soft)"><th class="text-left">De</th><th class="text-left">Sujet</th><th class="text-left">Reçu le</th><th></th></tr></thead>

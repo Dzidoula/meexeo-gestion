@@ -1,5 +1,6 @@
 <x-layouts.app title="Nouveau séjour — MASTERCLAYS">
     <x-page-header title="Nouveau séjour" />
+    @include('hotel._subnav')
 
     <form method="POST" action="{{ route('hotel-stays.store') }}" class="mt-6 max-w-lg space-y-4" x-data="{ type: '{{ old('type', 'chambre') }}' }">
         @csrf

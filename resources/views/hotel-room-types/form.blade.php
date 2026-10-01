@@ -1,5 +1,6 @@
 <x-layouts.app :title="($hotelRoomType->exists ? 'Modifier' : 'Ajouter').' un type de chambre — MASTERCLAYS'">
     <x-page-header :title="$hotelRoomType->exists ? 'Modifier le type de chambre' : 'Ajouter un type de chambre'" />
+    @include('hotel._subnav')
 
     <form method="POST" action="{{ $hotelRoomType->exists ? route('hotel-room-types.update', $hotelRoomType) : route('hotel-room-types.store') }}" enctype="multipart/form-data" class="mt-6 max-w-lg space-y-4">
         @csrf

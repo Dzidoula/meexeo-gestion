@@ -4,6 +4,7 @@
             <a href="{{ route('hotel-promo-codes.create') }}" class="min-h-[44px] inline-flex items-center px-4 text-sm font-semibold" style="border-radius:var(--radius-mc-sm);background:var(--color-mc-accent);color:var(--color-mc-on-accent)">Ajouter un code</a>
         </x-slot:actions>
     </x-page-header>
+    @include('hotel._subnav')
 
     @if (session('status'))
         <p class="mt-4 text-sm" style="color:var(--color-mc-success)">{{ session('status') }}</p>

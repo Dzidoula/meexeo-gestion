@@ -11,6 +11,7 @@
             @endif
         </x-slot:actions>
     </x-page-header>
+    @include('hotel._subnav')
 
     <div class="mt-6 grid gap-5 lg:grid-cols-2">
         <div class="p-6" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-border);background:var(--color-mc-surface)">

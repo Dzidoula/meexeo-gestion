@@ -15,6 +15,7 @@
                class="inline-flex min-h-[44px] items-center px-2 text-sm" style="color:var(--color-mc-ink-faint)">Types de chambre</a>
         </x-slot:actions>
     </x-page-header>
+    @include('hotel._subnav')
 
     <form method="GET" class="mt-6 flex flex-wrap items-end gap-3">
         <div>

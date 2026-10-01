@@ -1,5 +1,6 @@
 <x-layouts.app title="Ajouter une photo — MASTERCLAYS">
     <x-page-header title="Ajouter une photo à la galerie" />
+    @include('hotel._subnav')
 
     <form method="POST" action="{{ route('hotel-galleries.store') }}" enctype="multipart/form-data" class="mt-6 max-w-lg space-y-4">
         @csrf

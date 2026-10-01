@@ -1,5 +1,6 @@
 <x-layouts.app :title="($hotelPromoCode->exists ? 'Modifier' : 'Ajouter').' un code promo — MASTERCLAYS'">
     <x-page-header :title="$hotelPromoCode->exists ? 'Modifier le code promo' : 'Ajouter un code promo'" />
+    @include('hotel._subnav')
 
     <form method="POST" action="{{ $hotelPromoCode->exists ? route('hotel-promo-codes.update', $hotelPromoCode) : route('hotel-promo-codes.store') }}" class="mt-6 max-w-lg space-y-4">
         @csrf

@@ -1,5 +1,6 @@
 <x-layouts.app :title="($hotelTestimonial->exists ? 'Modifier' : 'Ajouter').' un témoignage — MASTERCLAYS'">
     <x-page-header :title="$hotelTestimonial->exists ? 'Modifier le témoignage' : 'Ajouter un témoignage'" />
+    @include('hotel._subnav')
 
     <form method="POST" action="{{ $hotelTestimonial->exists ? route('hotel-testimonials.update', $hotelTestimonial) : route('hotel-testimonials.store') }}" class="mt-6 max-w-lg space-y-4">
         @csrf

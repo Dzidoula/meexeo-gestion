@@ -25,6 +25,7 @@
             @endif
         </x-slot:actions>
     </x-page-header>
+    @include('hotel._subnav')
 
     @if (session('status'))
         <p class="mt-4 px-4 py-3 text-sm" style="border-radius:var(--radius-mc);border:1px solid rgba(22,163,74,.35);background:rgba(22,163,74,.08);color:var(--color-mc-success)">{{ session('status') }}</p>

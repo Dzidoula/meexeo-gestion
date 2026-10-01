@@ -1,5 +1,6 @@
 <x-layouts.app title="Newsletter — MASTERCLAYS">
     <x-page-header title="Abonnés newsletter" />
+    @include('hotel._subnav')
     <div class="mt-6 overflow-x-auto">
         <table class="w-full text-sm">
             <thead><tr style="color:var(--color-mc-ink-soft)"><th class="text-left">Email</th><th class="text-left">Inscrit le</th><th></th></tr></thead>
