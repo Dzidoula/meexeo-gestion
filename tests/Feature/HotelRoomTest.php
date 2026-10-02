@@ -148,4 +148,27 @@ class HotelRoomTest extends TestCase
 
         $this->assertSame(35000, $room->fresh()->nightly_rate);
     }
+
+    public function test_a_manager_can_delete_a_room_with_no_stays(): void
+    {
+        $room = HotelRoom::factory()->create();
+
+        $this->actingAsManager()
+            ->delete("/chambres/{$room->id}")
+            ->assertRedirect();
+
+        $this->assertNull($room->fresh());
+    }
+
+    public function test_a_room_with_stays_cannot_be_deleted(): void
+    {
+        $room = HotelRoom::factory()->create();
+        \App\Models\HotelStay::factory()->create(['hotel_room_id' => $room->id]);
+
+        $this->actingAsManager()
+            ->delete("/chambres/{$room->id}")
+            ->assertRedirect();
+
+        $this->assertNotNull($room->fresh());
+    }
 }

@@ -47,6 +47,32 @@ class StoreHotelStayRequest extends FormRequest
         ];
     }
 
+    public function withValidator(\Illuminate\Validation\Validator $validator): void
+    {
+        $validator->after(function (\Illuminate\Validation\Validator $validator): void {
+            if (! $this->filled(['arrival_date', 'departure_date'])) {
+                return;
+            }
+
+            $overlapping = fn ($query) => $query
+                ->whereIn('status', [HotelStayStatus::Reserved->value, HotelStayStatus::InProgress->value])
+                ->whereDate('arrival_date', '<', $this->input('departure_date'))
+                ->whereDate('departure_date', '>', $this->input('arrival_date'));
+
+            if ($this->input('type', 'chambre') === 'privatisation') {
+                $conflict = $overlapping(HotelStay::query()->where('type', 'chambre'))->exists();
+                if ($conflict) {
+                    $validator->errors()->add('arrival_date', "Impossible de privatiser la résidence : des chambres sont déjà réservées sur cette période.");
+                }
+            } else {
+                $conflict = $overlapping(HotelStay::query()->where('type', 'privatisation'))->exists();
+                if ($conflict) {
+                    $validator->errors()->add('arrival_date', "Impossible de réserver cette chambre : la résidence entière est privatisée sur cette période.");
+                }
+            }
+        });
+    }
+
     public function messages(): array
     {
         return [

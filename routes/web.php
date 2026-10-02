@@ -145,6 +145,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/chambres', [HotelRoomController::class, 'store'])->name('hotel-rooms.store');
         Route::get('/chambres/{room}/modifier', [HotelRoomController::class, 'edit'])->name('hotel-rooms.edit');
         Route::put('/chambres/{room}', [HotelRoomController::class, 'update'])->name('hotel-rooms.update');
+        Route::delete('/chambres/{room}', [HotelRoomController::class, 'destroy'])->name('hotel-rooms.destroy');
 
         Route::get('/sejours/nouveau', [HotelStayController::class, 'create'])->name('hotel-stays.create');
         Route::post('/sejours', [HotelStayController::class, 'store'])->name('hotel-stays.store');

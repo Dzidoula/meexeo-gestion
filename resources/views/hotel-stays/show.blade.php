@@ -3,6 +3,13 @@
 <x-layouts.app :title="'Séjour de '.$stay->guest_name.' — MASTERCLAYS'">
     <x-page-header :title="'Séjour de '.$stay->guest_name" :subtitle="$stay->room ? 'Chambre '.$stay->room->number : 'Privatisation (villa entière)'">
         <x-slot:actions>
+            @if ($stay->external_source === 'residence_touvalem')
+                <a href="https://residencetouvalem.com/bookings/{{ $stay->external_id }}/pdf"
+                   class="inline-flex min-h-[44px] items-center px-4 text-sm font-semibold"
+                   style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border);color:var(--color-mc-ink)">
+                    Télécharger la facture
+                </a>
+            @endif
             @if ($canWrite)
                 @if ($stay->confirmation_status === 'pending')
                     <form method="POST" action="{{ route('hotel-stays.confirm', $stay) }}">

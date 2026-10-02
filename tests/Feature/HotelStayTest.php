@@ -396,4 +396,73 @@ class HotelStayTest extends TestCase
         $this->assertSame(HotelStayStatus::Cancelled, $stay->fresh()->status);
         $this->assertSame(HotelRoomStatus::Available, $room->fresh()->status);
     }
+
+    public function test_a_room_cannot_be_booked_while_the_whole_property_is_privatised(): void
+    {
+        $room = HotelRoom::factory()->create(['status' => HotelRoomStatus::Available]);
+        HotelStay::factory()->create([
+            'type' => 'privatisation', 'hotel_room_id' => null,
+            'arrival_date' => '2026-10-10', 'departure_date' => '2026-10-12',
+        ]);
+
+        $this->actingAsManager()
+            ->post('/sejours', [
+                'hotel_room_id' => $room->id,
+                'guest_name' => 'Awa Koné',
+                'guest_phone' => '0102030405',
+                'arrival_date' => '2026-10-11',
+                'departure_date' => '2026-10-13',
+                'total_amount' => 90000,
+                'deposit_amount' => 0,
+            ])
+            ->assertSessionHasErrors(['arrival_date']);
+
+        $this->assertSame(1, HotelStay::count());
+    }
+
+    public function test_the_property_cannot_be_privatised_while_a_room_is_already_booked(): void
+    {
+        $room = HotelRoom::factory()->create(['status' => HotelRoomStatus::Available]);
+        HotelStay::factory()->create([
+            'type' => 'chambre', 'hotel_room_id' => $room->id,
+            'arrival_date' => '2026-10-10', 'departure_date' => '2026-10-12',
+        ]);
+
+        $this->actingAsManager()
+            ->post('/sejours', [
+                'type' => 'privatisation',
+                'guest_name' => 'Awa Koné',
+                'guest_phone' => '0102030405',
+                'arrival_date' => '2026-10-11',
+                'departure_date' => '2026-10-13',
+                'total_amount' => 600000,
+                'deposit_amount' => 0,
+            ])
+            ->assertSessionHasErrors(['arrival_date']);
+
+        $this->assertSame(1, HotelStay::count());
+    }
+
+    public function test_a_touvalem_origin_stay_shows_an_invoice_download_link(): void
+    {
+        $stay = HotelStay::factory()->create([
+            'external_source' => 'residence_touvalem',
+            'external_id' => 42,
+        ]);
+
+        $this->actingAsManager()
+            ->get("/sejours/{$stay->id}")
+            ->assertOk()
+            ->assertSee('https://residencetouvalem.com/bookings/42/pdf', false);
+    }
+
+    public function test_a_native_stay_shows_no_invoice_download_link(): void
+    {
+        $stay = HotelStay::factory()->create(['external_source' => null, 'external_id' => null]);
+
+        $this->actingAsManager()
+            ->get("/sejours/{$stay->id}")
+            ->assertOk()
+            ->assertDontSee('bookings', false);
+    }
 }

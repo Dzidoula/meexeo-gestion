@@ -64,4 +64,15 @@ class HotelRoomController extends Controller
 
         return redirect()->route('hotel-rooms.show', $room)->with('status', 'La chambre a été mise à jour.');
     }
+
+    public function destroy(HotelRoom $room): RedirectResponse
+    {
+        if ($room->stays()->exists()) {
+            return back()->with('error', 'Cette chambre a des séjours associés, elle ne peut pas être supprimée.');
+        }
+
+        $room->delete();
+
+        return redirect()->route('hotel-rooms.index')->with('status', 'La chambre a été supprimée.');
+    }
 }

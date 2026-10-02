@@ -8,6 +8,14 @@
                    style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border);color:var(--color-mc-ink)">
                     Modifier
                 </a>
+                @if (! $room->stays()->exists())
+                    <form method="POST" action="{{ route('hotel-rooms.destroy', $room) }}" onsubmit="return confirm('Supprimer définitivement cette chambre ?')">
+                        @csrf @method('DELETE')
+                        <button type="submit" title="Supprimer" class="inline-flex h-[44px] w-[44px] items-center justify-center" style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border);color:var(--color-mc-danger)">
+                            <x-mc-icon name="trash-2" class="h-4 w-4" />
+                        </button>
+                    </form>
+                @endif
             @endif
         </x-slot:actions>
     </x-page-header>
