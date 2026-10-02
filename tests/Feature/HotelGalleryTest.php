@@ -58,6 +58,21 @@ class HotelGalleryTest extends TestCase
         Http::assertSent(fn ($r) => str_ends_with($r->url(), '/galleries/delete'));
     }
 
+    public function test_a_manager_can_rename_a_gallery_image(): void
+    {
+        Http::fake(['residencetouvalem.com/*' => Http::response(['synced' => true], 201)]);
+        $gallery = HotelGallery::create(['image_path' => 'hotel-galleries/x.jpg', 'title' => 'Ancien titre']);
+
+        $this->actingAsManager()
+            ->put("/galerie/{$gallery->id}", ['title' => 'Nouveau titre', 'category' => 'Extérieur'])
+            ->assertRedirect();
+
+        $fresh = $gallery->fresh();
+        $this->assertSame('Nouveau titre', $fresh->title);
+        $this->assertSame('Extérieur', $fresh->category);
+        Http::assertSent(fn ($r) => $r->url() === 'https://residencetouvalem.com/api/masterclays-sync/galleries' && $r['title'] === 'Nouveau titre');
+    }
+
     public function test_a_viewer_cannot_add_a_gallery_image(): void
     {
         Storage::fake('public');

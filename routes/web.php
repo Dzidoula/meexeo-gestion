@@ -158,6 +158,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/galerie/nouveau', [HotelGalleryController::class, 'create'])->name('hotel-galleries.create');
         Route::post('/galerie', [HotelGalleryController::class, 'store'])->name('hotel-galleries.store');
+        Route::get('/galerie/{hotelGallery}/modifier', [HotelGalleryController::class, 'edit'])->name('hotel-galleries.edit');
+        Route::put('/galerie/{hotelGallery}', [HotelGalleryController::class, 'update'])->name('hotel-galleries.update');
         Route::delete('/galerie/{hotelGallery}', [HotelGalleryController::class, 'destroy'])->name('hotel-galleries.destroy');
 
         Route::get('/temoignages/nouveau', [HotelTestimonialController::class, 'create'])->name('hotel-testimonials.create');
