@@ -12,6 +12,7 @@
             @endif
         </x-slot:actions>
     </x-page-header>
+    @include('locative._subnav')
 
     <form method="GET" class="mt-6 flex flex-wrap items-end gap-3">
         <div class="min-w-[220px] flex-1">

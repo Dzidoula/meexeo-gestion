@@ -1,6 +1,7 @@
 {{-- resources/views/leases/form.blade.php --}}
 <x-layouts.app title="Nouvelle affectation — MEEXEO">
     <x-page-header title="Nouvelle affectation" subtitle="Liez un bien à un locataire." />
+    @include('locative._subnav')
 
     @error('property_id')
         <p class="mt-4 px-4 py-3 text-sm" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-danger);background:rgba(220,38,38,.08);color:var(--color-mc-danger)">{{ $message }}</p>

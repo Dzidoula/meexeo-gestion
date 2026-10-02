@@ -1,5 +1,6 @@
 <x-layouts.app title="Enregistrer un paiement — MEEXEO">
     <x-page-header title="Enregistrer un paiement" subtitle="Chaque paiement doit être accompagné d'une preuve." />
+    @include('locative._subnav')
 
     <div class="mt-6 grid gap-5 lg:grid-cols-[1.4fr_1fr]" x-data="{
         montant: {{ $lease?->monthly_rent ?? 0 }},

@@ -3,6 +3,7 @@
 <x-layouts.app :title="($editing ? 'Modifier la fiche' : 'Nouveau locataire').' — MEEXEO'">
     <x-page-header :title="$editing ? 'Modifier la fiche locataire' : 'Nouveau locataire'"
                    :subtitle="$editing ? $tenant->reference : 'Renseignez l\'identité, l\'activité et les contacts.'" />
+    @include('locative._subnav')
 
     <form method="POST" action="{{ $editing ? route('tenants.update', $tenant) : route('tenants.store') }}"
           class="mt-6 max-w-3xl space-y-6">

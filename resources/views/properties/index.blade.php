@@ -12,6 +12,7 @@
             @endif
         </x-slot:actions>
     </x-page-header>
+    @include('locative._subnav')
 
     <div class="mt-6 grid gap-3.5" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
         <div style="background:var(--color-mc-surface);border:1px solid var(--color-mc-border);border-radius:var(--radius-mc);padding:16px">

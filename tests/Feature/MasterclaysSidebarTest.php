@@ -20,11 +20,16 @@ class MasterclaysSidebarTest extends TestCase
         }
     }
 
-    public function test_the_sidebar_still_shows_the_historical_meexeo_entries(): void
+    public function test_the_duplicated_historical_meexeo_sidebar_section_is_gone(): void
     {
+        // Biens/Locataires/Paiements used to appear twice: once as "Gestion
+        // locative" (the real module entry) and again as a separate
+        // "MEEXEO (historique)" section lower down — confusing, and the
+        // "historique" label made the actively-used module look deprecated.
+        // Now reached via "Gestion locative" → the locative._subnav tabs.
         $response = $this->actingAs(User::factory()->viewer()->create())->get('/tableau-de-bord');
 
-        $response->assertSee('Biens')->assertSee('Locataires')->assertSee('Paiements');
+        $response->assertDontSee('MEEXEO (historique)');
     }
 
     public function test_the_sidebar_groups_entries_under_their_section_titles(): void
