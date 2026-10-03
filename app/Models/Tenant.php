@@ -1,5 +1,5 @@
 <?php
-// app/Models/Tenant.php
+
 namespace App\Models;
 
 use App\Enums\LeaseStatus;
@@ -7,30 +7,63 @@ use App\Enums\MaritalStatus;
 use App\Enums\TenantStatus;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 
-class Tenant extends Model
+class Tenant extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $fillable = [
         'last_name', 'first_names', 'birth_date', 'id_number', 'marital_status',
         'occupation', 'workplace', 'phone1', 'phone2', 'email',
         'emergency_name', 'emergency_phone', 'spouse_name', 'spouse_phone',
         'status', 'photo_path', 'notes',
+        'otp_code', 'otp_expires_at', 'phone_verified_at', 'remember_token',
     ];
+
+    protected $hidden = ['otp_code', 'remember_token'];
 
     protected function casts(): array
     {
         return [
-            'birth_date' => 'date',
-            'marital_status' => MaritalStatus::class,
-            'status' => TenantStatus::class,
+            'birth_date'        => 'date',
+            'marital_status'    => MaritalStatus::class,
+            'status'            => TenantStatus::class,
+            'otp_expires_at'    => 'datetime',
+            'phone_verified_at' => 'datetime',
         ];
+    }
+
+    public function generateOtp(): string
+    {
+        $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        $this->update([
+            'otp_code'       => $code,
+            'otp_expires_at' => now()->addMinutes(10),
+        ]);
+
+        return $code;
+    }
+
+    public function verifyOtp(string $code): bool
+    {
+        if ($this->otp_expires_at === null || $this->otp_expires_at->isPast()) {
+            return false;
+        }
+
+        if ($this->otp_code !== $code) {
+            return false;
+        }
+
+        $this->update(['otp_code' => null, 'otp_expires_at' => null]);
+
+        return true;
     }
 
     protected function reference(): Attribute
@@ -38,7 +71,6 @@ class Tenant extends Model
         return Attribute::get(fn () => 'LOC-'.str_pad((string) $this->id, 4, '0', STR_PAD_LEFT));
     }
 
-    /** Prénoms puis nom, comme sur les documents administratifs ivoiriens. */
     protected function fullName(): Attribute
     {
         return Attribute::get(fn () => trim("{$this->first_names} {$this->last_name}"));
