@@ -11,10 +11,20 @@
         <div class="text-center mb-8">
             <h1 class="text-2xl font-semibold text-lagune">Entrez le code</h1>
             <p class="text-ardoise mt-1 text-sm">Un code à 6 chiffres vous a été envoyé</p>
-            @if(app()->environment('local') && session('_otp_dev_code'))
-                <p class="mt-2 text-xs text-cuivre font-mono bg-amber-50 rounded px-2 py-1 inline-block">
-                    [DEV] Code : {{ session('_otp_dev_code') }}
-                </p>
+            @if(\App\Http\Controllers\TenantPortal\Auth\LoginController::displaysOtp() && session('_otp_dev_code'))
+                <div class="mt-3 rounded-xl border border-amber-300 bg-amber-50 px-3 py-2.5 text-left">
+                    <p class="text-[11px] font-semibold uppercase tracking-wide text-amber-800">
+                        Démonstration — envoi SMS non activé
+                    </p>
+                    <p class="mt-1 font-mono text-lg font-semibold text-amber-900">
+                        {{ session('_otp_dev_code') }}
+                    </p>
+                    <p class="mt-1 text-[11px] leading-snug text-amber-700">
+                        Le code s'affiche ici faute de SMS. Ne mettez aucune donnée réelle
+                        dans cet environnement : n'importe qui connaissant un numéro de
+                        téléphone peut ouvrir le compte correspondant.
+                    </p>
+                </div>
             @endif
         </div>
 

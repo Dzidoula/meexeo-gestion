@@ -14,6 +14,23 @@ use Illuminate\View\View;
 
 class LoginController extends Controller
 {
+    /** Whether the code is logged and kept in the session for later display. */
+    public static function exposesOtp(): bool
+    {
+        return app()->environment('local', 'testing') || self::displaysOtp();
+    }
+
+    /**
+     * Whether the verification page renders the code instead of relying on SMS.
+     * Deliberately excludes a bare `testing` environment so that both the on and
+     * off paths stay testable.
+     */
+    public static function displaysOtp(): bool
+    {
+        return app()->environment('local')
+            || (bool) config('tenant-portal.show_otp_on_screen');
+    }
+
     public function showForm(Request $request): View|RedirectResponse
     {
         return Auth::guard('tenant')->check()
@@ -49,7 +66,7 @@ class LoginController extends Controller
 
         $code = $tenant->generateOtp();
 
-        if (app()->environment('local', 'testing')) {
+        if (self::exposesOtp()) {
             Log::info("[TenantPortal OTP] {$tenant->phone1} → code: {$code}");
             session(['_otp_dev_code' => $code]);
         }
