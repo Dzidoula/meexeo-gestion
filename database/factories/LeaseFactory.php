@@ -24,6 +24,13 @@ class LeaseFactory extends Factory
         ];
     }
 
+    public function active(): static
+    {
+        return $this->state(fn () => [
+            'status' => LeaseStatus::Active,
+        ]);
+    }
+
     public function ended(): static
     {
         return $this->state(fn () => [

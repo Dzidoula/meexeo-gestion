@@ -47,6 +47,11 @@ return [
             'driver' => 'session',
             'provider' => 'customers',
         ],
+
+        'tenant' => [
+            'driver'   => 'session',
+            'provider' => 'tenants',
+        ],
     ],
 
     /*
@@ -75,6 +80,11 @@ return [
         'customers' => [
             'driver' => 'eloquent',
             'model' => \App\Models\Customer::class,
+        ],
+
+        'tenants' => [
+            'driver' => 'eloquent',
+            'model'  => \App\Models\Tenant::class,
         ],
 
         // 'users' => [
