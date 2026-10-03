@@ -6,6 +6,7 @@ use App\Enums\PaymentMethod;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TenantPortal\StoreProofRequest;
 use App\Models\Payment;
+use App\Support\RentSchedule;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
@@ -18,16 +19,12 @@ class ProofController extends Controller
         $tenant = auth()->guard('tenant')->user();
         $lease  = $tenant->activeLease()->firstOrFail();
 
-        // startOfMonth before stepping: a lease starting on the 31st would
-        // otherwise skip any month shorter than the start day.
-        $cursor = Carbon::parse($lease->start_date)->startOfMonth();
-        $last   = now()->startOfMonth();
-        $months = [];
-
-        while ($cursor->lte($last)) {
-            $months[] = ['key' => $cursor->format('Y-m'), 'label' => ucfirst($cursor->isoFormat('MMMM YYYY'))];
-            $cursor->addMonth();
-        }
+        // Seuls les mois réellement dus : proposer un mois déjà réglé mène à un
+        // refus, puisque le portail ne touche jamais un paiement du gestionnaire.
+        $months = RentSchedule::forLease($lease)
+            ->whereIn('status', ['pending', 'overdue', 'partial'])
+            ->map(fn ($r) => ['key' => $r['key'], 'label' => $r['label']])
+            ->values();
 
         return view('tenant-portal.proofs.create', compact('tenant', 'lease', 'months'));
     }

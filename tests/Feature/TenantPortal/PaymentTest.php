@@ -72,7 +72,7 @@ class PaymentTest extends TestCase
         Lease::factory()->active()->create(['tenant_id' => $tenant->id, 'property_id' => $property->id]);
 
         $this->actingAs($tenant, 'tenant')
-            ->get('/espace-locataire/paiements/nouveau')
+            ->get('/espace-locataire/preuves/envoyer')
             ->assertOk();
     }
 }

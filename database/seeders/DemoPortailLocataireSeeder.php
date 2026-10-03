@@ -6,13 +6,16 @@ use App\Enums\LeaseStatus;
 use App\Enums\MaritalStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PropertyStatus;
+use App\Enums\PortalDocumentCategory;
 use App\Enums\PropertyType;
 use App\Enums\TenantStatus;
 use App\Models\Lease;
 use App\Models\Payment;
+use App\Models\PortalDocument;
 use App\Models\Property;
 use App\Models\RepairRequest;
 use App\Models\Tenant;
+use App\Models\TenantMessage;
 use Illuminate\Database\Seeder;
 
 /**
@@ -129,6 +132,8 @@ class DemoPortailLocataireSeeder extends Seeder
 
             $this->seedPayments($lease, $start, $s['behaviour']);
             $this->seedRepairs($tenant, $lease, $s['behaviour']);
+            $this->seedDocuments($tenant, $lease, $start);
+            $this->seedMessages($tenant, $lease, $s['behaviour']);
 
             $credentials[] = [
                 'name'      => $tenant->first_names.' '.$tenant->last_name,
@@ -256,6 +261,78 @@ class DemoPortailLocataireSeeder extends Seeder
             ])->forceFill([
                 'created_at' => now()->subDays(($i + 1) * 9),
             ])->save();
+        }
+    }
+
+    private function seedDocuments(Tenant $tenant, Lease $lease, \Illuminate\Support\Carbon $start): void
+    {
+        // Le bail signé.
+        PortalDocument::create([
+            'tenant_id'     => $tenant->id,
+            'lease_id'      => $lease->id,
+            'category'      => PortalDocumentCategory::Lease,
+            'path'          => 'portal-documents/demo/contrat-location.pdf',
+            'original_name' => 'Contrat de location '.$start->year.'.pdf',
+            'size'          => 239_904,
+            'issued_at'     => $start->copy(),
+        ]);
+
+        // Une quittance par mois réglé, du plus récent au plus ancien.
+        foreach ($lease->payments()->whereNull('portal_status')->latest('month')->take(3)->get() as $p) {
+            PortalDocument::create([
+                'tenant_id'     => $tenant->id,
+                'lease_id'      => $lease->id,
+                'category'      => PortalDocumentCategory::Receipt,
+                'path'          => 'portal-documents/demo/quittance-'.$p->month->format('Y-m').'.pdf',
+                'original_name' => 'Quittance — '.ucfirst($p->month->isoFormat('MMMM YYYY')).'.pdf',
+                'size'          => random_int(80_000, 95_000),
+                'period'        => $p->month,
+                'issued_at'     => $p->paid_on,
+            ]);
+        }
+
+        PortalDocument::create([
+            'tenant_id'     => $tenant->id,
+            'lease_id'      => $lease->id,
+            'category'      => PortalDocumentCategory::Other,
+            'path'          => 'portal-documents/demo/etat-des-lieux.pdf',
+            'original_name' => "État des lieux d'entrée.pdf",
+            'size'          => 337_612,
+            'issued_at'     => $start->copy(),
+        ]);
+    }
+
+    private function seedMessages(Tenant $tenant, Lease $lease, string $behaviour): void
+    {
+        $welcome = TenantMessage::create([
+            'tenant_id' => $tenant->id,
+            'sender'    => 'manager',
+            'subject'   => 'Bienvenue sur votre portail locataire MEEXEO',
+            'body'      => "Bonjour {$tenant->first_names},\n\n"
+                ."Nous sommes ravis de vous accueillir sur votre espace locataire. Vous y "
+                ."retrouvez vos loyers mois par mois, vos quittances, et vous pouvez y signaler "
+                ."tout problème dans votre logement.\n\n"
+                ."Après chaque paiement par Wave ou Orange Money, pensez à envoyer la capture "
+                ."de votre reçu depuis l'onglet « Loyers & paiements ».\n\n"
+                ."Cordialement,\nMEEXEO IMMOBILIER",
+            'read_at'   => null,
+        ]);
+
+        $welcome->forceFill(['created_at' => $lease->start_date])->save();
+
+        if (in_array($behaviour, ['late', 'partial'], true)) {
+            TenantMessage::create([
+                'tenant_id' => $tenant->id,
+                'sender'    => 'manager',
+                'subject'   => 'Rappel : loyer du mois en cours',
+                'body'      => "Bonjour,\n\n"
+                    ."Nous vous rappelons que le loyer est dû le {$lease->due_day} de chaque mois. "
+                    ."Votre règlement n'est pas encore parvenu.\n\n"
+                    ."Si vous avez déjà payé, envoyez-nous simplement la preuve depuis le portail "
+                    ."et nous régulariserons votre situation.\n\n"
+                    ."Cordialement,\nMEEXEO IMMOBILIER",
+                'read_at'   => null,
+            ])->forceFill(['created_at' => now()->subDays(2)])->save();
         }
     }
 

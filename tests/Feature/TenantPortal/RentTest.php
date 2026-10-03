@@ -28,23 +28,24 @@ class RentTest extends TestCase
         return compact('tenant', 'property', 'lease');
     }
 
-    public function test_rents_page_renders(): void
+    public function test_rents_are_listed_on_the_payments_page(): void
     {
         ['tenant' => $tenant] = $this->setupTenant();
 
         $this->actingAs($tenant, 'tenant')
-            ->get('/espace-locataire/loyers')
+            ->get('/espace-locataire/paiements')
             ->assertOk();
     }
 
-    public function test_rents_page_shows_months_since_lease_start(): void
+    public function test_every_month_since_lease_start_has_a_row(): void
     {
         ['tenant' => $tenant] = $this->setupTenant();
 
+        // Le mois se lit dans la date d'échéance de chaque ligne.
         $this->actingAs($tenant, 'tenant')
-            ->get('/espace-locataire/loyers')
-            ->assertSee('Août 2026')
-            ->assertSee('Septembre 2026');
+            ->get('/espace-locataire/paiements')
+            ->assertSee('5 août 2026')
+            ->assertSee('5 septembre 2026');
     }
 
     public function test_paid_month_shows_paid_status(): void
@@ -59,13 +60,13 @@ class RentTest extends TestCase
         ]);
 
         $this->actingAs($tenant, 'tenant')
-            ->get('/espace-locataire/loyers')
+            ->get('/espace-locataire/paiements')
             ->assertSee('Payé');
     }
 
     public function test_rents_page_requires_authentication(): void
     {
-        $this->get('/espace-locataire/loyers')
+        $this->get('/espace-locataire/paiements')
             ->assertRedirect('/espace-locataire/connexion');
     }
 }

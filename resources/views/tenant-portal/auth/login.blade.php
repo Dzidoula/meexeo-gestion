@@ -1,47 +1,48 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Connexion — Espace Locataire</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="min-h-screen bg-sable flex items-center justify-center p-4">
-    <div class="w-full max-w-sm">
-        <div class="text-center mb-8">
-            <h1 class="text-2xl font-semibold text-lagune">Espace Locataire</h1>
-            <p class="text-ardoise mt-1 text-sm">Connectez-vous avec votre numéro de téléphone</p>
+<x-layouts.tenant-portal-auth title="Connexion">
+
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 sm:p-10">
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900">Connexion</h2>
+            <p class="text-sm text-gray-500 mt-2">
+                Saisissez votre numéro de téléphone. Nous vous envoyons un code à 6 chiffres.
+            </p>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <form method="POST" action="{{ route('tenant-portal.send-otp') }}">
-                @csrf
+        <form method="POST" action="{{ route('tenant-portal.send-otp') }}" class="space-y-5">
+            @csrf
 
-                <div class="mb-4">
-                    <label for="phone" class="block text-sm font-medium text-lagune mb-2">
-                        Numéro de téléphone
-                    </label>
-                    <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value="{{ old('phone') }}"
-                        placeholder="07 00 00 00 00"
-                        autocomplete="tel"
-                        autofocus
-                        class="w-full px-4 py-3 rounded-xl border @error('phone') border-red-400 bg-red-50 @else border-gray-200 @enderror text-lagune text-lg focus:outline-none focus:ring-2 focus:ring-acier focus:border-transparent"
-                    >
-                    @error('phone')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+            <div>
+                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1.5">Numéro de téléphone</label>
+                <div class="relative">
+                    <x-tenant-portal.icon name="phone" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input id="phone" type="tel" name="phone" value="{{ old('phone') }}" required autofocus
+                           inputmode="tel" autocomplete="tel" placeholder="07 00 00 00 00"
+                           class="w-full pl-10 pr-3 py-2.5 rounded-lg border bg-gray-50 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-pl-500 focus:border-transparent transition @error('phone') border-red-300 @else border-gray-200 @enderror">
                 </div>
+                @error('phone')
+                    <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
+                        <x-tenant-portal.icon name="alert-circle" class="w-3.5 h-3.5" />
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
 
-                <button type="submit"
-                    class="w-full bg-lagune text-white py-3 rounded-xl font-medium text-base hover:bg-opacity-90 transition-colors">
-                    Recevoir mon code
-                </button>
-            </form>
-        </div>
+            <button type="submit"
+                    class="w-full bg-pl-600 hover:bg-pl-700 text-white text-sm font-semibold px-4 py-3 rounded-lg transition-all hover:shadow-lg hover:shadow-pl-500/25 flex items-center justify-center gap-2">
+                Recevoir mon code
+                <x-tenant-portal.icon name="arrow-right" class="w-4 h-4" />
+            </button>
+        </form>
+
+        {{-- Pas d'inscription : c'est le gestionnaire qui ouvre les comptes. --}}
+        <p class="text-center text-sm text-gray-500 mt-6">
+            Vous n'avez pas encore d'accès ?<br>
+            <span class="text-gray-400">Contactez votre gestionnaire pour qu'il active votre espace.</span>
+        </p>
     </div>
-</body>
-</html>
+
+    <p class="text-center text-xs text-gray-400 mt-6">
+        En vous connectant, vous acceptez les conditions d'utilisation du portail.
+    </p>
+
+</x-layouts.tenant-portal-auth>

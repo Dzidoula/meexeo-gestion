@@ -92,7 +92,58 @@
 
   --shadow-mc-store-card: 0 1px 2px rgba(16, 24, 40, 0.06), 0 4px 12px rgba(16, 24, 40, 0.08);
   --shadow-mc-store-card-hover: 0 4px 10px rgba(16, 24, 40, 0.10), 0 16px 28px rgba(16, 24, 40, 0.14);
+
+  /* PORTAIL LOCATAIRE — échelles reprises telles quelles de la maquette Bolt
+     (tailwind.config.js). Préfixées pl- et non meexeo- : dans ce fichier
+     « MEEXEO » désigne déjà la charte sable/lagune du back-office, et les deux
+     identités coexistent. Le portail s'adresse aux locataires, le back-office
+     aux gestionnaires. */
+  --color-pl-50:  #f0f7ff;
+  --color-pl-100: #dcecff;
+  --color-pl-200: #b9d9ff;
+  --color-pl-300: #8ac1ff;
+  --color-pl-400: #549fff;
+  --color-pl-500: #2b7ff7;
+  --color-pl-600: #1a63e6;
+  --color-pl-700: #164fb8;
+  --color-pl-800: #173f91;
+  --color-pl-900: #183774;
+  --color-pl-950: #102347;
+
+  --color-gold-50:  #fbf8ef;
+  --color-gold-100: #f6efd2;
+  --color-gold-200: #ecdc9f;
+  --color-gold-300: #e0c461;
+  --color-gold-400: #d9ac3a;
+  --color-gold-500: #c8902a;
+  --color-gold-600: #a96f22;
+  --color-gold-700: #87541f;
+  --color-gold-800: #70431f;
+  --color-gold-900: #5e391e;
+  --color-gold-950: #351f0e;
+
+  --font-pl: "Plus Jakarta Sans", system-ui, sans-serif;
 }
+
+@layer utilities {
+  /* Reprises de index.css de la maquette. */
+  .scrollbar-thin { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.15) transparent; }
+  .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.15); border-radius: 3px; }
+}
+
+@keyframes plFadeIn     { 0% { opacity: 0 } 100% { opacity: 1 } }
+@keyframes plSlideUp    { 0% { opacity: 0; transform: translateY(16px) } 100% { opacity: 1; transform: none } }
+@keyframes plSlideInX   { 0% { opacity: 0; transform: translateX(-24px) } 100% { opacity: 1; transform: none } }
+@keyframes plScaleIn    { 0% { opacity: 0; transform: scale(.95) } 100% { opacity: 1; transform: none } }
+@keyframes plPulseSoft  { 0%, 100% { opacity: 1 } 50% { opacity: .6 } }
+
+.animate-fade-in      { animation: plFadeIn .4s ease-out }
+.animate-slide-up     { animation: plSlideUp .4s ease-out }
+.animate-slide-in     { animation: plSlideInX .3s ease-out }
+.animate-scale-in     { animation: plScaleIn .2s ease-out }
+.animate-pulse-soft   { animation: plPulseSoft 2s ease-in-out infinite }
 
 @layer utilities {
   /* Les sommes se lisent en colonne : chiffres de largeur fixe. */

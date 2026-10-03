@@ -29,6 +29,11 @@ Route::prefix('espace-locataire')->name('tenant-portal.')->group(function () {
         Route::get('/loyers',              [\App\Http\Controllers\TenantPortal\RentController::class, 'index'])->name('rents');
         Route::get('/profil',              [\App\Http\Controllers\TenantPortal\ProfileController::class, 'show'])->name('profile');
         Route::patch('/profil',            [\App\Http\Controllers\TenantPortal\ProfileController::class, 'update'])->name('profile.update');
+        Route::get('/documents',           [\App\Http\Controllers\TenantPortal\DocumentController::class, 'index'])->name('documents');
+        Route::get('/documents/{document}',[\App\Http\Controllers\TenantPortal\DocumentController::class, 'download'])->name('documents.download');
+        Route::get('/messages',            [\App\Http\Controllers\TenantPortal\MessageController::class, 'index'])->name('messages');
+        Route::get('/messages/{message}',  [\App\Http\Controllers\TenantPortal\MessageController::class, 'show'])->name('messages.show');
+        Route::post('/messages',           [\App\Http\Controllers\TenantPortal\MessageController::class, 'store'])->name('messages.store');
         Route::get('/notifications',       [\App\Http\Controllers\TenantPortal\NotificationController::class, 'index'])->name('notifications');
         Route::get('/contact',             [\App\Http\Controllers\TenantPortal\ContactController::class, 'index'])->name('contact');
         Route::post('/contact',            [\App\Http\Controllers\TenantPortal\ContactController::class, 'store'])->name('contact.store');

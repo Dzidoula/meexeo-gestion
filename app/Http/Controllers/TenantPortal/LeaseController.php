@@ -10,8 +10,13 @@ class LeaseController extends Controller
     public function show(): View
     {
         $tenant = auth()->guard('tenant')->user();
-        $lease  = $tenant->activeLease()->with('property')->firstOrFail();
+        $lease  = $tenant->activeLease()->with('property.primaryPhoto')->firstOrFail();
 
-        return view('tenant-portal.lease.show', compact('tenant', 'lease'));
+        return view('tenant-portal.lease.show', [
+            'tenant'    => $tenant,
+            'lease'     => $lease,
+            'property'  => $lease->property,
+            'documents' => $tenant->portalDocuments()->where('lease_id', $lease->id)->get(),
+        ]);
     }
 }

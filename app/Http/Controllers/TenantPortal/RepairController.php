@@ -21,12 +21,10 @@ class RepairController extends Controller
         return view('tenant-portal.repairs.index', compact('tenant', 'repairs'));
     }
 
-    public function create(): View
+    /** Le formulaire est une fenêtre sur la liste, comme dans la maquette. */
+    public function create(): RedirectResponse
     {
-        $tenant = auth()->guard('tenant')->user();
-        $lease  = $tenant->activeLease()->with('property')->firstOrFail();
-
-        return view('tenant-portal.repairs.create', compact('tenant', 'lease'));
+        return redirect()->route('tenant-portal.repairs');
     }
 
     public function store(StoreRepairRequest $request): RedirectResponse

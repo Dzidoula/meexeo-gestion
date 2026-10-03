@@ -94,9 +94,9 @@ class ProofSecurityTest extends TestCase
         ]);
 
         $this->actingAs($tenant, 'tenant')
-            ->get('/espace-locataire/loyers')
+            ->get('/espace-locataire/paiements')
             ->assertOk()
-            ->assertSee('En attente de vérification');
+            ->assertSee('En vérification');
     }
 
     public function test_month_dropdown_does_not_skip_short_months(): void

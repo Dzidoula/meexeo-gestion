@@ -95,6 +95,17 @@ class Tenant extends Authenticatable
         return $this->hasMany(TenantDocument::class)->orderBy('type')->orderBy('id');
     }
 
+    /** Documents publiés au locataire dans son portail — distincts de documents(). */
+    public function portalDocuments(): HasMany
+    {
+        return $this->hasMany(PortalDocument::class)->latest('issued_at');
+    }
+
+    public function messages(): HasMany
+    {
+        return $this->hasMany(TenantMessage::class)->latest();
+    }
+
     public function leases(): HasMany
     {
         return $this->hasMany(Lease::class)->orderByDesc('start_date');

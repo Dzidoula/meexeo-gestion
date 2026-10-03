@@ -48,7 +48,7 @@ class SecurityTest extends TestCase
             '/espace-locataire/',
             '/espace-locataire/loyers',
             '/espace-locataire/paiements',
-            '/espace-locataire/paiements/nouveau',
+            '/espace-locataire/preuves/envoyer',
             '/espace-locataire/preuves/envoyer',
             '/espace-locataire/reparations',
             '/espace-locataire/reparations/nouveau',
