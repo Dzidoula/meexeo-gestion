@@ -12,10 +12,13 @@ class EnsureUserHasRole
     /** L'administrateur passe partout : il n'a pas à être listé sur chaque route. */
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        $user = $request->user();
+        // Explicitement le garde web : un compte authentifié sur un autre garde
+        // (locataire, client) n'a pas de rôle, et le lire ferait planter la requête
+        // au lieu de la refuser.
+        $user = $request->user('web');
 
-        if (! $user) {
-            abort(401);
+        if (! $user || ! $user->role instanceof Role) {
+            abort(403);
         }
 
         if ($user->role === Role::Admin || in_array($user->role->value, $roles, true)) {

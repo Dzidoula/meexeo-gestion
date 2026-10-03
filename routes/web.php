@@ -23,6 +23,7 @@ use App\Http\Controllers\HotelStayController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\MasterclaysAdminController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PortalProofController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductPhotoController;
 use App\Http\Controllers\Public\CartController;
@@ -226,6 +227,12 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:manager,accountant')->group(function () {
         Route::get('/paiements/nouveau', [PaymentController::class, 'create'])->name('payments.create');
         Route::post('/paiements', [PaymentController::class, 'store'])->name('payments.store');
+
+        // Preuves envoyées depuis le portail locataire.
+        Route::get('/preuves', [PortalProofController::class, 'index'])->name('portal-proofs.index');
+        Route::get('/preuves/{payment}/fichier', [PortalProofController::class, 'proof'])->name('portal-proofs.file');
+        Route::patch('/preuves/{payment}/valider', [PortalProofController::class, 'approve'])->name('portal-proofs.approve');
+        Route::patch('/preuves/{payment}/refuser', [PortalProofController::class, 'reject'])->name('portal-proofs.reject');
     });
 
     Route::get('/biens/{property}', [PropertyController::class, 'show'])->name('properties.show');

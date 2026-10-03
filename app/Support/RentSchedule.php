@@ -32,6 +32,7 @@ class RentSchedule
             // le gestionnaire ne l'a pas validée : elle ne compte pas dans le réglé.
             $verified = $payments->whereNull('portal_status');
             $pending  = $payments->where('portal_status', 'pending');
+            $rejected = $payments->where('portal_status', 'rejected');
             $paid     = (int) $verified->sum('amount');
 
             $due = RentDueDate::forMonth($cursor, $lease->due_day);
@@ -47,7 +48,8 @@ class RentSchedule
                 'payments' => $verified->values(),
                 'paid_on'  => $verified->max('paid_on'),
                 'method'   => $verified->last()?->method,
-                'status'   => self::status($lease, $paid, $pending->isNotEmpty(), $due),
+                'rejected' => $rejected->last(),
+                'status'   => self::status($lease, $paid, $pending->isNotEmpty(), $rejected->isNotEmpty(), $due),
             ];
 
             $cursor->addMonth();
@@ -56,7 +58,7 @@ class RentSchedule
         return collect(array_reverse($rows));
     }
 
-    private static function status(Lease $lease, int $paid, bool $hasPending, Carbon $due): string
+    private static function status(Lease $lease, int $paid, bool $hasPending, bool $hasRejected, Carbon $due): string
     {
         if ($paid >= $lease->monthly_rent) {
             return 'paid';
@@ -68,6 +70,12 @@ class RentSchedule
 
         if ($hasPending) {
             return 'pending_proof';
+        }
+
+        // Le refus prime sur « en retard » : le locataire doit comprendre qu'il
+        // a agi et que son envoi n'a pas été retenu, pas croire qu'il n'a rien fait.
+        if ($hasRejected) {
+            return 'rejected';
         }
 
         return now()->gt($due) ? 'overdue' : 'pending';
@@ -82,6 +90,7 @@ class RentSchedule
             'pending_proof' => 'En vérification',
             'pending'       => 'En attente',
             'overdue'       => 'En retard',
+            'rejected'      => 'Preuve refusée',
         ];
     }
 
@@ -93,6 +102,7 @@ class RentSchedule
             'partial'       => 'bg-amber-50 text-amber-700',
             'pending_proof' => 'bg-blue-50 text-blue-700',
             'overdue'       => 'bg-red-50 text-red-700',
+            'rejected'      => 'bg-red-50 text-red-700',
             default         => 'bg-amber-50 text-amber-700',
         };
     }

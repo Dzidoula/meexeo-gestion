@@ -98,6 +98,15 @@
                                 Reste à payer : {{ Money::fcfa($row['rest']) }}
                             </p>
                         @endif
+                        @if($row['status'] === 'rejected' && $row['rejected']?->notes)
+                            <p class="text-xs text-red-600 mt-1 leading-snug">
+                                {{ \Illuminate\Support\Str::after($row['rejected']->notes, '— ') }}
+                            </p>
+                            <a href="{{ route('tenant-portal.proofs.create') }}"
+                               class="text-xs text-pl-600 hover:text-pl-700 font-medium mt-1 inline-block">
+                                Envoyer une nouvelle preuve
+                            </a>
+                        @endif
                     </div>
                 </div>
                 <div class="flex items-center gap-3 shrink-0">
