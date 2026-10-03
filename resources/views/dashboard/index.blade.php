@@ -78,6 +78,33 @@
         </div>
     </x-dashboard-section>
 
+    <x-dashboard-section title="Portail locataire" icon="bell" icon-color="var(--color-part-puce)"
+                         :href="route('portal-proofs.index')" link-label="Voir les preuves">
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <a href="{{ route('portal-proofs.index') }}" class="block">
+                <x-stat-card label="Preuves à vérifier"
+                             :value="$portalPendingProofs"
+                             :tone="$portalPendingProofs > 0 ? 'terre' : 'lagune'"
+                             :hint="$portalOldestProof
+                                 ? 'La plus ancienne attend depuis '.$portalOldestProof->diffForHumans(null, true)
+                                 : 'Rien en attente'"
+                             icon="wallet" icon-color="var(--color-part-puce)" />
+            </a>
+
+            <x-stat-card label="Messages sans réponse"
+                         :value="$portalUnreadMessages"
+                         :tone="$portalUnreadMessages > 0 ? 'cuivre' : 'lagune'"
+                         hint="Écrits par des locataires"
+                         icon="mail" icon-color="var(--color-mc-accent)" />
+
+            <x-stat-card label="Entretiens ouverts"
+                         :value="$portalOpenRepairs"
+                         :tone="$portalOpenRepairs > 0 ? 'cuivre' : 'lagune'"
+                         hint="Reçus ou en cours"
+                         icon="wrench" icon-color="var(--color-acier)" />
+        </div>
+    </x-dashboard-section>
+
     <x-dashboard-section title="Véhicules" icon="car" icon-color="var(--color-acier)" :href="route('vehicles.index')" link-label="Voir le catalogue">
         <div class="grid gap-4 sm:grid-cols-3">
             <x-stat-card label="Total véhicules" :value="$vehiclesTotal" icon="car" icon-color="var(--color-acier)" />

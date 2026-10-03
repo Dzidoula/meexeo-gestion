@@ -12,6 +12,8 @@ use App\Models\Lease;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Property;
+use App\Models\RepairRequest;
+use App\Models\TenantMessage;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
 use App\Support\PaymentMonthStatus;
@@ -177,7 +179,24 @@ class DashboardController extends Controller
             ->take(8)
             ->values();
 
+        // Portail locataire : ce qui attend une décision du gestionnaire. Sans
+        // ces trois compteurs ici, le travail arrive sans que rien ne le signale
+        // là où on regarde en premier.
+        $portalPendingProofs = Payment::where('portal_status', 'pending')->count();
+
+        $portalUnreadMessages = TenantMessage::where('sender', 'tenant')
+            ->whereNull('read_at')
+            ->count();
+
+        $portalOpenRepairs = RepairRequest::whereIn('status', ['recu', 'en_cours'])->count();
+
+        $portalOldestProof = Payment::where('portal_status', 'pending')->min('created_at');
+
         return view('dashboard.index', [
+            'portalPendingProofs'  => $portalPendingProofs,
+            'portalUnreadMessages' => $portalUnreadMessages,
+            'portalOpenRepairs'    => $portalOpenRepairs,
+            'portalOldestProof'    => $portalOldestProof ? Carbon::parse($portalOldestProof) : null,
             'period' => $period,
             'propertiesTotal' => $propertiesTotal,
             'occupiedCount' => $occupiedCount,
