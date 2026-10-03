@@ -18,7 +18,18 @@ class ProofController extends Controller
         $tenant = auth()->guard('tenant')->user();
         $lease  = $tenant->activeLease()->firstOrFail();
 
-        return view('tenant-portal.proofs.create', compact('tenant', 'lease'));
+        // startOfMonth before stepping: a lease starting on the 31st would
+        // otherwise skip any month shorter than the start day.
+        $cursor = Carbon::parse($lease->start_date)->startOfMonth();
+        $last   = now()->startOfMonth();
+        $months = [];
+
+        while ($cursor->lte($last)) {
+            $months[] = ['key' => $cursor->format('Y-m'), 'label' => ucfirst($cursor->isoFormat('MMMM YYYY'))];
+            $cursor->addMonth();
+        }
+
+        return view('tenant-portal.proofs.create', compact('tenant', 'lease', 'months'));
     }
 
     public function store(StoreProofRequest $request): RedirectResponse

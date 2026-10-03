@@ -19,16 +19,11 @@
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
                 <label class="block text-sm font-medium text-lagune mb-2">Mois concerné</label>
                 <select name="month" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-lagune @error('month') border-red-400 @enderror">
-                    @php
-                        $start = \Carbon\Carbon::parse($lease->start_date);
-                        $cur   = now();
-                    @endphp
-                    @while($start->lte($cur))
-                        <option value="{{ $start->format('Y-m') }}">
-                            {{ ucfirst($start->isoFormat('MMMM YYYY')) }}
+                    @foreach($months as $m)
+                        <option value="{{ $m['key'] }}" {{ old('month') === $m['key'] ? 'selected' : '' }}>
+                            {{ $m['label'] }}
                         </option>
-                        @php $start->addMonth() @endphp
-                    @endwhile
+                    @endforeach
                 </select>
                 @error('month')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
             </div>

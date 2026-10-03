@@ -99,6 +99,26 @@ class ProofSecurityTest extends TestCase
             ->assertSee('En attente de vérification');
     }
 
+    public function test_month_dropdown_does_not_skip_short_months(): void
+    {
+        $tenant   = Tenant::factory()->create();
+        $property = Property::factory()->create();
+        Lease::factory()->active()->create([
+            'tenant_id'    => $tenant->id,
+            'property_id'  => $property->id,
+            'monthly_rent' => 150000,
+            // A 31st start date skips February unless the cursor is normalised.
+            'start_date'   => '2026-01-31',
+            'due_day'      => 5,
+        ]);
+
+        $this->actingAs($tenant, 'tenant')
+            ->get('/espace-locataire/preuves/envoyer')
+            ->assertOk()
+            ->assertSee('Février 2026')
+            ->assertSee('Mars 2026');
+    }
+
     public function test_invalid_month_is_rejected(): void
     {
         Storage::fake('public');
