@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\TenantPortal;
 
 use App\Http\Controllers\Controller;
+use App\Support\RentDueDate;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -10,20 +11,29 @@ class DashboardController extends Controller
     public function index(): View
     {
         $tenant   = auth()->guard('tenant')->user();
-        $lease    = $tenant->activeLease()->with('property.photos')->firstOrFail();
+        $lease    = $tenant->activeLease()->with('property.primaryPhoto')->firstOrFail();
         $property = $lease->property;
 
-        $currentPayment = $lease->payments()
+        $thisMonth = $lease->payments()
             ->whereYear('month', now()->year)
             ->whereMonth('month', now()->month)
-            ->first();
+            ->get();
 
-        $nextDue = now()->day <= $lease->due_day
-            ? now()->setDay($lease->due_day)
-            : now()->addMonth()->setDay($lease->due_day);
+        $paidThisMonth  = (int) $thisMonth->whereNull('portal_status')->sum('amount');
+        $hasPendingProof = $thisMonth->where('portal_status', 'pending')->isNotEmpty();
+
+        $nextDue = RentDueDate::next($lease->due_day);
+
+        $rentStatus = match (true) {
+            $paidThisMonth >= $lease->monthly_rent => 'paid',
+            $paidThisMonth > 0                     => 'partial',
+            $hasPendingProof                       => 'pending',
+            now()->gt(RentDueDate::forMonth(now(), $lease->due_day)) => 'late',
+            default                                => 'upcoming',
+        };
 
         return view('tenant-portal.dashboard', compact(
-            'tenant', 'lease', 'property', 'currentPayment', 'nextDue'
+            'tenant', 'lease', 'property', 'rentStatus', 'nextDue'
         ));
     }
 }

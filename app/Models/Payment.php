@@ -14,6 +14,7 @@ class Payment extends Model
 
     protected $fillable = [
         'lease_id', 'month', 'paid_on', 'amount', 'method', 'reference', 'proof_path', 'notes',
+        'portal_status',
     ];
 
     protected function casts(): array

@@ -17,6 +17,7 @@ class StoreRepairRequest extends FormRequest
             'type'        => ['required', 'in:plomberie,electricite,serrure,peinture,climatisation,autre'],
             'description' => ['required', 'string', 'min:10', 'max:1000'],
             'urgency'     => ['required', 'in:faible,moyenne,urgente'],
+            'photos'      => ['nullable', 'array', 'max:5'],
             'photos.*'    => ['nullable', 'image', 'max:5120'],
             'video'       => ['nullable', 'mimetypes:video/mp4,video/quicktime', 'max:51200'],
         ];

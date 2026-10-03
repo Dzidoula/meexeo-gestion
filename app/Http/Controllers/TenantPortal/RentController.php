@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\TenantPortal;
 
 use App\Http\Controllers\Controller;
+use App\Support\RentDueDate;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class RentController extends Controller
@@ -13,27 +15,32 @@ class RentController extends Controller
         $tenant = auth()->guard('tenant')->user();
         $lease  = $tenant->activeLease()->with('payments')->firstOrFail();
 
-        $start   = Carbon::parse($lease->start_date)->startOfMonth();
+        $cursor  = Carbon::parse($lease->start_date)->startOfMonth();
         $current = now()->startOfMonth();
         $months  = [];
 
-        $paymentsIndexed = $lease->payments->keyBy(fn ($p) => $p->month->format('Y-m'));
+        // A month may hold several payments (instalments), so group rather than index.
+        $byMonth = $lease->payments->groupBy(fn ($p) => $p->month->format('Y-m'));
 
-        while ($start->lte($current)) {
-            $key     = $start->format('Y-m');
-            $payment = $paymentsIndexed->get($key);
+        while ($cursor->lte($current)) {
+            $key      = $cursor->format('Y-m');
+            $payments = $byMonth->get($key, new Collection);
+
+            $verified   = $payments->whereNull('portal_status');
+            $hasPending = $payments->where('portal_status', 'pending')->isNotEmpty();
+            $paid       = (int) $verified->sum('amount');
 
             $months[] = [
-                'key'     => $key,
-                'label'   => ucfirst($start->isoFormat('MMMM YYYY')),
-                'amount'  => $lease->monthly_rent,
-                'paid'    => $payment?->amount ?? 0,
-                'rest'    => $payment ? max(0, $lease->monthly_rent - $payment->amount) : $lease->monthly_rent,
-                'payment' => $payment,
-                'status'  => $this->computeStatus($start->copy(), $lease->due_day, $payment, $lease->monthly_rent),
+                'key'      => $key,
+                'label'    => ucfirst($cursor->isoFormat('MMMM YYYY')),
+                'amount'   => $lease->monthly_rent,
+                'paid'     => $paid,
+                'rest'     => max(0, $lease->monthly_rent - $paid),
+                'payments' => $verified->values(),
+                'status'   => $this->computeStatus($cursor, $lease, $paid, $hasPending),
             ];
 
-            $start->addMonth();
+            $cursor->addMonth();
         }
 
         return view('tenant-portal.rents.index', [
@@ -43,26 +50,31 @@ class RentController extends Controller
         ]);
     }
 
-    public function notice(): \Illuminate\View\View
+    public function notice(): View
     {
         $tenant = auth()->guard('tenant')->user();
         $lease  = $tenant->activeLease()->firstOrFail();
 
-        $nextDue = now()->day <= $lease->due_day
-            ? now()->setDay($lease->due_day)
-            : now()->addMonth()->setDay($lease->due_day);
+        $nextDue = RentDueDate::next($lease->due_day);
 
         return view('tenant-portal.rents.notice', compact('tenant', 'lease', 'nextDue'));
     }
 
-    private function computeStatus(Carbon $month, int $dueDay, $payment, int $monthlyRent): string
+    private function computeStatus(Carbon $month, $lease, int $paid, bool $hasPending): string
     {
-        if ($payment) {
-            return $payment->amount >= $monthlyRent ? 'paid' : 'partial';
+        if ($paid >= $lease->monthly_rent) {
+            return 'paid';
         }
 
-        $due = $month->copy()->setDay($dueDay);
+        if ($paid > 0) {
+            return 'partial';
+        }
 
-        return now()->gt($due) ? 'late' : 'upcoming';
+        // An unverified upload is not a payment: it never reads as paid.
+        if ($hasPending) {
+            return 'pending';
+        }
+
+        return now()->gt(RentDueDate::forMonth($month, $lease->due_day)) ? 'late' : 'upcoming';
     }
 }

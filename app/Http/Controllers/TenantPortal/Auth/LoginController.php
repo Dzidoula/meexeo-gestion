@@ -25,11 +25,19 @@ class LoginController extends Controller
     {
         $request->validate(['phone' => 'required|string']);
 
-        $key = 'otp-generate:'.$request->ip();
+        $ipKey    = 'otp-generate:'.$request->ip();
+        $phoneKey = 'otp-generate-phone:'.sha1((string) $request->phone);
 
-        if (RateLimiter::tooManyAttempts($key, 5)) {
-            abort(429, 'Trop de tentatives. Réessayez dans une heure.');
+        foreach ([$ipKey, $phoneKey] as $key) {
+            if (RateLimiter::tooManyAttempts($key, 5)) {
+                abort(429, 'Trop de tentatives. Réessayez dans une heure.');
+            }
         }
+
+        // Counted before the lookup: an unknown number must cost an attempt too,
+        // otherwise the budget never applies to enumeration probes.
+        RateLimiter::hit($ipKey, 3600);
+        RateLimiter::hit($phoneKey, 3600);
 
         $tenant = Tenant::where('phone1', $request->phone)->first();
 
@@ -38,8 +46,6 @@ class LoginController extends Controller
                 'phone' => 'Aucun locataire trouvé avec ce numéro.',
             ]);
         }
-
-        RateLimiter::hit($key, 3600);
 
         $code = $tenant->generateOtp();
 
@@ -73,6 +79,10 @@ class LoginController extends Controller
         $key = 'otp-verify:'.$request->session()->get('tenant_otp_id');
 
         if (RateLimiter::tooManyAttempts($key, 3)) {
+            // Burn the code itself: clearing only the session would leave a
+            // still-valid OTP for a fresh session to brute-force.
+            Tenant::find($request->session()->get('tenant_otp_id'))?->invalidateOtp();
+
             $request->session()->forget('tenant_otp_id');
             throw ValidationException::withMessages([
                 'otp' => 'Trop de tentatives. Demandez un nouveau code.',

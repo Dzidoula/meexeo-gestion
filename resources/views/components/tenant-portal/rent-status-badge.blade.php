@@ -7,6 +7,7 @@ $styles = match($status) {
     'late'    => 'bg-orange-100 text-orange-800',
     'unpaid'  => 'bg-red-100 text-red-800',
     'partial' => 'bg-yellow-100 text-yellow-800',
+    'pending' => 'bg-amber-100 text-amber-800',
     default   => 'bg-gray-100 text-gray-700',
 };
 $labels = match($status) {
@@ -15,6 +16,7 @@ $labels = match($status) {
     'late'    => 'En retard',
     'unpaid'  => 'Impayé',
     'partial' => 'Partiel',
+    'pending' => 'En attente de vérification',
     default   => $status,
 };
 @endphp

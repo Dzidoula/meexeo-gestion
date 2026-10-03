@@ -33,13 +33,7 @@
             <p class="text-xl font-semibold text-lagune">
                 {{ number_format($lease->monthly_rent, 0, ',', ' ') }} F
             </p>
-            @if($currentPayment)
-                <x-tenant-portal.rent-status-badge status="paid" class="mt-2" />
-            @else
-                <x-tenant-portal.rent-status-badge
-                    status="{{ now()->day > $lease->due_day ? 'late' : 'upcoming' }}"
-                    class="mt-2" />
-            @endif
+            <x-tenant-portal.rent-status-badge :status="$rentStatus" class="mt-2" />
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
@@ -47,7 +41,7 @@
             <p class="text-xl font-semibold text-lagune">
                 {{ $nextDue->format('d') }}
             </p>
-            <p class="text-sm text-ardoise">{{ $nextDue->isoFormat('MMMM YYYY') }}</p>
+            <p class="text-sm text-ardoise">{{ ucfirst($nextDue->isoFormat('MMMM YYYY')) }}</p>
         </div>
     </div>
 

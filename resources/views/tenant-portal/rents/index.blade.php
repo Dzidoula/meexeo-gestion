@@ -13,15 +13,15 @@
                         <p class="font-medium text-lagune">{{ $month['label'] }}</p>
                         <p class="text-sm text-ardoise mt-0.5">
                             {{ number_format($month['amount'], 0, ',', ' ') }} F
-                            @if($month['payment'])
-                                · Payé le {{ \Carbon\Carbon::parse($month['payment']->paid_on)->format('d/m/Y') }}
+                            @if($month['payments']->isNotEmpty())
+                                · Payé le {{ $month['payments']->last()->paid_on->format('d/m/Y') }}
                             @endif
                         </p>
                     </div>
                     <x-tenant-portal.rent-status-badge :status="$month['status']" />
                 </div>
 
-                @if($month['rest'] > 0 && $month['payment'])
+                @if($month['rest'] > 0 && $month['payments']->isNotEmpty())
                     <div class="mt-2 pt-2 border-t border-gray-50">
                         <p class="text-xs text-orange-600">
                             Reste à payer : {{ number_format($month['rest'], 0, ',', ' ') }} F

@@ -79,7 +79,7 @@ class OtpAuthTest extends TestCase
     {
         $tenant = Tenant::factory()->create();
         $code = $tenant->generateOtp();
-        $tenant->update(['otp_expires_at' => now()->subMinute()]);
+        $tenant->forceFill(['otp_expires_at' => now()->subMinute()])->save();
 
         $this->withSession(['tenant_otp_id' => $tenant->id])
             ->post('/espace-locataire/verification', ['otp' => $code])

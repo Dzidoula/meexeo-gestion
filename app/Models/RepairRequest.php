@@ -20,13 +20,25 @@ class RepairRequest extends Model
         return ['photos' => 'array'];
     }
 
+    private bool $pendingTicket = false;
+
     protected static function booted(): void
     {
+        // ticket_no is NOT NULL + unique, so the insert needs a value that cannot
+        // collide; the real number is derived from the row id right after, which
+        // concurrent submissions cannot duplicate the way read-then-increment would.
         static::creating(function (self $repair) {
-            if (! $repair->ticket_no) {
-                $last  = self::orderByDesc('id')->first();
-                $next  = $last ? ((int) substr($last->ticket_no, 4)) + 1 : 1;
-                $repair->ticket_no = 'REP-'.str_pad((string) $next, 3, '0', STR_PAD_LEFT);
+            $repair->pendingTicket = ! $repair->ticket_no;
+
+            if ($repair->pendingTicket) {
+                $repair->ticket_no = 'TMP-'.bin2hex(random_bytes(6));
+            }
+        });
+
+        static::created(function (self $repair) {
+            if ($repair->pendingTicket) {
+                $repair->ticket_no = 'REP-'.str_pad((string) $repair->id, 3, '0', STR_PAD_LEFT);
+                $repair->saveQuietly();
             }
         });
     }

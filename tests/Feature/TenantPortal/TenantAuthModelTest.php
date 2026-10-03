@@ -56,7 +56,7 @@ class TenantAuthModelTest extends TestCase
         $tenant = Tenant::factory()->create();
         $code = $tenant->generateOtp();
 
-        $tenant->update(['otp_expires_at' => now()->subMinute()]);
+        $tenant->forceFill(['otp_expires_at' => now()->subMinute()])->save();
 
         $this->assertFalse($tenant->fresh()->verifyOtp($code));
     }

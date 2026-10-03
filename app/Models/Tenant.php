@@ -23,8 +23,10 @@ class Tenant extends Authenticatable
         'occupation', 'workplace', 'phone1', 'phone2', 'email',
         'emergency_name', 'emergency_phone', 'spouse_name', 'spouse_phone',
         'status', 'photo_path', 'notes',
-        'otp_code', 'otp_expires_at', 'phone_verified_at', 'remember_token',
     ];
+
+    // Credential fields are deliberately not fillable: they are only ever written
+    // by the OTP methods below, via forceFill, never from request input.
 
     protected $hidden = ['otp_code', 'remember_token'];
 
@@ -43,10 +45,10 @@ class Tenant extends Authenticatable
     {
         $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
-        $this->update([
+        $this->forceFill([
             'otp_code'       => $code,
             'otp_expires_at' => now()->addMinutes(10),
-        ]);
+        ])->save();
 
         return $code;
     }
@@ -57,13 +59,18 @@ class Tenant extends Authenticatable
             return false;
         }
 
-        if ($this->otp_code !== $code) {
+        if (! hash_equals((string) $this->otp_code, $code)) {
             return false;
         }
 
-        $this->update(['otp_code' => null, 'otp_expires_at' => null]);
+        $this->invalidateOtp();
 
         return true;
+    }
+
+    public function invalidateOtp(): void
+    {
+        $this->forceFill(['otp_code' => null, 'otp_expires_at' => null])->save();
     }
 
     protected function reference(): Attribute
