@@ -1,11 +1,28 @@
 <?php
+
 namespace App\Http\Controllers\TenantPortal;
+
 use App\Http\Controllers\Controller;
-class ProfileController extends Controller {
-    public function index() { return view('tenant-portal.stub'); }
-    public function show() { return view('tenant-portal.stub'); }
-    public function create() { return view('tenant-portal.stub'); }
-    public function store() { return back(); }
-    public function update() { return back(); }
-    public function notice() { return view('tenant-portal.stub'); }
+use App\Http\Requests\TenantPortal\UpdateProfileRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+
+class ProfileController extends Controller
+{
+    public function show(): View
+    {
+        $tenant = auth()->guard('tenant')->user();
+
+        return view('tenant-portal.profile.show', compact('tenant'));
+    }
+
+    public function update(UpdateProfileRequest $request): RedirectResponse
+    {
+        $tenant = auth()->guard('tenant')->user();
+
+        $tenant->update($request->only('email', 'phone2', 'occupation'));
+
+        return redirect()->route('tenant-portal.profile')
+            ->with('success', 'Profil mis à jour.');
+    }
 }

@@ -1,11 +1,17 @@
 <?php
+
 namespace App\Http\Controllers\TenantPortal;
+
 use App\Http\Controllers\Controller;
-class LeaseController extends Controller {
-    public function index() { return view('tenant-portal.stub'); }
-    public function show() { return view('tenant-portal.stub'); }
-    public function create() { return view('tenant-portal.stub'); }
-    public function store() { return back(); }
-    public function update() { return back(); }
-    public function notice() { return view('tenant-portal.stub'); }
+use Illuminate\View\View;
+
+class LeaseController extends Controller
+{
+    public function show(): View
+    {
+        $tenant = auth()->guard('tenant')->user();
+        $lease  = $tenant->activeLease()->with('property')->firstOrFail();
+
+        return view('tenant-portal.lease.show', compact('tenant', 'lease'));
+    }
 }
