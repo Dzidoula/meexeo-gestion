@@ -1,11 +1,69 @@
 <?php
+
 namespace App\Http\Controllers\TenantPortal;
+
 use App\Http\Controllers\Controller;
-class RepairController extends Controller {
-    public function index() { return view('tenant-portal.stub'); }
-    public function show() { return view('tenant-portal.stub'); }
-    public function create() { return view('tenant-portal.stub'); }
-    public function store() { return back(); }
-    public function update() { return back(); }
-    public function notice() { return view('tenant-portal.stub'); }
+use App\Http\Requests\TenantPortal\StoreRepairRequest;
+use App\Models\RepairRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
+
+class RepairController extends Controller
+{
+    public function index(): View
+    {
+        $tenant  = auth()->guard('tenant')->user();
+        $repairs = RepairRequest::where('tenant_id', $tenant->id)
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
+        return view('tenant-portal.repairs.index', compact('tenant', 'repairs'));
+    }
+
+    public function create(): View
+    {
+        $tenant = auth()->guard('tenant')->user();
+        $lease  = $tenant->activeLease()->with('property')->firstOrFail();
+
+        return view('tenant-portal.repairs.create', compact('tenant', 'lease'));
+    }
+
+    public function store(StoreRepairRequest $request): RedirectResponse
+    {
+        $tenant = auth()->guard('tenant')->user();
+        $lease  = $tenant->activeLease()->firstOrFail();
+
+        $photos = [];
+        foreach ($request->file('photos', []) as $photo) {
+            $photos[] = $photo->store('repairs/photos', 'public');
+        }
+
+        $videoPath = $request->hasFile('video')
+            ? $request->file('video')->store('repairs/videos', 'public')
+            : null;
+
+        RepairRequest::create([
+            'tenant_id'   => $tenant->id,
+            'lease_id'    => $lease->id,
+            'type'        => $request->type,
+            'description' => $request->description,
+            'urgency'     => $request->urgency,
+            'status'      => 'recu',
+            'photos'      => $photos ?: null,
+            'video_path'  => $videoPath,
+        ]);
+
+        return redirect()->route('tenant-portal.repairs')
+            ->with('success', 'Signalement enregistré. Votre gestionnaire en a été informé.');
+    }
+
+    public function show(RepairRequest $repair): View
+    {
+        $tenant = auth()->guard('tenant')->user();
+
+        abort_if($repair->tenant_id !== $tenant->id, 403);
+
+        return view('tenant-portal.repairs.show', compact('repair', 'tenant'));
+    }
 }
