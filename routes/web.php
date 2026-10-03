@@ -23,6 +23,7 @@ use App\Http\Controllers\HotelStayController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\MasterclaysAdminController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PortalDocumentController;
 use App\Http\Controllers\PortalProofController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductPhotoController;
@@ -36,6 +37,7 @@ use App\Http\Controllers\PropertyPhotoController;
 use App\Http\Controllers\StaticModuleController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TenantDocumentController;
+use App\Http\Controllers\TenantMessageController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\VehiclePhotoController;
 use App\Http\Controllers\VehicleTypeController;
@@ -119,6 +121,11 @@ Route::middleware('auth')->group(function () {
 
         Route::post('/locataires/{tenant}/documents', [TenantDocumentController::class, 'store'])->name('tenants.documents.store');
         Route::delete('/locataires/{tenant}/documents/{document}', [TenantDocumentController::class, 'destroy'])->name('tenants.documents.destroy');
+
+        // Portail locataire : documents publiés et messagerie.
+        Route::post('/locataires/{tenant}/portail/documents', [PortalDocumentController::class, 'store'])->name('tenants.portal-documents.store');
+        Route::delete('/locataires/{tenant}/portail/documents/{document}', [PortalDocumentController::class, 'destroy'])->name('tenants.portal-documents.destroy');
+        Route::post('/locataires/{tenant}/portail/messages', [TenantMessageController::class, 'store'])->name('tenants.portal-messages.store');
 
         Route::get('/affectations/nouvelle', [LeaseController::class, 'create'])->name('leases.create');
         Route::post('/affectations', [LeaseController::class, 'store'])->name('leases.store');

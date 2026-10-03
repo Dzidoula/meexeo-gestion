@@ -53,8 +53,12 @@
 
     {{-- Une erreur de validation sur l'envoi d'un document doit ouvrir l'onglet
          Documents au chargement : sinon elle reste invisible sous l'onglet Identité. --}}
-    @php($initialTab = $errors->hasAny(['file', 'type']) ? 'documents' : null)
-    <x-tabs :tabs="['identite' => 'Identité', 'documents' => 'Documents', 'paiements' => 'Paiements']" :initial="$initialTab">
+    @php($initialTab = match (true) {
+        $errors->hasAny(['file', 'type']) => 'documents',
+        $errors->hasAny(['category', 'period', 'body', 'subject']) => 'portail',
+        default => null,
+    })
+    <x-tabs :tabs="['identite' => 'Identité', 'documents' => 'Documents', 'paiements' => 'Paiements', 'portail' => 'Portail']" :initial="$initialTab">
     <x-slot:panel_identite>
         <div class="p-6" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-border);background:var(--color-mc-surface)">
             <dl class="grid gap-4 sm:grid-cols-2 text-sm">
@@ -156,5 +160,132 @@
                 </div>
             @endif
         </x-slot:panel_paiements>
+
+        <x-slot:panel_portail>
+            @php($canWrite = in_array(auth()->user()->role, [\App\Enums\Role::Admin, \App\Enums\Role::Manager], true))
+
+            <div class="grid gap-5 lg:grid-cols-2">
+
+                {{-- ===== Documents publiés ===== --}}
+                <div class="p-6" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-border);background:var(--color-mc-surface)">
+                    <h3 style="font-size:14px;font-weight:700;color:var(--color-mc-ink)">Documents publiés</h3>
+                    <p class="mt-1" style="font-size:12.5px;color:var(--color-mc-ink-soft)">
+                        Visibles par le locataire dans son espace. À ne pas confondre avec les pièces
+                        du dossier, dans l'onglet Documents.
+                    </p>
+
+                    @if ($canWrite)
+                        <form method="POST" action="{{ route('tenants.portal-documents.store', $tenant) }}"
+                              enctype="multipart/form-data" class="mt-4 space-y-3">
+                            @csrf
+                            <div class="flex flex-wrap gap-2">
+                                <select name="category" required class="min-h-[40px] flex-1"
+                                        style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border);background:var(--color-mc-surface);padding:0 10px;font-size:13px;color:var(--color-mc-ink)">
+                                    <option value="">Type de document…</option>
+                                    @foreach ($portalCategories as $value => $label)
+                                        <option value="{{ $value }}" @selected(old('category') === $value)>{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                                <input type="month" name="period" value="{{ old('period') }}"
+                                       title="Mois concerné, pour une quittance"
+                                       class="min-h-[40px]"
+                                       style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border);background:var(--color-mc-surface);padding:0 10px;font-size:13px;color:var(--color-mc-ink)">
+                            </div>
+                            <input type="file" name="file" required accept=".pdf,.jpg,.jpeg,.png"
+                                   style="font-size:12.5px;color:var(--color-mc-ink-soft)">
+                            @error('category')<p style="font-size:12px;color:var(--color-mc-danger)">{{ $message }}</p>@enderror
+                            @error('file')<p style="font-size:12px;color:var(--color-mc-danger)">{{ $message }}</p>@enderror
+                            @error('period')<p style="font-size:12px;color:var(--color-mc-danger)">{{ $message }}</p>@enderror
+                            <button type="submit" class="inline-flex min-h-[40px] items-center"
+                                    style="border-radius:var(--radius-mc-sm);background:var(--color-mc-accent);padding:0 16px;font-size:13px;font-weight:700;color:var(--color-mc-on-accent)">
+                                Publier
+                            </button>
+                        </form>
+                    @endif
+
+                    <div class="mt-5 space-y-2">
+                        @forelse ($tenant->portalDocuments as $doc)
+                            <div class="flex items-center gap-3" style="border-top:1px solid var(--color-mc-border-soft);padding-top:10px">
+                                <div class="min-w-0 flex-1">
+                                    <p style="font-size:13px;font-weight:600;color:var(--color-mc-ink)">{{ $doc->original_name }}</p>
+                                    <p style="font-size:11.5px;color:var(--color-mc-ink-faint)">
+                                        {{ $doc->category->label() }} · {{ $doc->size_label }}
+                                        @if ($doc->period) · {{ ucfirst($doc->period->isoFormat('MMMM YYYY')) }} @endif
+                                    </p>
+                                </div>
+                                @if ($canWrite)
+                                    <form method="POST" action="{{ route('tenants.portal-documents.destroy', [$tenant, $doc]) }}"
+                                          onsubmit="return confirm('Retirer ce document du portail du locataire ?')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" style="font-size:12px;font-weight:600;color:var(--color-mc-danger)">Retirer</button>
+                                    </form>
+                                @endif
+                            </div>
+                        @empty
+                            <p style="font-size:13px;color:var(--color-mc-ink-faint)">Aucun document publié.</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                {{-- ===== Messagerie ===== --}}
+                <div class="p-6" style="border-radius:var(--radius-mc);border:1px solid var(--color-mc-border);background:var(--color-mc-surface)">
+                    <h3 style="font-size:14px;font-weight:700;color:var(--color-mc-ink)">Messagerie</h3>
+                    <p class="mt-1" style="font-size:12.5px;color:var(--color-mc-ink-soft)">
+                        Les échanges apparaissent dans l'espace du locataire.
+                    </p>
+
+                    @if ($canWrite)
+                        <form method="POST" action="{{ route('tenants.portal-messages.store', $tenant) }}" class="mt-4 space-y-3">
+                            @csrf
+                            <input type="text" name="subject" value="{{ old('subject') }}" placeholder="Sujet"
+                                   class="min-h-[40px] w-full"
+                                   style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border);background:var(--color-mc-surface);padding:0 10px;font-size:13px;color:var(--color-mc-ink)">
+                            <textarea name="body" rows="3" required placeholder="Votre message…" class="w-full"
+                                      style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border);background:var(--color-mc-surface);padding:10px;font-size:13px;color:var(--color-mc-ink)">{{ old('body') }}</textarea>
+                            @error('body')<p style="font-size:12px;color:var(--color-mc-danger)">{{ $message }}</p>@enderror
+                            <button type="submit" class="inline-flex min-h-[40px] items-center"
+                                    style="border-radius:var(--radius-mc-sm);background:var(--color-mc-accent);padding:0 16px;font-size:13px;font-weight:700;color:var(--color-mc-on-accent)">
+                                Envoyer
+                            </button>
+                        </form>
+                    @endif
+
+                    <div class="mt-5 space-y-4">
+                        @forelse ($threads as $thread)
+                            <div style="border-top:1px solid var(--color-mc-border-soft);padding-top:12px">
+                                <p style="font-size:13px;font-weight:700;color:var(--color-mc-ink)">{{ $thread->subject }}</p>
+                                <p class="mt-1" style="font-size:12.5px;color:var(--color-mc-ink-soft);white-space:pre-line">{{ \Illuminate\Support\Str::limit($thread->body, 200) }}</p>
+                                <p class="mt-1" style="font-size:11.5px;color:var(--color-mc-ink-faint)">
+                                    {{ $thread->isFromManager() ? 'Gestionnaire' : $tenant->fullName }}
+                                    · {{ $thread->created_at->format('d/m/Y H:i') }}
+                                    @unless ($thread->isFromManager()) · {{ $thread->read_at ? 'lu' : 'non lu' }} @endunless
+                                </p>
+
+                                @foreach ($thread->replies as $reply)
+                                    <div class="mt-2 pl-3" style="border-left:2px solid var(--color-mc-border)">
+                                        <p style="font-size:12.5px;color:var(--color-mc-ink-soft);white-space:pre-line">{{ \Illuminate\Support\Str::limit($reply->body, 160) }}</p>
+                                        <p style="font-size:11px;color:var(--color-mc-ink-faint)">
+                                            {{ $reply->isFromManager() ? 'Gestionnaire' : $tenant->fullName }} · {{ $reply->created_at->format('d/m/Y H:i') }}
+                                        </p>
+                                    </div>
+                                @endforeach
+
+                                @if ($canWrite)
+                                    <form method="POST" action="{{ route('tenants.portal-messages.store', $tenant) }}" class="mt-2 flex gap-2">
+                                        @csrf
+                                        <input type="hidden" name="parent_id" value="{{ $thread->id }}">
+                                        <input type="text" name="body" required placeholder="Répondre…" class="min-h-[36px] flex-1"
+                                               style="border-radius:var(--radius-mc-sm);border:1px solid var(--color-mc-border);background:var(--color-mc-surface);padding:0 10px;font-size:12.5px;color:var(--color-mc-ink)">
+                                        <button type="submit" style="font-size:12.5px;font-weight:700;color:var(--color-mc-accent)">Envoyer</button>
+                                    </form>
+                                @endif
+                            </div>
+                        @empty
+                            <p style="font-size:13px;color:var(--color-mc-ink-faint)">Aucun message échangé.</p>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+        </x-slot:panel_portail>
     </x-tabs>
 </x-layouts.app>

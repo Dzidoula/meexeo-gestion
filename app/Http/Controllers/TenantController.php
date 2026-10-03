@@ -61,11 +61,16 @@ class TenantController extends Controller
 
     public function show(Tenant $tenant): View
     {
-        $tenant->load(['documents', 'activeLease.property', 'payments.lease']);
+        $tenant->load([
+            'documents', 'activeLease.property', 'payments.lease',
+            'portalDocuments', 'messages.replies.author', 'messages.author',
+        ]);
 
         return view('tenants.show', [
             'tenant' => $tenant,
             'documentTypes' => TenantDocumentType::options(),
+            'portalCategories' => \App\Enums\PortalDocumentCategory::options(),
+            'threads' => $tenant->messages->whereNull('parent_id'),
         ]);
     }
 
