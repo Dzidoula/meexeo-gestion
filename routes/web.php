@@ -48,7 +48,16 @@ Route::post('/connexion', [LoginController::class, 'store'])->name('login.store'
 Route::post('/deconnexion', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');
 
 // MASTERCLAYS — vitrine publique (sans authentification), distincte de l'espace admin ci-dessous.
-Route::get('/', [HomeController::class, 'index'])->name('public.home');
+// admin.masterclays.net, locataire.masterclays.net et masterclays.net sont le même
+// vhost : sans ce garde, un locataire atterrissant sur son adresse dédiée verrait
+// la vitrine véhicules au lieu de son portail.
+Route::get('/', function (\Illuminate\Http\Request $request) {
+    if ($request->getHost() === config('tenant-portal.tenant_host')) {
+        return redirect()->route('tenant-portal.login');
+    }
+
+    return app(HomeController::class)->index();
+})->name('public.home');
 Route::get('/nos-vehicules', [PublicVehicleController::class, 'index'])->name('public.vehicles.index');
 Route::get('/nos-vehicules/{vehicle}', [PublicVehicleController::class, 'show'])->name('public.vehicles.show');
 Route::get('/taxis', [ComingSoonController::class, 'show'])->name('public.taxis')->defaults('activity', 'taxis');
