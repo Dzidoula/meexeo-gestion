@@ -72,6 +72,7 @@ class ProofUploadTest extends TestCase
 
         $this->actingAs($tenant, 'tenant')
             ->post('/espace-locataire/preuves', [
+                'payment_method' => 'wave',
                 'month'  => now()->subMonth()->format('Y-m'),
                 'amount' => 150000,
                 'proof'  => UploadedFile::fake()->image('wave_receipt.jpg'),
@@ -102,6 +103,7 @@ class ProofUploadTest extends TestCase
 
         $this->actingAs($tenant, 'tenant')
             ->post('/espace-locataire/preuves', [
+                'payment_method' => 'wave',
                 'month'  => now()->subMonth()->format('Y-m'),
                 'amount' => 150000,
                 'proof'  => UploadedFile::fake()->image('receipt.png'),

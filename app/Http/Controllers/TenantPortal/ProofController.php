@@ -55,7 +55,7 @@ class ProofController extends Controller
             'month'         => $month->toDateString(),
             'amount'        => $request->amount,
             'paid_on'       => now()->toDateString(),
-            'method'        => PaymentMethod::Cash,
+            'method'        => $request->enum('payment_method', PaymentMethod::class),
             'proof_path'    => $path,
             'portal_status' => 'pending',
             'reference'     => 'PREUVE-'.strtoupper(substr(md5($path), 0, 8)),

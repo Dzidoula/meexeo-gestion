@@ -81,6 +81,18 @@
         </div>
 
         <div>
+            <label for="payment_method" class="block text-sm font-medium text-gray-700 mb-1.5">Mode de paiement</label>
+            <select id="payment_method" name="payment_method" required
+                    class="w-full px-3 py-2.5 rounded-lg border bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-pl-500 focus:border-transparent transition @error('payment_method') border-red-300 @else border-gray-200 @enderror">
+                <option value="">Choisir...</option>
+                @foreach(\App\Enums\PaymentMethod::options() as $value => $label)
+                    <option value="{{ $value }}" @selected(old('payment_method') === $value)>{{ $label }}</option>
+                @endforeach
+            </select>
+            @error('payment_method')<p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>@enderror
+        </div>
+
+        <div>
             <label for="proof" class="block text-sm font-medium text-gray-700 mb-1.5">Preuve de paiement</label>
             <p class="text-xs text-gray-400 mb-2">
                 Capture Wave, reçu Orange Money, bordereau bancaire. JPEG, PNG, WebP ou PDF, 5 Mo maximum.

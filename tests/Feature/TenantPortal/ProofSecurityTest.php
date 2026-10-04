@@ -67,6 +67,7 @@ class ProofSecurityTest extends TestCase
 
         $this->actingAs($tenant, 'tenant')
             ->post('/espace-locataire/preuves', [
+                'payment_method' => 'wave',
                 'month'  => $month->format('Y-m'),
                 'amount' => 150000,
                 'proof'  => UploadedFile::fake()->image('receipt.jpg'),

@@ -36,6 +36,7 @@
                         <p class="mt-1" style="font-size:12.5px;color:var(--color-mc-ink-soft)">
                             Mois : <strong>{{ ucfirst($payment->month->isoFormat('MMMM YYYY')) }}</strong>
                             · Déclaré le {{ $payment->created_at->format('d/m/Y à H:i') }}
+                            · Payé par <strong>{{ $payment->method?->label() ?? '—' }}</strong>
                             · {{ $tenant->phone1 }}
                         </p>
                         <p class="mt-2 chiffre" style="font-size:20px;font-weight:800;color:var(--color-mc-ink)">

@@ -4,7 +4,9 @@ namespace App\Http\Requests\TenantPortal;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Validator;
+use App\Enums\PaymentMethod;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreProofRequest extends FormRequest
 {
@@ -18,6 +20,7 @@ class StoreProofRequest extends FormRequest
         return [
             'month'  => ['required', 'string', 'date_format:Y-m'],
             'amount' => ['required', 'integer', 'min:1', 'max:100000000'],
+            'payment_method' => ['required', Rule::enum(PaymentMethod::class)],
             'proof'  => ['required', 'file', 'mimes:jpg,jpeg,png,webp,gif,pdf', 'max:5120'],
         ];
     }
@@ -54,6 +57,8 @@ class StoreProofRequest extends FormRequest
             'proof.mimes'       => 'Le fichier doit être une image (JPEG, PNG, WebP, GIF) ou un PDF.',
             'proof.max'         => 'Le fichier ne doit pas dépasser 5 Mo.',
             'month.date_format' => 'Mois invalide.',
+            'payment_method.required' => 'Indiquez comment vous avez payé.',
+            'payment_method.enum' => 'Mode de paiement invalide.',
         ];
     }
 }
