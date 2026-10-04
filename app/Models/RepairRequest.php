@@ -41,6 +41,26 @@ class RepairRequest extends Model
                 $repair->saveQuietly();
             }
         });
+
+        // Posé sur le modèle plutôt que dans un écran : le statut sera changé
+        // depuis le back-office comme depuis n'importe quel autre chemin.
+        // « Réparé » n'a volontairement pas de message : le cahier des charges
+        // (§11) ne prévoit que « en cours » et « clôturé ».
+        static::updated(function (self $repair) {
+            if (! $repair->wasChanged('status')) {
+                return;
+            }
+
+            $notice = match ($repair->status) {
+                'en_cours' => \App\Notifications\PortalNotice::repairInProgress($repair),
+                'cloture'  => \App\Notifications\PortalNotice::repairClosed($repair),
+                default    => null,
+            };
+
+            if ($notice) {
+                $repair->tenant?->notify($notice);
+            }
+        });
     }
 
     public function tenant(): BelongsTo { return $this->belongsTo(Tenant::class); }

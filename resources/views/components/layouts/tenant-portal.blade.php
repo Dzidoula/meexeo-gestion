@@ -18,8 +18,9 @@
         ['route' => 'tenant-portal.profile',   'label' => 'Mon profil',        'icon' => 'user'],
     ];
 
-    $notifications ??= collect();
-    $unreadNotifications = $notifications->whereNull('read_at')->count();
+    // Les dernières notifications du locataire connecté, pour la cloche.
+    $notifications ??= $tenant ? $tenant->notifications()->latest()->take(8)->get() : collect();
+    $unreadNotifications = $tenant ? $tenant->unreadNotifications()->count() : 0;
 
     $current = collect($nav)->first(fn ($i) => request()->routeIs($i['route']));
     $heading = $title ?? $current['label'] ?? 'Espace locataire';
@@ -169,14 +170,19 @@
                                 </div>
                                 <div class="max-h-80 overflow-y-auto scrollbar-thin">
                                     @forelse($notifications as $n)
-                                        <div class="px-4 py-3 border-b border-gray-50 hover:bg-gray-50 transition">
-                                            <p class="text-sm font-medium text-gray-900">{{ $n->title }}</p>
-                                            <p class="text-xs text-gray-500 mt-0.5">{{ $n->body }}</p>
-                                        </div>
+                                        <a href="{{ route('tenant-portal.notifications') }}"
+                                           class="block px-4 py-3 border-b border-gray-50 hover:bg-gray-50 transition">
+                                            <p class="text-sm {{ $n->read_at ? 'font-medium' : 'font-semibold' }} text-gray-900">{{ $n->data['title'] ?? '' }}</p>
+                                            <p class="text-xs text-gray-500 mt-0.5">{{ $n->data['body'] ?? '' }}</p>
+                                        </a>
                                     @empty
                                         <p class="px-4 py-8 text-center text-sm text-gray-400">Aucune notification</p>
                                     @endforelse
                                 </div>
+                                <a href="{{ route('tenant-portal.notifications') }}"
+                                   class="block px-4 py-3 text-center text-sm font-medium text-pl-600 hover:bg-gray-50 border-t border-gray-100">
+                                    Tout voir
+                                </a>
                             </div>
                         </div>
                     </template>

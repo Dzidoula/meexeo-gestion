@@ -5,6 +5,7 @@ namespace App\Http\Controllers\TenantPortal;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TenantPortal\StoreRepairRequest;
 use App\Models\RepairRequest;
+use App\Notifications\PortalNotice;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -41,7 +42,7 @@ class RepairController extends Controller
             ? $request->file('video')->store('repairs/videos', 'public')
             : null;
 
-        RepairRequest::create([
+        $repair = RepairRequest::create([
             'tenant_id'   => $tenant->id,
             'lease_id'    => $lease->id,
             'type'        => $request->type,
@@ -51,6 +52,8 @@ class RepairController extends Controller
             'photos'      => $photos ?: null,
             'video_path'  => $videoPath,
         ]);
+
+        $tenant->notify(PortalNotice::repairReceived($repair));
 
         return redirect()->route('tenant-portal.repairs')
             ->with('success', 'Signalement enregistré. Votre gestionnaire en a été informé.');

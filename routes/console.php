@@ -21,3 +21,12 @@ Schedule::command('touvalem:import-hotel-data')
     ->withoutOverlapping()
     ->onOneServer()
     ->appendOutputTo(storage_path('logs/touvalem-sync.log'));
+
+// Rappels de loyer du portail locataire (J-5 et jour J). 08:00 UTC = 08:00 à
+// Abidjan, le fuseau de l'application étant UTC. Le journal garde une trace de
+// chaque exécution, comme pour la synchronisation Touvalem.
+Schedule::command('portal:send-rent-reminders')
+    ->dailyAt('08:00')
+    ->withoutOverlapping()
+    ->onOneServer()
+    ->appendOutputTo(storage_path('logs/portal-rent-reminders.log'));

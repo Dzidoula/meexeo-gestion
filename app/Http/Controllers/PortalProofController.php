@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Notifications\PortalNotice;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -44,6 +45,8 @@ class PortalProofController extends Controller
                 .'Preuve validée le '.now()->format('d/m/Y').' par '.auth()->user()->name),
         ]);
 
+        $payment->lease->tenant->notify(PortalNotice::proofApproved($payment));
+
         return back()->with('status', 'Preuve validée : le paiement est enregistré.');
     }
 
@@ -64,6 +67,8 @@ class PortalProofController extends Controller
                 .'Preuve refusée le '.now()->format('d/m/Y').' par '.auth()->user()->name
                 .' — '.$validated['reason']),
         ]);
+
+        $payment->lease->tenant->notify(PortalNotice::proofRejected($validated['reason']));
 
         return back()->with('status', 'Preuve refusée : le locataire en est informé.');
     }
