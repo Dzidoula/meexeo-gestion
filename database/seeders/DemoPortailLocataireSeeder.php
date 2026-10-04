@@ -104,8 +104,10 @@ class DemoPortailLocataireSeeder extends Seeder
 
         // Re-runnable: a partially failed run would otherwise leave a duplicate
         // tenant on the same phone number, and login resolves the oldest one.
+        // Tenant::phone1 is canonicalized on write (+225XXXXXXXXXX), so the
+        // purge must look up the same canonical form, not the raw scenario value.
         $this->purgePreviousRun(
-            array_map(fn ($s) => $s['tenant']['phone1'], $scenarios),
+            array_map(fn ($s) => \App\Support\PhoneNumber::ivoirianE164($s['tenant']['phone1']), $scenarios),
             array_map(fn ($s) => $s['property']['title'], $scenarios),
         );
 
@@ -137,7 +139,9 @@ class DemoPortailLocataireSeeder extends Seeder
 
             $credentials[] = [
                 'name'      => $tenant->first_names.' '.$tenant->last_name,
-                'phone'     => $tenant->phone1,
+                // Stocké canonique (+225...), mais la connexion ne demande que
+                // la partie locale depuis la correction du format de saisie.
+                'phone'     => preg_replace('/^\+225/', '', $tenant->phone1),
                 'situation' => $s['behaviour'],
                 'property'  => $property->title,
             ];
