@@ -37,6 +37,19 @@
         </div>
     @endif
 
+    @if($months->isEmpty())
+        {{-- Rien à justifier : un menu « Mois concerné » vide ne servirait à rien. --}}
+        <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-8 text-center">
+            <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center mx-auto shadow-sm">
+                <x-tenant-portal.icon name="check-circle-2" class="w-6 h-6 text-emerald-600" />
+            </div>
+            <p class="font-semibold text-emerald-900 mt-4">Tous vos loyers sont à jour</p>
+            <p class="text-sm text-emerald-800/80 mt-1">
+                Il n'y a aucun mois à justifier pour le moment. Si vous venez de payer un loyer à venir,
+                vous pourrez envoyer la preuve dès qu'il sera échu.
+            </p>
+        </div>
+    @else
     <form method="POST" action="{{ route('tenant-portal.proofs.store') }}" enctype="multipart/form-data"
           class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 space-y-5">
         @csrf
@@ -88,6 +101,7 @@
             Envoyer la preuve
         </button>
     </form>
+    @endif
 
 </div>
 </x-layouts.tenant-portal>

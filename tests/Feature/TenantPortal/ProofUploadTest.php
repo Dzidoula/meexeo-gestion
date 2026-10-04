@@ -38,6 +38,33 @@ class ProofUploadTest extends TestCase
             ->assertOk();
     }
 
+    public function test_a_tenant_with_nothing_due_sees_a_message_not_an_empty_form(): void
+    {
+        ['tenant' => $tenant, 'lease' => $lease] = $this->tenant();
+
+        // Chaque mois du bail est déjà réglé : aucun mois à proposer.
+        foreach ([now()->subMonth()->startOfMonth(), now()->startOfMonth()] as $month) {
+            Payment::factory()->create([
+                'lease_id' => $lease->id,
+                'month'    => $month->toDateString(),
+                'amount'   => 150000,
+                'paid_on'  => $month->copy()->setDay(3)->toDateString(),
+            ]);
+        }
+
+        $html = $this->actingAs($tenant, 'tenant')
+            ->get('/espace-locataire/preuves/envoyer')
+            ->assertOk()
+            ->getContent();
+
+        $this->assertStringContainsString('à jour', $html);
+        $this->assertStringNotContainsString(
+            '<select id="month"',
+            $html,
+            'Un menu « Mois concerné » vide rend le formulaire inutilisable.'
+        );
+    }
+
     public function test_uploading_a_valid_image_stores_it_and_redirects(): void
     {
         Storage::fake('public');
