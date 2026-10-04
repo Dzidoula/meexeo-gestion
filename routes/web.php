@@ -56,6 +56,12 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
         return redirect()->route('tenant-portal.login');
     }
 
+    if ($request->getHost() === config('tenant-portal.admin_host')) {
+        return auth()->guard('web')->check()
+            ? redirect()->route('dashboard')
+            : redirect('/connexion');
+    }
+
     return app(HomeController::class)->index();
 })->name('public.home');
 Route::get('/nos-vehicules', [PublicVehicleController::class, 'index'])->name('public.vehicles.index');

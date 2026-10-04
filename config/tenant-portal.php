@@ -35,4 +35,18 @@ return [
 
     'tenant_host' => env('TENANT_PORTAL_HOST', 'locataire.masterclays.net'),
 
+    /*
+    |---------------------------------------------------------------------------
+    | Staff hostname
+    |---------------------------------------------------------------------------
+    |
+    | Same sharing problem as tenant_host, for the staff-facing name: visiting
+    | admin.masterclays.net must enter the admin flow (dashboard, or login for
+    | a guest) rather than the public storefront that masterclays.net itself
+    | legitimately shows.
+    |
+    */
+
+    'admin_host' => env('ADMIN_PORTAL_HOST', 'admin.masterclays.net'),
+
 ];

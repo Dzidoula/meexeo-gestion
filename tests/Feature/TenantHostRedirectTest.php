@@ -17,18 +17,30 @@ class TenantHostRedirectTest extends TestCase
             ->assertRedirect(route('tenant-portal.login'));
     }
 
-    public function test_other_hostnames_still_see_the_public_storefront(): void
+    public function test_the_admin_hostname_root_redirects_a_guest_to_login(): void
     {
-        config(['tenant-portal.tenant_host' => 'locataire.masterclays.net']);
+        config(['tenant-portal.admin_host' => 'admin.masterclays.net']);
 
         $this->get('http://admin.masterclays.net/')
-            ->assertOk()
-            ->assertSee('véhicule');
+            ->assertRedirect('/connexion');
+    }
+
+    public function test_the_admin_hostname_root_redirects_a_logged_in_manager_to_the_dashboard(): void
+    {
+        config(['tenant-portal.admin_host' => 'admin.masterclays.net']);
+        $user = \App\Models\User::factory()->create(['role' => \App\Enums\Role::Manager]);
+
+        $this->actingAs($user, 'web')
+            ->get('http://admin.masterclays.net/')
+            ->assertRedirect(route('dashboard'));
     }
 
     public function test_the_bare_masterclays_domain_still_sees_the_storefront(): void
     {
-        config(['tenant-portal.tenant_host' => 'locataire.masterclays.net']);
+        config([
+            'tenant-portal.tenant_host' => 'locataire.masterclays.net',
+            'tenant-portal.admin_host' => 'admin.masterclays.net',
+        ]);
 
         $this->get('http://masterclays.net/')
             ->assertOk()
