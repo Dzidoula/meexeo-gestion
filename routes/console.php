@@ -13,7 +13,11 @@ Artisan::command('inspire', function () {
 // l'import à la main — constaté en production le 4 octobre, deux jours
 // de décalage. L'import est un updateOrCreate par identifiant externe,
 // donc rejouable sans risque de doublon.
+// La sortie est conservée : updated_at ne bouge pas quand la source n'a pas
+// changé (Eloquent n'écrit rien sur un modèle inchangé), donc il ne prouve
+// pas qu'une exécution a eu lieu. Ce journal, si.
 Schedule::command('touvalem:import-hotel-data')
     ->everyFifteenMinutes()
     ->withoutOverlapping()
-    ->onOneServer();
+    ->onOneServer()
+    ->appendOutputTo(storage_path('logs/touvalem-sync.log'));
