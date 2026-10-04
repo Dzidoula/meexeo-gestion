@@ -1,6 +1,6 @@
 <x-layouts.app title="Notifications — MASTERCLAYS">
-    <div style="font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--color-mc-ink)">
-        <div style="font-size:20px;font-weight:800;margin-bottom:20px">Notifications & Alertes</div>
+    <div style="color:var(--color-mc-ink)">
+        <h1 class="font-titre text-3xl text-lagune" style="margin-bottom:20px">Notifications & Alertes</h1>
         <div style="background:var(--color-mc-surface);border:1px solid var(--color-mc-border);border-radius:var(--radius-mc)">
             @foreach ($items as $item)
                 <div class="flex items-start" style="gap:14px;padding:16px 20px;border-bottom:1px solid var(--color-mc-border-soft)">

@@ -1,5 +1,5 @@
 <x-layouts.app :title="$module['label'].' — MASTERCLAYS'">
-    <div style="font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--color-mc-ink)">
+    <div style="color:var(--color-mc-ink)">
         <div class="flex items-center justify-between gap-4" style="margin-bottom:20px">
             <div class="flex items-center gap-3.5">
                 <div class="flex items-center justify-center text-white"
@@ -7,7 +7,7 @@
                     <x-mc-icon :name="$module['icon']" class="h-5 w-5" />
                 </div>
                 <div>
-                    <div style="font-size:20px;font-weight:800">{{ $module['label'] }}</div>
+                    <h1 class="font-titre text-3xl text-lagune">{{ $module['label'] }}</h1>
                     <div style="font-size:13px;color:var(--color-mc-ink-soft)">{{ $module['sub'] }}</div>
                 </div>
             </div>

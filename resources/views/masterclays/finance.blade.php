@@ -1,6 +1,6 @@
 <x-layouts.app title="Comptabilité — MASTERCLAYS">
-    <div style="font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--color-mc-ink)">
-        <div style="font-size:20px;font-weight:800;margin-bottom:4px">Comptabilité</div>
+    <div style="color:var(--color-mc-ink)">
+        <h1 class="font-titre text-3xl text-lagune" style="margin-bottom:4px">Comptabilité</h1>
         <div style="font-size:13px;color:var(--color-mc-ink-soft);margin-bottom:20px">Finances & rapports consolidés de toutes les activités.</div>
         <div class="grid" style="grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px">
             <div style="background:var(--color-mc-surface);border:1px solid var(--color-mc-border);border-radius:var(--radius-mc);padding:18px">

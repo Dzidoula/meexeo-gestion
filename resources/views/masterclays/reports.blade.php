@@ -1,6 +1,6 @@
 <x-layouts.app title="Rapports & Statistiques — MASTERCLAYS">
-    <div style="font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--color-mc-ink)">
-        <div style="font-size:20px;font-weight:800;margin-bottom:4px">Rapports & Statistiques</div>
+    <div style="color:var(--color-mc-ink)">
+        <h1 class="font-titre text-3xl text-lagune" style="margin-bottom:4px">Rapports & Statistiques</h1>
         <div style="font-size:13px;color:var(--color-mc-ink-soft);margin-bottom:20px">Préparez et exportez vos rapports par module, au format PDF ou Excel.</div>
         <div class="grid" style="grid-template-columns:repeat(3,1fr);gap:14px">
             @foreach ($cards as $card)

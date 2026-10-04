@@ -1,6 +1,6 @@
 <x-layouts.app title="Utilisateurs & Permissions — MASTERCLAYS">
-    <div style="font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--color-mc-ink)">
-        <div style="font-size:20px;font-weight:800;margin-bottom:4px">Utilisateurs & Permissions</div>
+    <div style="color:var(--color-mc-ink)">
+        <h1 class="font-titre text-3xl text-lagune" style="margin-bottom:4px">Utilisateurs & Permissions</h1>
         <div style="font-size:13px;color:var(--color-mc-ink-soft);margin-bottom:20px">Comptes, rôles et droits d'accès par module.</div>
         <div style="background:var(--color-mc-surface);border:1px solid var(--color-mc-border);border-radius:var(--radius-mc);overflow:hidden">
             <div class="grid" style="grid-template-columns:1.2fr 1fr 1.6fr 0.8fr;padding:14px 20px;background:var(--color-mc-table-head);border-bottom:1px solid var(--color-mc-border)">

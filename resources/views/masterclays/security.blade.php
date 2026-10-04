@@ -1,7 +1,7 @@
 <x-layouts.app title="Sécurité — MASTERCLAYS">
-    <div style="font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;color:var(--color-mc-ink)"
+    <div style="color:var(--color-mc-ink)"
          x-data="{ toggles: { tfa: true, lockout: true, logging: true } }">
-        <div style="font-size:20px;font-weight:800;margin-bottom:20px">Sécurité</div>
+        <h1 class="font-titre text-3xl text-lagune" style="margin-bottom:20px">Sécurité</h1>
         <div class="grid" style="grid-template-columns:1fr 1fr;gap:20px">
             <div style="background:var(--color-mc-surface);border:1px solid var(--color-mc-border);border-radius:var(--radius-mc);padding:20px">
                 <div style="font-size:14.5px;font-weight:800;margin-bottom:14px">Options de sécurité</div>
