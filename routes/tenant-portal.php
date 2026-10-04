@@ -21,7 +21,7 @@ Route::prefix('espace-locataire')->name('tenant-portal.')->group(function () {
         Route::get('/paiements/nouveau',   [\App\Http\Controllers\TenantPortal\PaymentController::class, 'create'])->name('payments.create');
         Route::post('/paiements',          [\App\Http\Controllers\TenantPortal\PaymentController::class, 'store'])->name('payments.store');
         Route::get('/preuves/envoyer',     [\App\Http\Controllers\TenantPortal\ProofController::class, 'create'])->name('proofs.create');
-        Route::post('/preuves',            [\App\Http\Controllers\TenantPortal\ProofController::class, 'store'])->name('proofs.store');
+        Route::post('/preuves',            [\App\Http\Controllers\TenantPortal\ProofController::class, 'store'])->name('proofs.store')->middleware('throttle:tenant-proofs');
         Route::get('/reparations',         [\App\Http\Controllers\TenantPortal\RepairController::class, 'index'])->name('repairs');
         Route::get('/reparations/nouveau', [\App\Http\Controllers\TenantPortal\RepairController::class, 'create'])->name('repairs.create');
         Route::post('/reparations',        [\App\Http\Controllers\TenantPortal\RepairController::class, 'store'])->name('repairs.store');
