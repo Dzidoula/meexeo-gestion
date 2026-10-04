@@ -31,7 +31,8 @@ class TenantWriteTest extends TestCase
             ->post('/locataires', $this->validPayload())
             ->assertRedirect();
 
-        $this->assertDatabaseHas('tenants', ['last_name' => 'Koné', 'phone1' => '0701020304']);
+        // Le mutateur Tenant::phone1 canonise à l'écriture : 0701020304 -> +225070...
+        $this->assertDatabaseHas('tenants', ['last_name' => 'Koné', 'phone1' => '+2250701020304']);
     }
 
     public function test_the_name_and_first_phone_are_required(): void

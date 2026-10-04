@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\LeaseStatus;
 use App\Enums\MaritalStatus;
 use App\Enums\TenantStatus;
+use App\Support\PhoneNumber;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -71,6 +72,16 @@ class Tenant extends Authenticatable
     public function invalidateOtp(): void
     {
         $this->forceFill(['otp_code' => null, 'otp_expires_at' => null])->save();
+    }
+
+    /**
+     * Stocké canonique (+225XXXXXXXXXX) quel que soit le format saisi — formulaire
+     * admin, import, ou seeder. Le même format est recherché à la connexion
+     * (LoginController), donc les deux ne peuvent pas diverger.
+     */
+    protected function phone1(): Attribute
+    {
+        return Attribute::set(fn (string $value) => PhoneNumber::ivoirianE164($value));
     }
 
     protected function reference(): Attribute

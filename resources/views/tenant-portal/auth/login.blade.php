@@ -13,11 +13,13 @@
 
             <div>
                 <label for="phone" class="block text-sm font-medium text-gray-700 mb-1.5">Numéro de téléphone</label>
-                <div class="relative">
-                    <x-tenant-portal.icon name="phone" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <div class="relative flex">
+                    <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 bg-gray-100 text-sm font-medium text-gray-600 @error('phone') border-red-300 @else border-gray-200 @enderror">
+                        +225
+                    </span>
                     <input id="phone" type="tel" name="phone" value="{{ old('phone') }}" required autofocus
-                           inputmode="tel" autocomplete="tel" placeholder="07 00 00 00 00"
-                           class="w-full pl-10 pr-3 py-2.5 rounded-lg border bg-gray-50 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-pl-500 focus:border-transparent transition @error('phone') border-red-300 @else border-gray-200 @enderror">
+                           inputmode="tel" autocomplete="tel" placeholder="01 51 41 44 30"
+                           class="w-full px-3 py-2.5 rounded-r-lg border bg-gray-50 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-pl-500 focus:border-transparent transition @error('phone') border-red-300 @else border-gray-200 @enderror">
                 </div>
                 @error('phone')
                     <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">

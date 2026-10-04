@@ -42,8 +42,13 @@ class LoginController extends Controller
     {
         $request->validate(['phone' => 'required|string']);
 
+        // Normalisé une seule fois : la clé de limitation de débit et la
+        // recherche doivent viser le même numéro, sinon varier le format
+        // (espaces, tirets, +225 ou non) contourne la limite par téléphone.
+        $phone = \App\Support\PhoneNumber::ivoirianE164($request->phone);
+
         $ipKey    = 'otp-generate:'.$request->ip();
-        $phoneKey = 'otp-generate-phone:'.sha1((string) $request->phone);
+        $phoneKey = 'otp-generate-phone:'.sha1($phone);
 
         foreach ([$ipKey, $phoneKey] as $key) {
             if (RateLimiter::tooManyAttempts($key, 5)) {
@@ -56,7 +61,7 @@ class LoginController extends Controller
         RateLimiter::hit($ipKey, 3600);
         RateLimiter::hit($phoneKey, 3600);
 
-        $tenant = Tenant::where('phone1', $request->phone)->first();
+        $tenant = Tenant::where('phone1', $phone)->first();
 
         if (! $tenant) {
             throw ValidationException::withMessages([
